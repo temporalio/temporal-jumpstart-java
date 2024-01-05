@@ -1,2 +1,3 @@
 rootProject.name = 'temporal-jumpstart'
 include 'app'
+include 'sec_3'

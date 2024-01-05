@@ -1,4 +1,4 @@
-package io.temporal.jumpstart.app;
+package io.temporal.jumpstart.sec_3;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

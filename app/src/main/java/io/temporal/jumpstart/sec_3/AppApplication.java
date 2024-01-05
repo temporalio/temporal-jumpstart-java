@@ -1,4 +1,4 @@
-package io.temporal.jumpstart.app;
+package io.temporal.jumpstart.sec_3;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
