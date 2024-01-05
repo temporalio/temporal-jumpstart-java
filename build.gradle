@@ -1,0 +1,69 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.cadixdev.licenser' version '0.6.1'
+	id "net.ltgt.errorprone" version "3.1.0"
+	id 'com.diffplug.spotless' version '6.22.0' apply false
+}
+
+group = 'io.temporal.jumpstart'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.cadixdev.licenser'
+	apply plugin: 'net.ltgt.errorprone'
+	apply plugin: 'com.diffplug.spotless'
+
+	compileJava {
+		options.compilerArgs << "-Werror"
+	}
+
+	ext {
+		otelVersion = '1.30.1'
+		otelVersionAlpha = "${otelVersion}-alpha"
+		javaSDKVersion = '1.22.2'
+		jarVersion = '1.0.0'
+	}
+
+	repositories {
+		maven {
+			url "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+		mavenCentral()
+	}
+
+	dependencies {
+
+	}
+
+	license {
+		header rootProject.file('LICENSE')
+		exclude '**/*.json'
+		exclude '**/*.yaml'
+		exclude '**/*.yml'
+		exclude '**/*.html'
+		exclude '**/*.js'
+	}
+
+	apply plugin: 'com.diffplug.spotless'
+
+	spotless {
+		java {
+			target 'src/*/java/**/*.java'
+			targetExclude '**/.idea/**'
+			googleJavaFormat('1.16.0')
+		}
+	}
+
+	compileJava.dependsOn 'spotlessApply'
+
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
+}
