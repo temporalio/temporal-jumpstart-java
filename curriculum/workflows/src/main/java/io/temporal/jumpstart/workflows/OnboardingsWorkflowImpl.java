@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.workflow;
+package io.temporal.jumpstart.workflows;
 
-import io.temporal.jumpstart.starters.messages.OnboardingsPut;
+import io.temporal.jumpstart.workflows.messages.OnboardingsPut;
 import io.temporal.spring.boot.WorkflowImpl;
 import io.temporal.workflow.Workflow;
 import org.slf4j.Logger;

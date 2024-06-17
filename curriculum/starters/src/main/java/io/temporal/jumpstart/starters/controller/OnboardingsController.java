@@ -32,7 +32,6 @@ import io.temporal.client.WorkflowStub;
 import io.temporal.jumpstart.starters.messages.OnboardEntityRequest;
 import io.temporal.jumpstart.starters.messages.OnboardingsGet;
 import io.temporal.jumpstart.starters.messages.OnboardingsPut;
-import io.temporal.jumpstart.workflow.OnboardingsWorkflow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -69,17 +68,20 @@ public class OnboardingsController {
   ResponseEntity<String> StartOnboardingAsync(
       @PathVariable String id, @RequestBody OnboardingsPut params) {
 
-    OnboardingsWorkflow workflow =
-        temporalClient.newWorkflowStub(
-            OnboardingsWorkflow.class,
-            WorkflowOptions.newBuilder()
-                .setTaskQueue("Onboardings")
-                .setWorkflowId(id)
-                .setRetryOptions(null)
-                .setWorkflowIdReusePolicy(
-                    WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
-                .build());
+    WorkflowOptions options =
+        WorkflowOptions.newBuilder()
+            .setTaskQueue("Onboardings")
+            .setWorkflowId(id)
+            .setRetryOptions(null)
+            .setWorkflowIdReusePolicy(
+                WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
+            .build();
+    WorkflowStub workflowStub =
+        temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
-    return new ResponseEntity<String>(workflow.execute(params), HttpStatus.OK);
+    // Start the workflow execution.
+    WorkflowExecution execution = workflowStub.start(params);
+    String result = workflowStub.getResult(String.class);
+    return new ResponseEntity<String>(result, HttpStatus.OK);
   }
 }

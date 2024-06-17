@@ -24,7 +24,13 @@
 
 package io.temporal.jumpstart.starters;
 
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest
-class AppApplicationTests {}
+@SpringBootApplication
+public class StartersApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(StartersApplication.class, args);
+  }
+}

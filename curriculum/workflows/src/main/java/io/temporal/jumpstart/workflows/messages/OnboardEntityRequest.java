@@ -22,14 +22,22 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.workflow;
+package io.temporal.jumpstart.workflows.messages;
 
-import io.temporal.jumpstart.starters.messages.OnboardingsPut;
-import io.temporal.workflow.WorkflowInterface;
-import io.temporal.workflow.WorkflowMethod;
+public class OnboardEntityRequest {
+  private String value;
 
-@WorkflowInterface
-public interface OnboardingsWorkflow {
-  @WorkflowMethod(name = "WorkflowDefinitionDoesntExistYet")
-  String execute(OnboardingsPut params);
+  public OnboardEntityRequest(String value) {
+    this.value = value;
+  }
+
+  public OnboardEntityRequest() {}
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

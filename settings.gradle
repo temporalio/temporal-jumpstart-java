@@ -1,2 +1,3 @@
 rootProject.name = 'temporal-jumpstart-java'
-include 'starters'
+include 'curriculum:starters'
+include 'curriculum:workflows'

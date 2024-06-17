@@ -38,3 +38,4 @@ target
 .project
 .settings/
 bin/
+.vscode/

@@ -22,15 +22,14 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.starters;
+package io.temporal.jumpstart.workflows;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.temporal.jumpstart.workflows.messages.OnboardingsPut;
+import io.temporal.workflow.WorkflowInterface;
+import io.temporal.workflow.WorkflowMethod;
 
-@SpringBootApplication
-public class AppApplication {
-
-  public static void main(String[] args) {
-    SpringApplication.run(AppApplication.class, args);
-  }
+@WorkflowInterface
+public interface OnboardingsWorkflow {
+  @WorkflowMethod(name = "WorkflowDefinitionDoesntExistYet")
+  String execute(OnboardingsPut params);
 }

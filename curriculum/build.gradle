@@ -6,7 +6,6 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation "io.temporal:temporal-spring-boot-starter-alpha:1.22.2"
-	//implementation "org.springframework.boot:spring-boot-starter-security:$springSecurity"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
