@@ -1,9 +1,37 @@
-spring.temporal:
-namespace: <namespace_id> # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
-connection:
-target: <namespace_id>.tmprl.cloud:7233
-mtls:
-key-file: /path/to/key.key
-cert-chain-file: /path/to/cert.pem
+server:
+  port: 3030
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: temporal-jumpstart-java
+  temporal:
+    workersAutoDiscovery:
+      packages: io.temporal.jumpstart.workflows
+    namespace: temporal-jumpstart-java.sdvdw # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
+    connection:
+      target: temporal-jumpstart-java.sdvdw.tmprl.cloud:7233
+      mtls:
+        key-file: /Users/cici/Projects/certs/tcloud/ca_pkcs8.pem
+        cert-chain-file: /Users/cici/Projects/certs/tcloud/ca_cert.pem
 
-# more configuration options https://github.com/temporalio/sdk-java/tree/master/temporal-spring-boot-autoconfigure-alpha#mtls
+# (Note following configuration are not set by default but serve more as reference)
+#    workers:
+#      - task-queue: DemoTaskQueue
+#        capacity:
+#          max-concurrent-workflow-task-pollers: 6
+#          max-concurrent-activity-task-pollers: 6
+#        rate-limits:
+#          max-worker-activities-per-second: 3
+#          max-task-queue-activities-per-second: 3
+#    workflow-cache:
+#      max-instances: 10
+#      max-threads: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

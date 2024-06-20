@@ -22,35 +22,36 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.starters.controller;
+package io.temporal.jumpstart.workflows.controllers;
 
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
 import io.temporal.client.WorkflowClient;
+import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
-import io.temporal.jumpstart.starters.messages.OnboardEntityRequest;
-import io.temporal.jumpstart.starters.messages.OnboardingsGet;
-import io.temporal.jumpstart.starters.messages.OnboardingsPut;
+import io.temporal.jumpstart.workflows.messages.OnboardEntityRequest;
+import io.temporal.jumpstart.workflows.messages.OnboardingsGet;
+import io.temporal.jumpstart.workflows.messages.OnboardingsPut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/api/onboardings")
 public class OnboardingsController {
 
   @Autowired WorkflowClient temporalClient;
 
   @GetMapping("/{id}")
-  public ResponseEntity<OnboardingsGet> hello(@PathVariable("id") String id) {
+  public ResponseEntity<OnboardingsGet> GetOnboardingStatus(@PathVariable("id") String id) {
     OnboardingsGet returnVals = new OnboardingsGet();
     returnVals.setExecutionStatus("running");
     returnVals.setId(id);
@@ -80,7 +81,12 @@ public class OnboardingsController {
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
     // Start the workflow execution.
-    WorkflowExecution execution = workflowStub.start(params);
+    Boolean alreadyStarted = false;
+    try {
+      workflowStub.start(params);
+    } catch (WorkflowExecutionAlreadyStarted was) {
+      alreadyStarted = true;
+    }
     String result = workflowStub.getResult(String.class);
     return new ResponseEntity<String>(result, HttpStatus.OK);
   }

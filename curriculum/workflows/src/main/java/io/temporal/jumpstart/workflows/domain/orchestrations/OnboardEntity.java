@@ -22,22 +22,14 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.workflows;
+package io.temporal.jumpstart.workflows.domain.orchestrations;
 
-import io.temporal.jumpstart.workflows.messages.OnboardingsPut;
-import io.temporal.spring.boot.WorkflowImpl;
-import io.temporal.workflow.Workflow;
-import org.slf4j.Logger;
+import io.temporal.jumpstart.workflows.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.workflow.WorkflowInterface;
+import io.temporal.workflow.WorkflowMethod;
 
-@WorkflowImpl(taskQueues = "onboardings")
-public class OnboardingsWorkflowImpl implements OnboardingsWorkflow {
-
-  private final Logger logger = Workflow.getLogger(OnboardingsWorkflowImpl.class);
-
-  @Override
-  public String execute(OnboardingsPut params) {
-    // noop for now
-    logger.info("Finished executing Onboardings Workflow");
-    return "Received";
-  }
+@WorkflowInterface
+public interface OnboardEntity {
+  @WorkflowMethod
+  String executeAsync(OnboardEntityRequest args);
 }

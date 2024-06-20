@@ -3,6 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation("com.google.guava:guava:33.2.1-jre")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation "io.temporal:temporal-spring-boot-starter-alpha:1.22.2"
