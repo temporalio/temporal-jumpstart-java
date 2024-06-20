@@ -4,7 +4,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: temporal-jumpstart-java
+    name: temporal-jumpstart
   # temporal specific configs
   temporal:
     namespace: default
@@ -23,13 +23,39 @@ spring:
     #      max-instances: 10
     #      max-threads: 10
     workersAutoDiscovery:
-      packages: io.temporal.jumpstart.workflows
+      packages: io.temporal.jumpstart.app
+  # data source config for some samples that need it
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;
+    username: sa
+    password: pass
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  ## enable h2 console (h2-console endpoint) for debugging
+  h2:
+    console:
+      enabled: true
+  ## kafka setup for samples
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+    bootstrap-servers: localhost:9092
 # actuator (sdk metrics)
 management:
   endpoints:
     web:
       exposure:
         include: prometheus
-  metrics:
-    tags:
-      application: ${spring.application.name}
+# specific for samples
+samples:
+  data:
+    language: english
+  message:
+    topic:
+      name: app-topic
+    group:
+      name: app-group

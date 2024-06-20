@@ -22,22 +22,45 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.workflows.messages;
+package io.temporal.jumpstart.workflows.messages.api;
 
-public class OnboardEntityRequest {
-  private String value;
+import io.temporal.jumpstart.workflows.messages.orchestrations.OnboardEntityRequest;
 
-  public OnboardEntityRequest(String value) {
-    this.value = value;
+public class OnboardingsGet {
+
+  private String id;
+  private String executionStatus;
+  private OnboardEntityRequest oer;
+
+  public OnboardingsGet(String id, String executionStatus, OnboardEntityRequest oer) {
+    this.id = id;
+    this.executionStatus = executionStatus;
+    this.oer = oer;
   }
 
-  public OnboardEntityRequest() {}
+  public OnboardingsGet() {}
 
-  public String getValue() {
-    return value;
+  public String getId() {
+    return id;
   }
 
-  public void setValue(String value) {
-    this.value = value;
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getExecutionStatus() {
+    return executionStatus;
+  }
+
+  public void setExecutionStatus(String executionStatus) {
+    this.executionStatus = executionStatus;
+  }
+
+  public OnboardEntityRequest getOnboardingEntityRequest() {
+    return oer;
+  }
+
+  public void setValue(OnboardEntityRequest oer) {
+    this.oer = oer;
   }
 }

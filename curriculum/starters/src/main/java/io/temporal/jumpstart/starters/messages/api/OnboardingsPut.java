@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.starters.messages;
+package io.temporal.jumpstart.starters.messages.api;
 
 public class OnboardingsPut {
 

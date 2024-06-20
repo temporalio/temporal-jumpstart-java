@@ -7,5 +7,5 @@ Some repos Start. This one Jump Starts.
 
 ## Run each project separately
 
-``` $ ./gradlew :curriculum:starters:bootRun ```
+``` $ ./gradlew :curriculum:starters:bootRun ``` \
 ``` $ ./gradlew :curriculum:workflows:bootRun ```

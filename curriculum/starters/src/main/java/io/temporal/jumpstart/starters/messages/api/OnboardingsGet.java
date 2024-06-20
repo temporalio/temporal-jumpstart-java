@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.workflows.messages;
+package io.temporal.jumpstart.starters.messages.api;
+
+import io.temporal.jumpstart.starters.messages.orchestrations.OnboardEntityRequest;
 
 public class OnboardingsGet {
 

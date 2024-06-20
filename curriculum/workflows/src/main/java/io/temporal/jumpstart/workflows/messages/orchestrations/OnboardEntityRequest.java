@@ -22,21 +22,19 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.starters.messages;
+package io.temporal.jumpstart.workflows.messages.orchestrations;
 
-public class OnboardingsGet {
-
+public class OnboardEntityRequest {
   private String id;
-  private String executionStatus;
-  private OnboardEntityRequest oer;
+  private String value;
 
-  public OnboardingsGet(String id, String executionStatus, OnboardEntityRequest oer) {
+  public OnboardEntityRequest(String id, String value) 
     this.id = id;
-    this.executionStatus = executionStatus;
-    this.oer = oer;
+    this.value = value;
   }
 
-  public OnboardingsGet() {}
+  public OnboardEntityRequest() {
+  }
 
   public String getId() {
     return id;
@@ -46,19 +44,11 @@ public class OnboardingsGet {
     this.id = id;
   }
 
-  public String getExecutionStatus() {
-    return executionStatus;
+  public String getValue() {
+    return value;
   }
 
-  public void setExecutionStatus(String executionStatus) {
-    this.executionStatus = executionStatus;
-  }
-
-  public OnboardEntityRequest getOnboardingEntityRequest() {
-    return oer;
-  }
-
-  public void setValue(OnboardEntityRequest oer) {
-    this.oer = oer;
+  public void setValue(String value) {
+    this.value = value;
   }
 }
