@@ -24,21 +24,5 @@
 
 package io.temporal.jumpstart.starters.messages.api;
 
-public class OnboardingsPut {
-
-  private String value;
-
-  public OnboardingsPut(String value) {
-    this.value = value;
-  }
-
-  public OnboardingsPut() {}
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-}
+public record OnboardingsPut(String id, String value) {}
+;

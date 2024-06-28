@@ -24,20 +24,5 @@
 
 package io.temporal.jumpstart.starters.messages.orchestrations;
 
-public class OnboardEntityRequest {
-  private String value;
-
-  public OnboardEntityRequest(String value) {
-    this.value = value;
-  }
-
-  public OnboardEntityRequest() {}
-
-  public String getValue() {
-    return value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-}
+public record OnboardEntityRequest(String id, String value) {}
+;

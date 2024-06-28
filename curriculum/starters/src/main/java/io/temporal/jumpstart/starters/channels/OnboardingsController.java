@@ -24,16 +24,23 @@
 
 package io.temporal.jumpstart.starters.channels;
 
+import io.temporal.api.common.v1.Payload;
+import io.temporal.api.common.v1.Payloads;
 import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
+import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
+import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionResponse;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
+import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.jumpstart.starters.messages.api.OnboardingsGet;
 import io.temporal.jumpstart.starters.messages.api.OnboardingsPut;
 import io.temporal.jumpstart.starters.messages.orchestrations.OnboardEntityRequest;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -52,20 +59,36 @@ public class OnboardingsController {
 
   @GetMapping("/{id}")
   public ResponseEntity<OnboardingsGet> GetOnboardingStatus(@PathVariable("id") String id) {
-    OnboardingsGet returnVals = new OnboardingsGet();
-    returnVals.setExecutionStatus("running");
-    returnVals.setId(id);
-    OnboardEntityRequest oer = new OnboardEntityRequest();
-    WorkflowStub workflowStub = temporalClient.newUntypedWorkflowStub(id);
-    // Describe the Workflow execution.
-    WorkflowExecution execution = workflowStub.getExecution();
-    return ResponseEntity.ok(returnVals);
+    var svc = this.temporalClient.getWorkflowServiceStubs();
+
+    WorkflowExecution execution = WorkflowExecution.newBuilder().setWorkflowId(id).build();
+    DescribeWorkflowExecutionResponse desc =
+        svc.blockingStub()
+            .describeWorkflowExecution(
+                DescribeWorkflowExecutionRequest.newBuilder()
+                    .setExecution(execution)
+                    .setNamespace("default")
+                    .build());
+    var status = desc.getWorkflowExecutionInfo().getStatus();
+    var history = this.temporalClient.fetchHistory(id);
+    Payloads payloads =
+        history.getHistory().getEvents(0).getWorkflowExecutionStartedEventAttributes().getInput();
+    OnboardEntityRequest sentRequest = null;
+    for (Payload payload : payloads.getPayloadsList()) {
+      // using default data converter..assumes MigrateableWorkflowParams type
+      // note if you use custom data converter you would need use it instead of default
+      sentRequest =
+          DefaultDataConverter.newDefaultInstance()
+              .fromPayload(payload, OnboardEntityRequest.class, OnboardEntityRequest.class);
+    }
+    var get = new OnboardingsGet(sentRequest.id(), status.toString(), sentRequest);
+    return ResponseEntity.ok(get);
   }
 
   @PutMapping(
       value = "/{id}",
       consumes = {MediaType.APPLICATION_JSON_VALUE},
-      produces = {MediaType.TEXT_HTML_VALUE})
+      produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> StartOnboardingAsync(
       @PathVariable String id, @RequestBody OnboardingsPut params) {
 
@@ -80,14 +103,19 @@ public class OnboardingsController {
     WorkflowStub workflowStub =
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
+    var wfArgs = new OnboardEntityRequest(params.id(), params.value());
     // Start the workflow execution.
     boolean alreadyStarted = false;
     try {
-      workflowStub.start(params);
+      var run = workflowStub.start(wfArgs);
+      var headers = new HttpHeaders();
+      headers.setLocation(URI.create(String.format("/api/onboardings/%s", id)));
+      return new ResponseEntity<>(run.getRunId(), HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       alreadyStarted = true;
+      return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    } catch (Exception e) {
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    String result = workflowStub.getResult(String.class);
-    return new ResponseEntity<String>(result, HttpStatus.OK);
   }
 }
