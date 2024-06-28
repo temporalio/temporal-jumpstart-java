@@ -81,7 +81,7 @@ public class OnboardingsController {
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
     // Start the workflow execution.
-    Boolean alreadyStarted = false;
+    boolean alreadyStarted = false;
     try {
       workflowStub.start(params);
     } catch (WorkflowExecutionAlreadyStarted was) {
