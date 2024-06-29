@@ -3,4 +3,8 @@ include 'curriculum:starters'
 include 'curriculum:workflows'
 include 'curriculum:app'
 findProject(':curriculum:app')?.name = 'app'
+include 'curriculum:app:frontend'
+findProject(':curriculum:app:frontend')?.name = 'frontend'
+include 'curriculum:app:backend'
+findProject(':curriculum:app:backend')?.name = 'backend'
 

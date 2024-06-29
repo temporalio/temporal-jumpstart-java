@@ -6,7 +6,7 @@ dependencies {
 	implementation("com.google.guava:guava:33.2.1-jre")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "io.temporal:temporal-spring-boot-starter-alpha:1.22.2"
+	implementation "io.temporal:temporal-spring-boot-starter:1.22.2"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 

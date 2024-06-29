@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-package io.temporal.jumpstart.starters.messages.api;
+package io.temporal.curriculum.app.frontend.messages.api;
 
-import io.temporal.jumpstart.starters.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.curriculum.app.backend.messages.orchestrations.OnboardEntityRequest;
 
 public record OnboardingsGet(String id, String executionStatus, OnboardEntityRequest request) {}

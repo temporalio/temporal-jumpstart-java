@@ -1,28 +1,4 @@
-/*
- * MIT License
- *
- * Copyright (c) 2024 temporal.io
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-package io.temporal.jumpstart.starters.channels;
+package io.temporal.curriculum.app.frontend.channels;
 
 import io.temporal.api.common.v1.Payload;
 import io.temporal.api.common.v1.Payloads;
@@ -35,13 +11,14 @@ import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
 import io.temporal.common.converter.DefaultDataConverter;
-import io.temporal.jumpstart.starters.messages.api.OnboardingsGet;
-import io.temporal.jumpstart.starters.messages.api.OnboardingsPut;
-import io.temporal.jumpstart.starters.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.curriculum.app.backend.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.curriculum.app.frontend.messages.api.OnboardingsGet;
+import io.temporal.curriculum.app.frontend.messages.api.OnboardingsPut;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,8 +37,11 @@ public class OnboardingsController {
   Logger logger = LoggerFactory.getLogger(OnboardingsController.class);
   @Autowired WorkflowClient temporalClient;
 
+  @Value("${spring.curriculum.task-queue}")
+  String taskQueue;
+
   @GetMapping("/{id}")
-  public ResponseEntity<OnboardingsGet> GetOnboardingStatus(@PathVariable("id") String id) {
+  public ResponseEntity<OnboardingsGet> onboardingGet(@PathVariable("id") String id) {
     var svc = this.temporalClient.getWorkflowServiceStubs();
 
     WorkflowExecution execution = WorkflowExecution.newBuilder().setWorkflowId(id).build();
@@ -92,12 +72,16 @@ public class OnboardingsController {
       value = "/{id}",
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  ResponseEntity<String> StartOnboardingAsync(
+  ResponseEntity<String> onboardingPut(
       @PathVariable String id, @RequestBody OnboardingsPut params) {
 
+    return startOnboardEntity(id, params);
+  }
+
+  private ResponseEntity<String> startOnboardEntity(String id, OnboardingsPut params) {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
-            .setTaskQueue("Onboardings")
+            .setTaskQueue(taskQueue)
             .setWorkflowId(id)
             .setRetryOptions(null)
             .setWorkflowIdReusePolicy(
@@ -112,7 +96,7 @@ public class OnboardingsController {
       var run = workflowStub.start(wfArgs);
       var headers = new HttpHeaders();
       headers.setLocation(URI.create(String.format("/api/onboardings/%s", id)));
-      return new ResponseEntity<>(run.getRunId(), HttpStatus.ACCEPTED);
+      return new ResponseEntity<>(HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       logger.info("Workflow execution already started: {}", id);
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
