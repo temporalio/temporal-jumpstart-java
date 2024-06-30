@@ -1,19 +1,25 @@
-plugins {
-    id 'java'
-}
-
-group = 'io.temporal.jumpstart'
-version = '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+apply plugin: 'org.springframework.boot'
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "io.temporal:temporal-spring-boot-starter:1.24.0"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    implementation project(':onboardings:domain')
 }
 
-test {
-    useJUnitPlatform()
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }
