@@ -86,7 +86,7 @@ public class OnboardingsController {
     WorkflowStub workflowStub =
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
-    var wfArgs = new OnboardEntityRequest(params.id(), params.value());
+    var wfArgs = new OnboardEntityRequest(params.id(), params.value(),7 * 86400, null, false);
     // Start the workflow execution.
     try {
       var run = workflowStub.start(wfArgs);
