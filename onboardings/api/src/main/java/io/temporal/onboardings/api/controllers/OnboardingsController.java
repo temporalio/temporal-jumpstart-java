@@ -14,6 +14,7 @@ import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.onboardings.api.messages.OnboardingsGet;
 import io.temporal.onboardings.api.messages.OnboardingsPut;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
+import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("/api/onboardings")
@@ -86,7 +85,7 @@ public class OnboardingsController {
     WorkflowStub workflowStub =
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
 
-    var wfArgs = new OnboardEntityRequest(params.id(), params.value(),7 * 86400, null, false);
+    var wfArgs = new OnboardEntityRequest(params.id(), params.value(), 7 * 86400, null, false);
     // Start the workflow execution.
     try {
       var run = workflowStub.start(wfArgs);

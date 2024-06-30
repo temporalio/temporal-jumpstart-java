@@ -9,7 +9,7 @@ spring:
     task-queue: onboardings
   temporal:
     test-server:
-      enabled: true
+      enabled: false
     workers:
       - task-queue: onboardings
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.

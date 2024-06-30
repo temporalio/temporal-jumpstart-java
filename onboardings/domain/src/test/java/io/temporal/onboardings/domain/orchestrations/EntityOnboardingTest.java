@@ -6,6 +6,7 @@ import io.temporal.client.WorkflowOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.testing.TestWorkflowEnvironment;
+import java.util.UUID;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.util.UUID;
 
 @SpringBootTest(
     classes = {
@@ -78,17 +77,11 @@ public class EntityOnboardingTest {
   @Test
   public void execute_givenHealthyService_registersCrmEntity() {
     String wfId = UUID.randomUUID().toString();
-    var args = new OnboardEntityRequest(wfId,
-            UUID.randomUUID().toString(),
-            3,
-            null,
-            true);
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 3, null, true);
     EntityOnboarding sut =
-            workflowClient.newWorkflowStub(
-                    EntityOnboarding.class,
-                    WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
-    
-
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
   }
 
   @ComponentScan
