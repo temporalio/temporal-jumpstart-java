@@ -1,7 +1,10 @@
 package io.temporal.curriculum.app.backend.orchestrations;
 
 import io.temporal.client.WorkflowClient;
+import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.curriculum.app.backend.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.failure.ApplicationFailure;
 import io.temporal.testing.TestWorkflowEnvironment;
 import java.util.UUID;
 import org.junit.jupiter.api.*;
@@ -45,13 +48,49 @@ public class EntityOnboardingTest {
   }
 
   @Test
-  public void givenSimpleArgs_itShouldExecuteWorkflow() {
+  public void givenValidArgs_itShouldExecuteWorkflow() {
     String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 3, null, true);
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("test").build());
-    WorkflowClient.execute(sut::execute);
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
+    WorkflowClient.execute(() -> sut.execute(args));
+  }
+
+  @Test
+  public void execute_givenInvalidArgs_itShouldFailWorkflow() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, "", 3, null, true);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
+
+    var e =
+        Assertions.assertThrows(
+            WorkflowFailedException.class,
+            () -> {
+              sut.execute(args);
+            });
+    Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
+    Assertions.assertEquals("invalid_args", ((ApplicationFailure) e.getCause()).getType());
+  }
+
+  @Test
+  public void execute_givenHealthyService_registersCrmEntity() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId,
+            UUID.randomUUID().toString(),
+            3,
+            null,
+            true);
+    EntityOnboarding sut =
+            workflowClient.newWorkflowStub(
+                    EntityOnboarding.class,
+                    WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
+    
+
   }
 
   @ComponentScan
