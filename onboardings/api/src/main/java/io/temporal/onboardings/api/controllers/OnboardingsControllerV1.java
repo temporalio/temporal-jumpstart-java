@@ -45,7 +45,7 @@ public class OnboardingsControllerV1 {
             .describeWorkflowExecution(
                 DescribeWorkflowExecutionRequest.newBuilder()
                     .setExecution(execution)
-                    .setNamespace("default")
+                    .setNamespace(taskQueue)
                     .build());
     var status = desc.getWorkflowExecutionInfo().getStatus();
     var history = this.temporalClient.fetchHistory(id);
