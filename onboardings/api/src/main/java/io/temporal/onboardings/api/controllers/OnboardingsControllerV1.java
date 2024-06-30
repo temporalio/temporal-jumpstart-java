@@ -11,8 +11,8 @@ import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
 import io.temporal.common.converter.DefaultDataConverter;
-import io.temporal.onboardings.api.messages.OnboardingsGet;
-import io.temporal.onboardings.api.messages.OnboardingsPut;
+import io.temporal.onboardings.api.messages.OnboardingsGetV1;
+import io.temporal.onboardings.api.messages.OnboardingsPutV1;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import java.net.URI;
 import org.slf4j.Logger;
@@ -26,17 +26,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/onboardings")
-public class OnboardingsController {
+@RequestMapping("/api/v1/onboardings")
+public class OnboardingsControllerV1 {
 
-  Logger logger = LoggerFactory.getLogger(OnboardingsController.class);
+  Logger logger = LoggerFactory.getLogger(OnboardingsControllerV1.class);
   @Autowired WorkflowClient temporalClient;
 
   @Value("${spring.curriculum.task-queue}")
   String taskQueue;
 
   @GetMapping("/{id}")
-  public ResponseEntity<OnboardingsGet> onboardingGet(@PathVariable("id") String id) {
+  public ResponseEntity<OnboardingsGetV1> onboardingGet(@PathVariable("id") String id) {
     var svc = this.temporalClient.getWorkflowServiceStubs();
 
     WorkflowExecution execution = WorkflowExecution.newBuilder().setWorkflowId(id).build();
@@ -59,7 +59,7 @@ public class OnboardingsController {
           DefaultDataConverter.newDefaultInstance()
               .fromPayload(payload, OnboardEntityRequest.class, OnboardEntityRequest.class);
     }
-    var get = new OnboardingsGet(sentRequest.id(), status.toString(), sentRequest);
+    var get = new OnboardingsGetV1(sentRequest.id(), status.toString(), sentRequest);
     return ResponseEntity.ok(get);
   }
 
@@ -68,12 +68,12 @@ public class OnboardingsController {
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> onboardingPut(
-      @PathVariable String id, @RequestBody OnboardingsPut params) {
+      @PathVariable String id, @RequestBody OnboardingsPutV1 params) {
 
     return startOnboardEntity(id, params);
   }
 
-  private ResponseEntity<String> startOnboardEntity(String id, OnboardingsPut params) {
+  private ResponseEntity<String> startOnboardEntity(String id, OnboardingsPutV1 params) {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)

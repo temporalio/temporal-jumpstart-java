@@ -24,6 +24,5 @@
 
 package io.temporal.onboardings.api.messages;
 
-import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
-
-public record OnboardingsGet(String id, String executionStatus, OnboardEntityRequest request) {}
+public record OnboardingsPutV1(String id, String value) {}
+;

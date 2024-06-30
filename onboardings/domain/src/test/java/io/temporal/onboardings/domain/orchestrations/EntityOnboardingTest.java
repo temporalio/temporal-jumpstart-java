@@ -6,16 +6,19 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.failure.ApplicationFailure;
+import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.testing.TestWorkflowEnvironment;
 import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -39,6 +42,15 @@ public class EntityOnboardingTest {
   @Autowired WorkflowClient workflowClient;
 
   @MockBean CrmListener listener;
+  //  @MockBean IntegrationsHandlers integrationsHandlers;
+  //
+  //  @Bean
+  //  public IntegrationsHandlers getIntegrationsHandlersBean() {
+  //    return integrationsHandlers;
+  //  }
+
+  @Value("${spring.temporal.workers[0].task-queue}")
+  String taskQueue;
 
   @AfterEach
   public void after() {
@@ -57,7 +69,7 @@ public class EntityOnboardingTest {
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue(taskQueue).build());
     WorkflowClient.execute(() -> sut.execute(args));
   }
 
@@ -68,7 +80,7 @@ public class EntityOnboardingTest {
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue(taskQueue).build());
 
     var e =
         Assertions.assertThrows(
@@ -82,19 +94,17 @@ public class EntityOnboardingTest {
 
   @Test
   public void execute_givenHealthyService_registersCrmEntity() {
-    String wfId = UUID.randomUUID().toString();
-    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 3, null, true);
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 3, null, true);
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue("onboardings").build());
-
-    //    doNothing()
-    //        .when(integrationsHandlers)
-    //        .registerCrmEntity(new RegisterCrmEntityRequest(args.id(), args.value()));
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
     sut.execute(args);
-    verify(listener, times(1))
-        .registered(
+    var cfg = new Configuration();
+    verify(cfg.integrationHandlers, times(1))
+        .registerCrmEntity(
             argThat(
                 arg -> {
                   return Objects.equals(args.id(), arg.id())
@@ -103,5 +113,12 @@ public class EntityOnboardingTest {
   }
 
   @ComponentScan
-  public static class Configuration {}
+  public static class Configuration {
+    @MockBean private IntegrationsHandlers integrationHandlers;
+
+    @Bean
+    public IntegrationsHandlers getIntegrationsHandlersBean() {
+      return integrationHandlers;
+    }
+  }
 }
