@@ -6,6 +6,7 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.failure.ApplicationFailure;
+import io.temporal.onboardings.domain.DomainConfig;
 import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.testing.TestWorkflowEnvironment;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(
@@ -30,10 +32,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @EnableAutoConfiguration()
 @DirtiesContext
-@ComponentScan(
-    basePackageClasses = {
-      OrchestrationsConfig.class,
-    })
+@Import(DomainConfig.class)
 public class EntityOnboardingTest {
   @Autowired ConfigurableApplicationContext applicationContext;
 

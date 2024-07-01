@@ -1,8 +1,8 @@
-package io.temporal.onboardings.domain.orchestrations;
+package io.temporal.app.domain;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ComponentScan
-public class OrchestrationsConfig {}
+@Configuration
+public class DomainConfig {}

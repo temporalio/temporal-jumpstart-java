@@ -51,7 +51,7 @@ public class OnboardingsControllerV1 {
             .describeWorkflowExecution(
                 DescribeWorkflowExecutionRequest.newBuilder()
                     .setExecution(execution)
-                    .setNamespace(taskQueue)
+                    .setNamespace("default")
                     .build());
     var status = desc.getWorkflowExecutionInfo().getStatus();
     var history = this.temporalClient.fetchHistory(id);
@@ -83,20 +83,26 @@ public class OnboardingsControllerV1 {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)
-                // BestPractice: WorkflowIds should have business meaning.
-                // Details: This identifier can be an AccountID, SessionID, etc.
-                // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
-                // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
-                // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
+            // BestPractice: WorkflowIds should have business meaning.
+            // Details: This identifier can be an AccountID, SessionID, etc.
+            // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
+            // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
+            // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
             .setWorkflowId(id)
-                // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling failures at the Activity level within the Workflow.
-                // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting a Workflow and we strongly discourage it.
-                // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be enforced. Other Exceptions will cause the WorkflowTask
-                // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
-                .setRetryOptions(null)
-                // Our requirements state that we want to allow the same WorkflowID if prior attempts were Canceled.
-                // Therefore, we are using this Policy that will reject duplicates unless previous attempts did not reach terminal state as `Completed'.
-                .setWorkflowIdReusePolicy(
+            // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling
+            // failures at the Activity level within the Workflow.
+            // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting
+            // a Workflow and we strongly discourage it.
+            // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be
+            // enforced. Other Exceptions will cause the WorkflowTask
+            // to be rescheduled so that Workflows can continue to make progress once
+            // repaired/redeployed with corrections.
+            .setRetryOptions(null)
+            // Our requirements state that we want to allow the same WorkflowID if prior attempts
+            // were Canceled.
+            // Therefore, we are using this Policy that will reject duplicates unless previous
+            // attempts did not reach terminal state as `Completed'.
+            .setWorkflowIdReusePolicy(
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY)
             .build();
     WorkflowStub workflowStub =
