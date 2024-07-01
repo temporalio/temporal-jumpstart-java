@@ -56,9 +56,13 @@ public class OnboardingsControllerV2 {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> onboardingPut(
       @PathVariable String id, @RequestBody OnboardingsPutV2 params) {
+    // poor man's inspection to decide whether to update the entity or start a workflow
+    // we could as easily check for WF existence first to decide which is best action to take
     if (params.approval().approvalStatus().equals(ApprovalStatus.PENDING)) {
       return startOnboardEntity(id, params);
     }
+
+    // Signal our onboarding with the appropriate ApprovalStatus
     try {
       var wfStub = temporalClient.newWorkflowStub(EntityOnboarding.class, id);
       if (params.approval().approvalStatus().equals(ApprovalStatus.APPROVED)) {
@@ -69,6 +73,7 @@ public class OnboardingsControllerV2 {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
     } catch (WorkflowNotFoundException e) {
+      // you can receive this if the Workflow has Closed or simply is not there
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

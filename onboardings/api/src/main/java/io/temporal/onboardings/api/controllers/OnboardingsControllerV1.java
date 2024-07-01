@@ -37,6 +37,12 @@ public class OnboardingsControllerV1 {
 
   @GetMapping("/{id}")
   public ResponseEntity<OnboardingsGetV1> onboardingGet(@PathVariable("id") String id) {
+    // this is relatively advanced use of the TemporalClient but is shown here to
+    // illustrate how to interact with the lower-level gRPC API for extracting details
+    // about the WorkflowExecution.
+    // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
+    // This module will not overly explain this interaction but will be valuable later when we
+    // want to reason about our Executions with more detail.
     var svc = this.temporalClient.getWorkflowServiceStubs();
 
     WorkflowExecution execution = WorkflowExecution.newBuilder().setWorkflowId(id).build();
@@ -77,10 +83,21 @@ public class OnboardingsControllerV1 {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)
+                // BestPractice: WorkflowIds should have business meaning.
+                // Details: This identifier can be an AccountID, SessionID, etc.
+                // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
+                // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
+                // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
             .setWorkflowId(id)
-            .setRetryOptions(null)
-            .setWorkflowIdReusePolicy(
-                WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
+                // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling failures at the Activity level within the Workflow.
+                // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting a Workflow and we strongly discourage it.
+                // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be enforced. Other Exceptions will cause the WorkflowTask
+                // to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
+                .setRetryOptions(null)
+                // Our requirements state that we want to allow the same WorkflowID if prior attempts were Canceled.
+                // Therefore, we are using this Policy that will reject duplicates unless previous attempts did not reach terminal state as `Completed'.
+                .setWorkflowIdReusePolicy(
+                WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY)
             .build();
     WorkflowStub workflowStub =
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
