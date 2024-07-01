@@ -30,7 +30,11 @@ public class EntityOnboardingImpl implements EntityOnboarding {
       Workflow.newActivityStub(
           NotificationsHandlers.class,
           ActivityOptions.newBuilder()
-              .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
+              .setRetryOptions(RetryOptions.newBuilder().
+                      // Since we are delivering an message, we want to restrict the number of retry attempts we make
+                      // lest we inadvertently build a SPAM server.
+                      setMaximumAttempts(2).
+                      build())
               .setStartToCloseTimeout(Duration.ofSeconds(2))
               .build());
 
@@ -38,14 +42,23 @@ public class EntityOnboardingImpl implements EntityOnboarding {
   public void execute(OnboardEntityRequest args) {
     state =
         new EntityOnboardingState(
-            args.id(), args.value(), new Approval(ApprovalStatus.PENDING, null));
+                args.id(),
+                args.value(),
+                args.skipApproval() ? new Approval(ApprovalStatus.APPROVED, null):
+                new Approval(ApprovalStatus.PENDING, null));
     var notifyDeputyOwner = args.deputyOwnerEmail() != null && !args.deputyOwnerEmail().isEmpty();
     assertValidArgs(args);
     if (!args.skipApproval()) {
       var waitApprovalSecs = args.completionTimeoutSeconds();
       if (notifyDeputyOwner) {
+        // We lean into integer division here to be unconcerned about
+        // determinism issues. Note that if we did this with a float/double
+        // we could run into a problem with hardware results and violate the determinism
+        // requirement for our Timer.
         waitApprovalSecs = waitApprovalSecs / 2;
       }
+
+      // this blocks until we flip the `ApprovalStatus` bit on our state object
       var conditionMet =
           Workflow.await(
               Duration.ofSeconds(waitApprovalSecs),
@@ -61,12 +74,17 @@ public class EntityOnboardingImpl implements EntityOnboarding {
         var can = Workflow.newContinueAsNewStub(EntityOnboarding.class);
         var canArgs =
             new OnboardEntityRequest(
-                args.id(), state.currentValue(), waitApprovalSecs, null, args.skipApproval());
+                args.id(), state.currentValue(),
+                    args.completionTimeoutSeconds() - waitApprovalSecs,
+                    null, args.skipApproval());
         can.execute(canArgs);
         return;
       }
     }
+
+    // make sure we are APPROVED to proceed with the Onboarding
     if (!state.approval().approvalStatus().equals(ApprovalStatus.APPROVED)) {
+      logger.info("Entity was rejected for {}", args.id());
       return;
     }
 
@@ -105,7 +123,23 @@ public class EntityOnboardingImpl implements EntityOnboarding {
         || args.id().isEmpty()
         || args.value() == null
         || args.value().isEmpty()) {
-      throw ApplicationFailure.newFailure("id and value are required", "invalid_args");
+      /*
+       * Temporal is not prescriptive about the strategy you choose for indicating failures in your Workflows.
+       *
+       * We throw an ApplicationFailureException here which would ultimately result in a `WorkflowFailedException`.
+       * This is a common way to fail a Workflow which will never succeed due to bad arguments or some other invariant.
+       *
+       * It is common to use ApplicationFailure for business failures, but these should be considered distinct from an intermittent failure such as
+       * a bug in the code or some dependency which is temporarily unavailable. Temporal can often recover from these kinds of intermittent failures
+       * with a redeployment, downstream service correction, etc. These intermittent failures would typically result in an Exception NOT descended from
+       * TemporalFailure and would therefore NOT fail the Workflow Execution.
+       *
+       * If you have explicit business metrics setup to monitor failed Workflows, you could alternatively return a "Status" result with the business failure
+       * and allow the Workflow Execution to "Complete" without failure.
+       *
+       * Note that `WorkflowFailedException` will count towards the `workflow_failed` SDK Metric (https://docs.temporal.io/references/sdk-metrics#workflow_failed).
+       */
+      throw ApplicationFailure.newFailure("id and value are required", Errors.INVALID_ARGS.name());
     }
   }
 }

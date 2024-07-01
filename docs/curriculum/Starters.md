@@ -7,11 +7,33 @@
 * Understand how to Start OR Execute a Workflow (that doesn't exist!)
 * Introduce Web UI and a Workflow Execution history
 
+## Best Practices
+
+#### WorkflowIds should have business meaning.
+
+This identifier can be an AccountID, SessionID, etc. 
+
+* Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact. 
+* Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
+Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
+
+#### Do not fail a workflow on intermittent (eg bug) errors; prefer handling failures at the Activity level within the Workflow.
+
+A Workflow will very rarely need one to specify a RetryPolicy when starting a Workflow and we strongly discourage it.
+Only Exceptions that inherit from `TemporalFailure` will cause a RetryPolicy to be enforced. Other Exceptions will cause the WorkflowTask
+to be rescheduled so that Workflows can continue to make progress once repaired/redeployed with corrections.
+Reference: 
+* https://javadoc.io/doc/io.temporal/temporal-sdk/latest/io/temporal/client/WorkflowFailedException.html
+* https://docs.temporal.io/encyclopedia/detecting-workflow-failures
+
+
 ## Onboardings
 
-## Connection setup
+#### Select Our Options
 
-See the various `resources` directories for connection details using Spring Boot.
+* **Workflow ID:** Let's use the same `id` as the resource that has been `PUT`
+* **Workflow ID Reuse Policy:** Our requirements state that we want to allow the same WorkflowID if prior attempts were Canceled. 
+Therefore, we are using this Policy that will reject duplicates unless previous attempts did not reach terminal state as `Completed'.
 
 ## Start an Entity Onboarding
 
@@ -24,7 +46,7 @@ See the various `resources` directories for connection details using Spring Boot
 
 **Expected outcome**
 
-1. You should see a Workflow running  [here](http://localhost:8233/namespaces/default/workflows) or  [Temporal Cloud Namespace UI](https://cloud.temporal.io).
+1. You should see a Workflow running  [locally](http://localhost:8233/namespaces/default/workflows) or in the [Temporal Cloud Namespace UI](https://cloud.temporal.io).
     1. WorkflowType: `WorkflowDefinitionDoesntExistYet`
     2. WorkflowId: `onboarding-123`
 2. Enter the Workflow and you should see a "No Workers Running" caution and the first two events which indicate the
