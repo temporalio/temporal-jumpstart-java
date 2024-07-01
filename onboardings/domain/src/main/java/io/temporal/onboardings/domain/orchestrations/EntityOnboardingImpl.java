@@ -30,11 +30,14 @@ public class EntityOnboardingImpl implements EntityOnboarding {
       Workflow.newActivityStub(
           NotificationsHandlers.class,
           ActivityOptions.newBuilder()
-              .setRetryOptions(RetryOptions.newBuilder().
-                      // Since we are delivering an message, we want to restrict the number of retry attempts we make
+              .setRetryOptions(
+                  RetryOptions.newBuilder()
+                      .
+                      // Since we are delivering an message, we want to restrict the number of retry
+                      // attempts we make
                       // lest we inadvertently build a SPAM server.
-                      setMaximumAttempts(2).
-                      build())
+                      setMaximumAttempts(2)
+                      .build())
               .setStartToCloseTimeout(Duration.ofSeconds(2))
               .build());
 
@@ -42,10 +45,11 @@ public class EntityOnboardingImpl implements EntityOnboarding {
   public void execute(OnboardEntityRequest args) {
     state =
         new EntityOnboardingState(
-                args.id(),
-                args.value(),
-                args.skipApproval() ? new Approval(ApprovalStatus.APPROVED, null):
-                new Approval(ApprovalStatus.PENDING, null));
+            args.id(),
+            args.value(),
+            args.skipApproval()
+                ? new Approval(ApprovalStatus.APPROVED, null)
+                : new Approval(ApprovalStatus.PENDING, null));
     var notifyDeputyOwner = args.deputyOwnerEmail() != null && !args.deputyOwnerEmail().isEmpty();
     assertValidArgs(args);
     if (!args.skipApproval()) {
@@ -74,9 +78,11 @@ public class EntityOnboardingImpl implements EntityOnboarding {
         var can = Workflow.newContinueAsNewStub(EntityOnboarding.class);
         var canArgs =
             new OnboardEntityRequest(
-                args.id(), state.currentValue(),
-                    args.completionTimeoutSeconds() - waitApprovalSecs,
-                    null, args.skipApproval());
+                args.id(),
+                state.currentValue(),
+                args.completionTimeoutSeconds() - waitApprovalSecs,
+                null,
+                args.skipApproval());
         can.execute(canArgs);
         return;
       }

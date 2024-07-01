@@ -4,11 +4,10 @@ import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.clients.crm.CrmClient;
 import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
+import java.net.ConnectException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-
-import java.net.ConnectException;
 
 @Component("integrations-handlers")
 public class IntegrationsHandlersImpl implements IntegrationsHandlers {
@@ -25,15 +24,16 @@ public class IntegrationsHandlersImpl implements IntegrationsHandlers {
       // If so, just return
       var value = crmClient.getCustomerById(cmd.id());
       return;
-    } catch(HttpClientErrorException e) {
-      if(!e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+    } catch (HttpClientErrorException e) {
+      if (!e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
         throw e;
       }
     }
     try {
       crmClient.registerCustomer(cmd.id(), cmd.value());
     } catch (ConnectException e) {
-      throw ApplicationFailure.newFailureWithCause("Failed to connect with CRM service.", Errors.SERVICE_UNRECOVERABLE.name(), e);
+      throw ApplicationFailure.newFailureWithCause(
+          "Failed to connect with CRM service.", Errors.SERVICE_UNRECOVERABLE.name(), e);
     }
   }
 }
