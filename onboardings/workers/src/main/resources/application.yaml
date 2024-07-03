@@ -8,6 +8,7 @@ spring:
     name: temporal-jumpstart-java
   curriculum:
     task-queue: onboardings
+    repositoriesId: repositories
   temporal:
     test-server:
       enabled: false
@@ -16,6 +17,8 @@ spring:
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
         workflow-classes:
           - io.temporal.onboardings.domain.orchestrations.EntityOnboardingImpl
+          - io.temporal.onboardings.domain.orchestrations.RepositoriesImpl
+
         activity-beans:
           - notifications-handlers
           - integrations-handlers

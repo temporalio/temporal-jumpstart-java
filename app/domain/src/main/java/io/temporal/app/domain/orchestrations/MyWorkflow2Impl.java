@@ -11,6 +11,7 @@ import java.util.*;
 
 public class MyWorkflow2Impl implements MyWorkflow{
     private Logger logger = Workflow.getLogger(MyWorkflow2Impl.class);
+    List<String> completedProducts = new ArrayList<>();
     private final ProductHandlers productHandlers =
             Workflow.newActivityStub(ProductHandlers.class,
                     ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(5)).build());
@@ -18,7 +19,6 @@ public class MyWorkflow2Impl implements MyWorkflow{
     public void execute(StartMyWorkflowRequest args) {
 
         var partialFulfillment = false;
-        var completedProducts = new ArrayList<String>();
         Map<String, String> productSpecs = new HashMap<String, String>();
         productSpecs.put("p1", "pspec1");
         productSpecs.put("p2", "pspec2");
@@ -38,7 +38,9 @@ public class MyWorkflow2Impl implements MyWorkflow{
                                 results.add(p);
                             }
                         });
+
         var conditionMet = Workflow.await(Duration.ofSeconds(100), ()->completedProducts.size() == productSpecs.size());
+        // activity
         if(!conditionMet){
             // cancel all the activities that have not called back
             cancellationScope.cancel();
@@ -52,5 +54,15 @@ public class MyWorkflow2Impl implements MyWorkflow{
                 p.get();
             }
         }
+        Workflow.await(()->this.repeatActivityAt);
+    }
+
+    @Override
+    public void CompleteProduct(String productType) {
+        if(this.completedProducts.contains("foo")){
+            this.repeatActivityA = true;
+        }
+        this.completedProducts.add(productType);
+        /// activity
     }
 }

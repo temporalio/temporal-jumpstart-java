@@ -37,6 +37,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
                       // attempts we make
                       // lest we inadvertently build a SPAM server.
                       setMaximumAttempts(2)
+                      .setDoNotRetry("invalid_args", "varga")
                       .build())
               .setStartToCloseTimeout(Duration.ofSeconds(2))
               .build());

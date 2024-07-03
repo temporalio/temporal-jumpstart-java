@@ -1,5 +1,6 @@
 package io.temporal.onboardings.domain.integrations;
 
+import io.temporal.client.WorkflowClient;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.clients.crm.CrmClient;
 import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.client.HttpClientErrorException;
 @Component("integrations-handlers")
 public class IntegrationsHandlersImpl implements IntegrationsHandlers {
   private final CrmClient crmClient;
+
+  private WorkflowClient myClient;
 
   public IntegrationsHandlersImpl(CrmClient crmClient) {
     this.crmClient = crmClient;
@@ -32,7 +35,7 @@ public class IntegrationsHandlersImpl implements IntegrationsHandlers {
     try {
       crmClient.registerCustomer(cmd.id(), cmd.value());
     } catch (ConnectException e) {
-      throw ApplicationFailure.newFailureWithCause(
+      throw ApplicationFailure.newNonRetryableFailure(
           "Failed to connect with CRM service.", Errors.SERVICE_UNRECOVERABLE.name(), e);
     }
   }
