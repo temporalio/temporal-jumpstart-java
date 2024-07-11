@@ -3,13 +3,15 @@ package io.temporal.app.api.controllers;
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
 import io.temporal.app.api.messages.MyResourceGet;
 import io.temporal.app.api.messages.MyResourcePut;
-import io.temporal.app.domain.messages.orchestrations.StartMyWorkflowRequest;
-import io.temporal.app.domain.orchestrations.MyWorkflow;
+import io.temporal.app.domain.messages.orchestrations.SubmitOrderRequest;
+import io.temporal.app.domain.orchestrations.Order;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowNotFoundException;
 import io.temporal.client.WorkflowOptions;
 import java.net.URI;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/resources")
-public class MyController {
+@RequestMapping("/api/orders")
+public class OrdersController {
 
-  Logger logger = LoggerFactory.getLogger(MyController.class);
+  Logger logger = LoggerFactory.getLogger(OrdersController.class);
   @Autowired WorkflowClient temporalClient;
 
   @Value("${spring.curriculum.task-queue}")
@@ -33,7 +35,7 @@ public class MyController {
   @GetMapping("/{id}")
   public ResponseEntity<MyResourceGet> onboardingGet(@PathVariable("id") String id) {
     try {
-      var workflowStub = temporalClient.newWorkflowStub(MyWorkflow.class, id);
+      var workflowStub = temporalClient.newWorkflowStub(Order.class, id);
       // implement this
       //            var state = workflowStub.getState();
       return new ResponseEntity<>(new MyResourceGet("do", "something"), HttpStatus.OK);
@@ -60,9 +62,9 @@ public class MyController {
             .setWorkflowIdReusePolicy(
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
             .build();
-    var workflowStub = temporalClient.newWorkflowStub(MyWorkflow.class, options);
+    var workflowStub = temporalClient.newWorkflowStub(Order.class, options);
 
-    var wfArgs = new StartMyWorkflowRequest(params.id(), params.value());
+    var wfArgs = new SubmitOrderRequest(params.id(), params.userId(), new ArrayList<>());
     // Start the workflow execution.
     try {
       var run = WorkflowClient.start(workflowStub::execute, wfArgs);

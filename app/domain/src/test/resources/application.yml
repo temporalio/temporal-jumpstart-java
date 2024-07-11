@@ -1,0 +1,46 @@
+server:
+  port: 3030
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: temporal-jumpstart-java
+  app:
+    task-queue: app
+  temporal:
+    test-server:
+      enabled: true
+    workers:
+      - task-queue: app
+        # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
+        workflow-classes:
+          - io.temporal.app.domain.orchestrations.OrderImpl
+        activity-beans:
+          - product-handlers
+    namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
+    connection:
+      target: 127.0.0.1:7233
+
+# (Note following configuration are not set by default but serve more as reference)
+#    workers:
+#      - task-queue: DemoTaskQueue
+#        capacity:
+#          max-concurrent-workflow-task-pollers: 6
+#          max-concurrent-activity-task-pollers: 6
+#          max-concurrent-workflow-task-executors: 6
+#          max-concurrent-activity-task-executors: 6
+#          max-concurrent-local-activity-task-executors: 6
+#        rate-limits:
+#          max-worker-activities-per-second: 3
+#          max-task-queue-activities-per-second: 3
+#    workflow-cache:
+#      max-instances: 10
+#      max-threads: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
