@@ -1,16 +1,21 @@
 package io.temporal.app.api.controllers;
 
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
-import io.temporal.app.api.messages.OrderGet;
-import io.temporal.app.api.messages.OrderPut;
-import io.temporal.app.domain.messages.orchestrations.SubmitOrderRequest;
+import io.temporal.app.messages.api.*;
+import io.temporal.app.messages.commands.FulfillAccommodationRequest;
+import io.temporal.app.messages.commands.FulfillTaxiRequest;
+import io.temporal.app.messages.orchestrations.SubmitOrderRequest;
+import io.temporal.app.messages.values.ProductType;
 import io.temporal.app.domain.orchestrations.Order;
+import io.temporal.app.messages.commands.FulfillFlightRequest;
+import io.temporal.app.messages.commands.ProductFulfillmentRequest;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowNotFoundException;
 import io.temporal.client.WorkflowOptions;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +68,20 @@ public class OrdersController {
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
             .build();
     var workflowStub = temporalClient.newWorkflowStub(Order.class, options);
+    List<ProductFulfillmentRequest> fulfillments = new ArrayList<ProductFulfillmentRequest>();
+    for (FlightView view: params.flights()){
+      fulfillments.add(new FulfillFlightRequest(ProductType.FLIGHT, view.id(), view.airline(), view.flightNumber()));
+    }
+    for (TaxiView view: params.taxis()){
+      fulfillments.add(new FulfillTaxiRequest(ProductType.TAXI, view.id(), view.name(), view.pickupDateTime()));
+    }
+    for (AccommodationView view: params.accommodations()){
+      fulfillments.add(new FulfillAccommodationRequest(ProductType.ACCOMMODATION, view.id(), view.name(),view.startDate(), view.endDate()));
+    }
 
-    var wfArgs = new SubmitOrderRequest(params.id(), params.userId(), new ArrayList<>());
+
+    var wfArgs = new SubmitOrderRequest(params.id(), params.userId(), fulfillments.toArray(new ProductFulfillmentRequest[0]));
+
     // Start the workflow execution.
     try {
       var run = WorkflowClient.start(workflowStub::execute, wfArgs);

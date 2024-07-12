@@ -13,6 +13,7 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
     implementation project(':app:domain')
+    implementation project(':app:messages')
 }
 
 

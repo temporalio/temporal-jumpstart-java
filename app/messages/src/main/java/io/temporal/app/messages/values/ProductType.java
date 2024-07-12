@@ -1,4 +1,4 @@
-package io.temporal.app.domain.messages.values;
+package io.temporal.app.messages.values;
 
 public enum ProductType {
   ACCOMMODATION,

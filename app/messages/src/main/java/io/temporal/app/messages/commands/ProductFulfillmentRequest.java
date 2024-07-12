@@ -1,8 +1,8 @@
-package io.temporal.app.domain.messages.commands;
+package io.temporal.app.messages.commands;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.temporal.app.domain.messages.values.ProductType;
+import io.temporal.app.messages.values.ProductType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({

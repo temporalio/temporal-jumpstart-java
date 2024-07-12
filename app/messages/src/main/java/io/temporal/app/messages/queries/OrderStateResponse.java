@@ -1,7 +1,9 @@
-package io.temporal.app.domain.messages.queries;
+package io.temporal.app.messages.queries;
 
-import io.temporal.app.domain.messages.commands.CompleteProductFulfillmentRequest;
-import io.temporal.app.domain.messages.orchestrations.SubmitOrderRequest;
+
+import io.temporal.app.messages.commands.CompleteProductFulfillmentRequest;
+import io.temporal.app.messages.orchestrations.SubmitOrderRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 

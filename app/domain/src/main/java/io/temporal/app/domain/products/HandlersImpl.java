@@ -1,12 +1,12 @@
 package io.temporal.app.domain.products;
 
-import io.temporal.app.domain.messages.commands.FulfillAccommodationRequest;
-import io.temporal.app.domain.messages.commands.FulfillFlightRequest;
-import io.temporal.app.domain.messages.commands.FulfillTaxiRequest;
-import io.temporal.app.domain.messages.queries.GetProductFulfillmentConfigurationRequest;
-import io.temporal.app.domain.messages.queries.GetProductFulfillmentConfigurationResponse;
-import io.temporal.app.domain.messages.values.ProductFulfillmentConfiguration;
-import io.temporal.app.domain.messages.values.ProductType;
+import io.temporal.app.messages.commands.FulfillAccommodationRequest;
+import io.temporal.app.messages.commands.FulfillFlightRequest;
+import io.temporal.app.messages.commands.FulfillTaxiRequest;
+import io.temporal.app.messages.queries.GetProductFulfillmentConfigurationRequest;
+import io.temporal.app.messages.queries.GetProductFulfillmentConfigurationResponse;
+import io.temporal.app.messages.values.ProductFulfillmentConfiguration;
+import io.temporal.app.messages.values.ProductType;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 
