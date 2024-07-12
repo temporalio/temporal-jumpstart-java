@@ -6,4 +6,6 @@ include 'onboardings:domain'
 include 'app:api'
 include 'app:domain'
 include 'app:workers'
+include 'app:messages'
+findProject(':app:messages')?.name = 'messages'
 

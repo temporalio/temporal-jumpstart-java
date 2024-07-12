@@ -9,9 +9,6 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowNotFoundException;
 import io.temporal.client.WorkflowOptions;
-import java.net.URI;
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +19,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/orders")
-public class OrdersController {
+import java.net.URI;
+import java.util.ArrayList;
 
-  Logger logger = LoggerFactory.getLogger(OrdersController.class);
+@RestController
+@RequestMapping("/api/fulfillments")
+public class FulfillmentsController {
+
+  Logger logger = LoggerFactory.getLogger(FulfillmentsController.class);
   @Autowired WorkflowClient temporalClient;
 
   @Value("${spring.curriculum.task-queue}")
