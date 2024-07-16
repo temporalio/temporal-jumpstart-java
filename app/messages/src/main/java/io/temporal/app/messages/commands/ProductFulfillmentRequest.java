@@ -12,4 +12,6 @@ import io.temporal.app.messages.values.ProductType;
 })
 public interface ProductFulfillmentRequest {
   ProductType productType();
+
+  String id();
 }

@@ -7,7 +7,7 @@ spring:
   application:
     name: temporal-jumpstart-java
   curriculum:
-    task-queue: onboardings
+    task-queue: app
   temporal:
     test-server:
       enabled: false
@@ -15,7 +15,7 @@ spring:
       - task-queue: app
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
         workflow-classes:
-          - io.temporal.app.domain.orchestrations.MyWorkflowImpl
+          - io.temporal.app.domain.orchestrations.OrderImpl
         activity-beans:
           - product-handlers
     namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id

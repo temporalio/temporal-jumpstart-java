@@ -12,7 +12,7 @@ spring:
     workers-auto-discovery:
       packages: # intentionally left blank to avoid spring auto configure problems...i just want a client
   curriculum:
-    task-queue: onboardings
+    task-queue: app
 # actuator (sdk metrics)
 management:
   endpoints:

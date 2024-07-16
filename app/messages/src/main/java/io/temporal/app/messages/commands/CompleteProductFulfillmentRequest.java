@@ -4,4 +4,4 @@ import io.temporal.app.messages.values.FulfillmentStatus;
 import io.temporal.app.messages.values.ProductType;
 
 public record CompleteProductFulfillmentRequest(
-        ProductType productType, String id, FulfillmentStatus fulfillmentStatus) {}
+    ProductType productType, String id, FulfillmentStatus fulfillmentStatus) {}
