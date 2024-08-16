@@ -6,13 +6,13 @@ import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowNotFoundException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.onboardings.api.messages.OnboardingsGetV2;
+import io.temporal.onboardings.api.messages.OnboardingsPutV1;
 import io.temporal.onboardings.api.messages.OnboardingsPutV2;
 import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
 import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.orchestrations.EntityOnboarding;
-import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v2/onboardings")
@@ -43,7 +45,7 @@ public class OnboardingsControllerV2 {
               state.id(),
               state.currentValue(),
               state.approval().approvalStatus().name(),
-              state.approval().comment()),
+              state.approval().comment(), "MISSING_EMAIL"),
           HttpStatus.OK);
     } catch (WorkflowNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -95,7 +97,7 @@ public class OnboardingsControllerV2 {
     try {
       var run = WorkflowClient.start(workflowStub::execute, wfArgs);
       var headers = new HttpHeaders();
-      headers.setLocation(URI.create(String.format("/api/onboardings/%s", id)));
+      headers.setLocation(URI.create(String.format("/api/v2/onboardings/%s", id)));
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       logger.info("Workflow execution already started: {}", id);
