@@ -16,6 +16,7 @@ import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.testing.TestWorkflowEnvironment;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.UUID;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +31,19 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(
     classes = {
-      EntityOnboardingTest.Configuration.class,
+      EntityOnboardingMockedActivityTest.Configuration.class,
     })
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @EnableAutoConfiguration()
 @DirtiesContext
 @ActiveProfiles("test")
 @Import(DomainConfig.class)
-public class EntityOnboardingTest {
+public class EntityOnboardingMockedActivityTest {
   @Autowired ConfigurableApplicationContext applicationContext;
 
   @Autowired TestWorkflowEnvironment testWorkflowEnvironment;
 
   @Autowired WorkflowClient workflowClient;
-
-  @MockBean CrmListener listener;
 
   @MockBean IntegrationsHandlers integrationsHandlers;
 
@@ -53,18 +52,14 @@ public class EntityOnboardingTest {
   @Value("${spring.temporal.workers[0].task-queue}")
   String taskQueue;
 
-  @AfterEach
-  public void after() {
-    testWorkflowEnvironment.close();
-  }
-
   @BeforeEach
   void beforeEach() {
     applicationContext.start();
   }
 
+  // state verification
   @Test
-  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldOnboardTheEntity() {
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldBeApproved() {
     String wfId = UUID.randomUUID().toString();
     var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
     EntityOnboarding sut =
@@ -74,16 +69,35 @@ public class EntityOnboardingTest {
     WorkflowClient.start(sut::execute, args);
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
     sut.approve(new ApproveEntityRequest("nocomment"));
-    System.out.printf("Type of mock is " + notificationsHandlers.getClass() + "\n");
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
-
-    verify(integrationsHandlers, times(1))
-        .registerCrmEntity(
-            argThat(arg -> arg.id().equals(wfId) && arg.value().equals(args.value())));
     EntityOnboardingState response = sut.getState();
     Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.APPROVED);
   }
 
+  // behavior verification
+  @Test
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldRegisterTheEntity() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+
+    verify(integrationsHandlers, times(1))
+        .registerCrmEntity(
+            argThat(
+                inputCall ->
+                    Objects.equals(inputCall.id(), args.id())
+                        && Objects.equals(inputCall.value(), args.value())));
+    verify(notificationsHandlers, never()).requestDeputyOwnerApproval(any());
+  }
+
+  // state verification
   @Test
   public void execute_givenInvalidArgs_itShouldFailWorkflow() {
     String wfId = UUID.randomUUID().toString();
@@ -104,62 +118,14 @@ public class EntityOnboardingTest {
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
   }
 
-  @Test
-  public void execute_givenHealthyService_registersCrmEntity() {
-    var args =
-        new OnboardEntityRequest(
-            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 3, null, true);
-    EntityOnboarding sut =
-        workflowClient.newWorkflowStub(
-            EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
-    sut.execute(args);
-    var cfg = new Configuration();
-    //    verify(cfg.integrationHandlers, times(1))
-    //        .registerCrmEntity(
-    //            argThat(
-    //                arg -> {
-    //                  return Objects.equals(args.id(), arg.id())
-    //                      && Objects.equals(args.value(), arg.value());
-    //                }));
-  }
-
   @ComponentScan
-  //  @TestConfiguration
   public static class Configuration {
-    //        @MockBean private IntegrationsHandlers integrationsHandlersMock;
-    //    @MockBean private NotificationsHandlers notificationsHandlersMock;
-    //
-    //    //    @Bean("integrations-handlers")
-    //    //    public IntegrationsHandlers getIntegrationsHandlers() {
-    //    //      return integrationsHandlersMock;
-    //    //    }
-    //
-    //    @Primary
-    //    @Bean("notifications-handlers")
-    //    public NotificationsHandlers getNotificationsHandlers() {
-    //      return notificationsHandlersMock;
-    //    }
-    //    @MockBean(name = "integrations-handlers")
-    //    private IntegrationsHandlers integrationHandlers;
-    //
-    //    @MockBean(name = "notifications-handlers")
-    //    private NotificationsHandlers notificationsHandlers;
-    //
-    //    @Bean
-    //    public IntegrationsHandlers getIntegrationsTestHandlersBean() {
-    //      Mockito.doNothing()
-    //          .when(integrationHandlers)
-    //          .registerCrmEntity(any(RegisterCrmEntityRequest.class));
-    //      return integrationHandlers;
-    //    }
-    //
-    //    @Bean
-    //    public NotificationsHandlers getNotificationsTestHandlers() {
-    //      Mockito.doNothing()
-    //          .when(notificationsHandlers)
-    //          .requestDeputyOwnerApproval(any(RequestDeputyOwnerApprovalRequest.class));
-    //      return notificationsHandlers;
-    //    }
+    @MockBean private NotificationsHandlers notificationsHandlersMock;
+
+    @Primary
+    @Bean("notifications-handlers")
+    public NotificationsHandlers notificationsHandlers() {
+      return notificationsHandlersMock;
+    }
   }
 }
