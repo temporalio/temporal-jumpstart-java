@@ -18,6 +18,8 @@ import io.temporal.testing.TestWorkflowEnvironment;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.UUID;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,6 +97,25 @@ public class EntityOnboardingMockedActivityTest {
                     Objects.equals(inputCall.id(), args.id())
                         && Objects.equals(inputCall.value(), args.value())));
     verify(notificationsHandlers, never()).requestDeputyOwnerApproval(any());
+  }
+  @Test
+  public void givenValidArgsWithOwnerApprovalAndDeputyOwnerWhenApprovalWindowTimesOut_itShouldRequestDeputyOwnerApproval() {
+
+    var args = new OnboardEntityRequest(UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            3,
+            "deputydawg@example.com", false);
+    EntityOnboarding sut =
+            workflowClient.newWorkflowStub(
+                    EntityOnboarding.class,
+                    WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    var e = Assert.assertThrows(Continu)
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(3));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    EntityOnboardingState response = sut.getState();
+    Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.APPROVED);
   }
 
   // state verification

@@ -13,7 +13,7 @@ It also assumes some familiarity with the use of "Test Doubles" to isolate tests
 
 _Test Doubles_
 
-This document will use the following definitions for the various Test Double types (from [Meszaros](https://www.amazon.com/gp/product/0131495054)):
+This document will use the following definitions for the various [Test Double](https://martinfowler.com/bliki/TestDouble.html) types (from [Meszaros](https://www.amazon.com/gp/product/0131495054)):
 
 * **Dummy** objects are passed around but never actually used. Usually they are just used to fill parameter lists.
 * **Fake** objects actually have working implementations, but usually take some shortcut which makes them not suitable for production (an in memory database is a good example).
@@ -81,10 +81,12 @@ Should `Activities` be mocked; or should the dependency(ies) _inside_ the `Activ
 
 The boundary for your Workflow functional tests can be determined by these considerations:
 
+_Do you intend to maintain Activity tests?_
+If not, mocking or stubbing the inner dependencies these Activities use is reasonable. 
+This is more compelling if you have already invested in mocks for these dependencies elsewhere.
+This makes your tests "blackbox" tests where you consider the `Activity` an adapter that belongs to the Workflow definition, not the business domain; 
+that is, the only reason an "Activity" component even exists is because the orchestration requires the behavior the Activity encompasses.
+
 _Does your Workflow definition have conditional branches?_ 
 If so, mocking or stubbing the Activity definitions themselves can reduce test complexity by directly providing their results, allowing you to verify the branch paths.
 
-_Do you intend to maintain Activity tests?_ 
-If not, mocking or stubbing the inner dependencies of these Activities, especially if you already maintain mocks for these, is reasonable.
-This makes your tests "blackbox" tests where you consider the `Activity` an adapter that belongs to the Workflow definition, not the business domain; that is, the only reason
-an "Activity" exists because of the orchestration that calls the underlying behavior.
