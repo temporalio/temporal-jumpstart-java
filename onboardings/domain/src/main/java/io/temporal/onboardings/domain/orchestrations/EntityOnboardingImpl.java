@@ -17,6 +17,7 @@ import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.workflow.Workflow;
 import java.time.Duration;
+import java.util.Objects;
 import org.slf4j.Logger;
 
 public class EntityOnboardingImpl implements EntityOnboarding {
@@ -50,7 +51,9 @@ public class EntityOnboardingImpl implements EntityOnboarding {
             args.skipApproval()
                 ? new Approval(ApprovalStatus.APPROVED, null)
                 : new Approval(ApprovalStatus.PENDING, null));
-    var notifyDeputyOwner = args.deputyOwnerEmail() != null && !args.deputyOwnerEmail().isEmpty();
+    var notifyDeputyOwner =
+        Objects.nonNull(args.deputyOwnerEmail()) && !args.deputyOwnerEmail().isEmpty();
+
     assertValidArgs(args);
     if (!args.skipApproval()) {
       var waitApprovalSecs = args.completionTimeoutSeconds();
@@ -67,6 +70,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
           Workflow.await(
               Duration.ofSeconds(waitApprovalSecs),
               () -> !state.approval().approvalStatus().equals(ApprovalStatus.PENDING));
+
       if (!conditionMet) {
         if (!notifyDeputyOwner) {
           throw ApplicationFailure.newFailure(

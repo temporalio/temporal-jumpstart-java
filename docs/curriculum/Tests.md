@@ -27,13 +27,13 @@ This document will use the following definitions for the various [Test Double](h
 
 Before diving into _how_ to test Activities, it is helpful to consider if tests need to be tested in isolation:
 
-If the `Activity` implementation is a thin [Adapter](https://en.wikipedia.org/wiki/Adapter_pattern) that lightly transforms
+`If` the `Activity` implementation is a thin [Adapter](https://en.wikipedia.org/wiki/Adapter_pattern) that lightly transforms
 input or simply exists to conform to Temporal serializable input requirements, an Activity test could be considered ceremonial/useless.
 
-Else if an `Activity` has a fairly complex algorithm, an Activity test is reasonable to maintain - but only if that complexity
-does not belong inside the dependency implementation itself being invoked, if any. 
+`Else if` an `Activity` has a fairly complex algorithm, an Activity test is reasonable to maintain - but only if that complexity
+does not belong inside the dependency implementation itself being invoked, if any. Don't forget that Failure types 
 
-Else if an `Activity` needs interacts with the `ActivityContext`, perhaps emitting periodic **heartbeats**, an Activity test
+`Else if` an `Activity` needs interacts with the `ActivityContext`, perhaps emitting periodic **heartbeats**, an Activity test
 should be considered. 
 > NOTE: Temporal SDK has an `ActivityTestEnvironment` which stubs an `ActivityContext` for use in Activity tests.
 
@@ -63,7 +63,7 @@ Workflows typically expose internal _State_ by either:
 Therefore, the `verify` stage of a test can employ these to meet "State based" test requirements; that is,
 after the Workflow is exercised, one of these methods can be used to verify its internal state. 
 Note that returning a `result` from a Workflow can (and will) couple callers to that Workflow contract and 
-can cause maintenance issues down the road. 
+can cause maintenance issues later. 
 
 #### Behavior Verification
 
@@ -90,3 +90,7 @@ that is, the only reason an "Activity" component even exists is because the orch
 _Does your Workflow definition have conditional branches?_ 
 If so, mocking or stubbing the Activity definitions themselves can reduce test complexity by directly providing their results, allowing you to verify the branch paths.
 
+#### Replay Test
+
+Recall that Temporal Workflow definitions must be non-deterministic. Also recall that Workflows are "replayed" at various times during your Application lifetime.
+This means we must verify that the state and behaviors meet expectations regardless of **how** it is executed.
