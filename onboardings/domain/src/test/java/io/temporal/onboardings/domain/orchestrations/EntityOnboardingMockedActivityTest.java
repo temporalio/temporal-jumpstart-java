@@ -9,6 +9,7 @@ import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.DomainConfig;
 import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
 import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.onboardings.domain.messages.queries.EntityOnboardingState;
@@ -59,7 +60,7 @@ public class EntityOnboardingMockedActivityTest {
 
   // state verification
   @Test
-  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldBeApproved() {
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_whenApproved_itShouldBeApproved() {
     String wfId = UUID.randomUUID().toString();
     var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
     EntityOnboarding sut =
@@ -76,7 +77,8 @@ public class EntityOnboardingMockedActivityTest {
 
   // behavior verification
   @Test
-  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldRegisterTheEntity() {
+  public void
+      givenValidArgsWithOwnerApprovalNoDeputyOwner_whenApproved_itShouldRegisterTheEntity() {
     String wfId = UUID.randomUUID().toString();
     var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
     EntityOnboarding sut =
@@ -94,6 +96,40 @@ public class EntityOnboardingMockedActivityTest {
                 inputCall ->
                     Objects.equals(inputCall.id(), args.id())
                         && Objects.equals(inputCall.value(), args.value())));
+    verify(notificationsHandlers, never()).requestDeputyOwnerApproval(any());
+  }
+  // state verification
+  @Test
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_whenRejected_itShouldBeRejected() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.reject(new RejectEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    EntityOnboardingState response = sut.getState();
+    Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.REJECTED);
+  }
+  // behavior verification
+  @Test
+  public void
+      givenValidArgsWithOwnerApprovalNoDeputyOwner_whenRejected_itShouldNotRegisterTheEntity() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.reject(new RejectEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+
+    verifyNoInteractions(integrationsHandlers);
     verify(notificationsHandlers, never()).requestDeputyOwnerApproval(any());
   }
 
