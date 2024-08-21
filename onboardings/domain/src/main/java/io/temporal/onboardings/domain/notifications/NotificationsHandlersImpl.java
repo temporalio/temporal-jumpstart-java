@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component("notifications-handlers")
 public class NotificationsHandlersImpl implements NotificationsHandlers {
-  private EmailClient emailClient;
+  private final EmailClient emailClient;
 
   public NotificationsHandlersImpl(EmailClient emailClient) {
     this.emailClient = emailClient;

@@ -7,14 +7,16 @@ import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.DomainConfig;
-import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
+import io.temporal.onboardings.domain.clients.crm.CrmClient;
+import io.temporal.onboardings.domain.clients.email.EmailClient;
 import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.onboardings.domain.messages.queries.EntityOnboardingState;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
-import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.testing.TestWorkflowEnvironment;
+import java.net.ConnectException;
 import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.*;
@@ -24,10 +26,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.HttpClientErrorException;
 
 @SpringBootTest(
     classes = {
@@ -45,19 +51,12 @@ public class EntityOnboardingMockedDependencyTest {
 
   @Autowired WorkflowClient workflowClient;
 
-  @MockBean CrmListener listener;
+  @Autowired CrmClient crmClient;
 
-  @MockBean IntegrationsHandlers integrationsHandlers;
-
-  @Autowired NotificationsHandlers notificationsHandlers;
+  @Autowired EmailClient emailClient;
 
   @Value("${spring.temporal.workers[0].task-queue}")
   String taskQueue;
-
-  @AfterEach
-  public void after() {
-    testWorkflowEnvironment.close();
-  }
 
   @BeforeEach
   void beforeEach() {
@@ -65,26 +64,138 @@ public class EntityOnboardingMockedDependencyTest {
   }
 
   @Test
-  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldOnboardTheEntity() {
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_whenApproved_itShouldBeApproved() {
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    EntityOnboardingState response = sut.getState();
+    Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.APPROVED);
+  }
+
+  // behavior verification
+  @Test
+  public void
+      givenValidArgsWithOwnerApprovalNoDeputyOwner_whenApproved_itShouldRegisterTheEntity() {
+
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4, null, false);
+
+    when(crmClient.getCustomerById(args.id()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
+
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+
+    try {
+      verify(crmClient, times(1)).registerCustomer(args.id(), args.value());
+    } catch (ConnectException ignored) {
+    }
+    verify(emailClient, never()).sendEmail(any(), any());
+  }
+  // state verification
+  @Test
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_whenRejected_itShouldBeRejected() {
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.reject(new RejectEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    EntityOnboardingState response = sut.getState();
+    Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.REJECTED);
+  }
+  // behavior verification
+  @Test
+  public void
+      givenValidArgsWithOwnerApprovalNoDeputyOwner_whenRejected_itShouldNotRegisterTheEntity() {
     String wfId = UUID.randomUUID().toString();
     var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(wfId).setTaskQueue(taskQueue).build());
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
     WorkflowClient.start(sut::execute, args);
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
-    sut.approve(new ApproveEntityRequest("nocomment"));
-    System.out.printf("Type of mock is " + notificationsHandlers.getClass() + "\n");
+    sut.reject(new RejectEntityRequest("nocomment"));
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    try {
+      verify(crmClient, never()).registerCustomer(any(), any());
+    } catch (ConnectException ignored) {
+    }
+    verify(emailClient, never()).sendEmail(any(), any());
+  }
 
-    verify(integrationsHandlers, times(1))
-        .registerCrmEntity(
-            argThat(arg -> arg.id().equals(wfId) && arg.value().equals(args.value())));
+  @Test
+  public void
+      givenValidArgsWithOwnerApprovalAndDeputyOwnerWhenApprovalWindowTimesOut_itShouldAllowApprovalByDeputy() {
+    int completionTimeoutSeconds = 30;
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            completionTimeoutSeconds,
+            "deputydawg@example.com",
+            false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(completionTimeoutSeconds));
+    sut.approve(new ApproveEntityRequest("from deputydawg@example.com"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
     EntityOnboardingState response = sut.getState();
     Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.APPROVED);
   }
 
+  @Test
+  public void
+      givenValidArgsWithOwnerApprovalAndDeputyOwnerWhenApprovalWindowTimesOut_shouldRequestDeputyOwnerApproval() {
+    int completionTimeoutSeconds = 30;
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(),
+            UUID.randomUUID().toString(),
+            completionTimeoutSeconds,
+            "deputydawg@example.com",
+            false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(completionTimeoutSeconds));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    try {
+      verify(crmClient, times(1)).registerCustomer(args.id(), args.value());
+    } catch (ConnectException ignored) {
+    }
+    verify(emailClient, times(1)).sendEmail(args.deputyOwnerEmail(), any());
+  }
+  // state verification
   @Test
   public void execute_givenInvalidArgs_itShouldFailWorkflow() {
     String wfId = UUID.randomUUID().toString();
@@ -105,62 +216,22 @@ public class EntityOnboardingMockedDependencyTest {
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
   }
 
-  @Test
-  public void execute_givenHealthyService_registersCrmEntity() {
-    var args =
-        new OnboardEntityRequest(
-            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 3, null, true);
-    EntityOnboarding sut =
-        workflowClient.newWorkflowStub(
-            EntityOnboarding.class,
-            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
-    sut.execute(args);
-    var cfg = new Configuration();
-    //    verify(cfg.integrationHandlers, times(1))
-    //        .registerCrmEntity(
-    //            argThat(
-    //                arg -> {
-    //                  return Objects.equals(args.id(), arg.id())
-    //                      && Objects.equals(args.value(), arg.value());
-    //                }));
-  }
-
   @ComponentScan
-  //  @TestConfiguration
   public static class Configuration {
-    //        @MockBean private IntegrationsHandlers integrationsHandlersMock;
-    //    @MockBean private NotificationsHandlers notificationsHandlersMock;
-    //
-    //    //    @Bean("integrations-handlers")
-    //    //    public IntegrationsHandlers getIntegrationsHandlers() {
-    //    //      return integrationsHandlersMock;
-    //    //    }
-    //
-    //    @Primary
-    //    @Bean("notifications-handlers")
-    //    public NotificationsHandlers getNotificationsHandlers() {
-    //      return notificationsHandlersMock;
-    //    }
-    //    @MockBean(name = "integrations-handlers")
-    //    private IntegrationsHandlers integrationHandlers;
-    //
-    //    @MockBean(name = "notifications-handlers")
-    //    private NotificationsHandlers notificationsHandlers;
-    //
-    //    @Bean
-    //    public IntegrationsHandlers getIntegrationsTestHandlersBean() {
-    //      Mockito.doNothing()
-    //          .when(integrationHandlers)
-    //          .registerCrmEntity(any(RegisterCrmEntityRequest.class));
-    //      return integrationHandlers;
-    //    }
-    //
-    //    @Bean
-    //    public NotificationsHandlers getNotificationsTestHandlers() {
-    //      Mockito.doNothing()
-    //          .when(notificationsHandlers)
-    //          .requestDeputyOwnerApproval(any(RequestDeputyOwnerApprovalRequest.class));
-    //      return notificationsHandlers;
-    //    }
+    @MockBean private CrmClient crmListener;
+
+    @MockBean private EmailClient emailClient;
+
+    @Primary
+    @Bean
+    public CrmClient getCrmListener() {
+      return crmListener;
+    }
+
+    @Primary
+    @Bean
+    EmailClient getEmailClient() {
+      return emailClient;
+    }
   }
 }
