@@ -20,6 +20,7 @@ import java.net.ConnectException;
 import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -102,11 +103,12 @@ public class EntityOnboardingMockedDependencyTest {
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
 
     try {
-      verify(crmClient, times(1)).registerCustomer(args.id(), args.value());
+      verify(crmClient, times(1)).registerCustomer(eq(args.id()), eq(args.value()));
     } catch (ConnectException ignored) {
     }
     verify(emailClient, never()).sendEmail(any(), any());
   }
+
   // state verification
   @Test
   public void givenValidArgsWithOwnerApprovalNoDeputyOwner_whenRejected_itShouldBeRejected() {
@@ -124,6 +126,7 @@ public class EntityOnboardingMockedDependencyTest {
     EntityOnboardingState response = sut.getState();
     Assertions.assertEquals(response.approval().approvalStatus(), ApprovalStatus.REJECTED);
   }
+
   // behavior verification
   @Test
   public void
@@ -180,6 +183,8 @@ public class EntityOnboardingMockedDependencyTest {
             completionTimeoutSeconds,
             "deputydawg@example.com",
             false);
+    when(crmClient.getCustomerById(args.id()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
     EntityOnboarding sut =
         workflowClient.newWorkflowStub(
             EntityOnboarding.class,
@@ -190,11 +195,12 @@ public class EntityOnboardingMockedDependencyTest {
     sut.approve(new ApproveEntityRequest("nocomment"));
     testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
     try {
-      verify(crmClient, times(1)).registerCustomer(args.id(), args.value());
+      verify(crmClient, times(1)).registerCustomer(eq(args.id()), eq(args.value()));
     } catch (ConnectException ignored) {
     }
-    verify(emailClient, times(1)).sendEmail(args.deputyOwnerEmail(), any());
+    verify(emailClient, times(1)).sendEmail(eq(args.deputyOwnerEmail()), any());
   }
+
   // state verification
   @Test
   public void execute_givenInvalidArgs_itShouldFailWorkflow() {
@@ -214,6 +220,43 @@ public class EntityOnboardingMockedDependencyTest {
     Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
     Assertions.assertEquals(
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
+  }
+
+  // state verification
+  @Test
+  public void execute_givenErmClientOutage_itShouldFailWorkflow() {
+    var args =
+        new OnboardEntityRequest(
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 3, null, true);
+
+    when(crmClient.getCustomerById(args.id())).thenReturn(args.value());
+    try {
+      Mockito.doThrow(ConnectException.class).when(crmClient).registerCustomer(any(), any());
+    } catch (ConnectException e) {
+      throw new RuntimeException(e);
+    }
+    var e =
+        Assertions.assertThrows(
+            WorkflowFailedException.class,
+            () -> {
+              EntityOnboarding sut =
+                  workflowClient.newWorkflowStub(
+                      EntityOnboarding.class,
+                      WorkflowOptions.newBuilder()
+                          .setWorkflowId(args.id())
+                          .setTaskQueue(taskQueue)
+                          .build());
+              WorkflowClient.start(sut::execute, args);
+              testWorkflowEnvironment.sleep(Duration.ofSeconds(2));
+
+              //
+              // testWorkflowEnvironment.sleep(Duration.ofSeconds(args.completionTimeoutSeconds()));
+              //              sut.approve(new ApproveEntityRequest("nocomment"));
+              //              testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+            });
+    Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
+    Assertions.assertEquals(
+        Errors.SERVICE_UNRECOVERABLE.name(), ((ApplicationFailure) e.getCause()).getType());
   }
 
   @ComponentScan

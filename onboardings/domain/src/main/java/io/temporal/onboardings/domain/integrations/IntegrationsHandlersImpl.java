@@ -22,9 +22,10 @@ public class IntegrationsHandlersImpl implements IntegrationsHandlers {
     try {
       // Idempotency check - does the Entity already exist?
       // If so, just return
-      var value = crmClient.getCustomerById(cmd.id());
+      var ignored = crmClient.getCustomerById(cmd.id());
       return;
     } catch (HttpClientErrorException e) {
+      // a 404 means it doesnt exist, so ignore it
       if (!e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
         throw e;
       }
@@ -32,7 +33,7 @@ public class IntegrationsHandlersImpl implements IntegrationsHandlers {
     try {
       crmClient.registerCustomer(cmd.id(), cmd.value());
     } catch (ConnectException e) {
-      throw ApplicationFailure.newFailureWithCause(
+      throw ApplicationFailure.newNonRetryableFailureWithCause(
           "Failed to connect with CRM service.", Errors.SERVICE_UNRECOVERABLE.name(), e);
     }
   }
