@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
 import io.temporal.client.WorkflowOptions;
+import io.temporal.failure.ActivityFailure;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.DomainConfig;
 import io.temporal.onboardings.domain.clients.crm.CrmClient;
@@ -222,41 +223,40 @@ public class EntityOnboardingMockedDependencyTest {
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
   }
 
-  // state verification
+  // behavior verification
   @Test
-  public void execute_givenErmClientOutage_itShouldFailWorkflow() {
+  public void execute_givenErmClientOutage_itShouldFailWorkflow2() {
+
     var args =
         new OnboardEntityRequest(
-            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 3, null, true);
+            UUID.randomUUID().toString(), UUID.randomUUID().toString(), 4, null, false);
 
-    when(crmClient.getCustomerById(args.id())).thenReturn(args.value());
+    when(crmClient.getCustomerById(args.id()))
+        .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
     try {
       Mockito.doThrow(ConnectException.class).when(crmClient).registerCustomer(any(), any());
     } catch (ConnectException e) {
       throw new RuntimeException(e);
     }
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    var foo = WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.approve(new ApproveEntityRequest("nocomment"));
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
     var e =
         Assertions.assertThrows(
             WorkflowFailedException.class,
             () -> {
-              EntityOnboarding sut =
-                  workflowClient.newWorkflowStub(
-                      EntityOnboarding.class,
-                      WorkflowOptions.newBuilder()
-                          .setWorkflowId(args.id())
-                          .setTaskQueue(taskQueue)
-                          .build());
-              WorkflowClient.start(sut::execute, args);
-              testWorkflowEnvironment.sleep(Duration.ofSeconds(2));
-
-              //
-              // testWorkflowEnvironment.sleep(Duration.ofSeconds(args.completionTimeoutSeconds()));
-              //              sut.approve(new ApproveEntityRequest("nocomment"));
-              //              testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+              sut.execute(args);
             });
-    Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
-    Assertions.assertEquals(
-        Errors.SERVICE_UNRECOVERABLE.name(), ((ApplicationFailure) e.getCause()).getType());
+
+    var ae = Assertions.assertInstanceOf(ActivityFailure.class, e.getCause());
+    var afe = Assertions.assertInstanceOf(ApplicationFailure.class, ae.getCause());
+
+    Assertions.assertEquals(Errors.SERVICE_UNRECOVERABLE.name(), afe.getType());
   }
 
   @ComponentScan
