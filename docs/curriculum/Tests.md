@@ -90,7 +90,29 @@ that is, the only reason an "Activity" component even exists is because the orch
 _Does your Workflow definition have conditional branches?_ 
 If so, mocking or stubbing the Activity definitions themselves can reduce test complexity by directly providing their results, allowing you to verify the branch paths.
 
-#### Replay Test
+### Replay Tests
 
-Recall that Temporal Workflow definitions must be non-deterministic. Also recall that Workflows are "replayed" at various times during your Application lifetime.
-This means we must verify that the state and behaviors meet expectations regardless of **how** it is executed.
+Recall that Temporal Workflow definitions must be non-deterministic. 
+
+Also recall that Workflows are "replayed" at various times during your Application lifetime.
+
+> This means we must verify that the state and behaviors meet expectations regardless of **how** it is executed. 
+
+Your Workflow can build, pass all unit and functional tests, and ship to production just fine, but still bring your business to a halt because of Non-Determinism Errors. 
+This incident will be now exacerbated by the _new_ Workflow Executions that have started in production while the previous versions were "stuck".
+
+The Temporal [WorkflowReplayer](https://docs.temporal.io/develop/java/testing-suite#replay) test facility is what you want to use to either verify or validate any production Workflow
+executions in your development or build pipeline. 
+
+These types of tests are effectively a variant of "smoke" or "build validation" tests, so plug these tests in where you are currently performing these other tests; likely this
+is a step just before running your other unit or functional tests. 
+You might also consider these tests *verification* tests and might put these in the developer workflow as early as a `git commit`.
+
+Regardless of your environment or where in the delivery process these appear, they are an important investment to your production quality.
+
+#### What to test
+
+The Replay tests should exercise history that was caused by various code paths through your Executions.
+If your Workflow Definition has conditional branches, loops, or timers, it makes sense to mirror the unit test cases that verify these scenarios with the 
+execution histories _caused_ by those scenarios.
+
