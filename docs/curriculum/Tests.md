@@ -11,7 +11,8 @@ _State and/or Behavior Verification_
 This document presumes an acquaintance with the distinction between `state` and `behavior` verification styles.
 It also assumes some familiarity with the use of "Test Doubles" to isolate tests.
 
-_Test Doubles_
+
+**Test Doubles**
 
 This document will use the following definitions for the various [Test Double](https://martinfowler.com/bliki/TestDouble.html) types (from [Meszaros](https://www.amazon.com/gp/product/0131495054)):
 
@@ -110,9 +111,48 @@ You might also consider these tests *verification* tests and might put these in 
 
 Regardless of your environment or where in the delivery process these appear, they are an important investment to your production quality.
 
-#### What to test
+#### Recommendations
 
-The Replay tests should exercise history that was caused by various code paths through your Executions.
-If your Workflow Definition has conditional branches, loops, or timers, it makes sense to mirror the unit test cases that verify these scenarios with the 
-execution histories _caused_ by those scenarios.
+The Replay tests should exercise history that was produced by various code paths through your Executions.
+If your Workflow Definition has conditional branches, loops, or timers, it makes sense to store histories created by the unit test cases that verify these scenarios with the 
+execution histories _caused_ by the scenarios in the `latest` build so that they might be validated in `vNext` implementations.
+
+How these tests are implemented is based on your Version Control System (VCS) methodology and isolation boundaries present in your
+Continuous Integration / Continuous Deployment (CICD) pipeline.
+
+#### Implementing Replay Tests : In Situ Version Strategy 
+
+If you elect to use the `GetVersion` or `patch` SDK APIs, you must choose between loading Workflow History representing the 
+`latest` build from memory or from file storage.
+
+**External Workflow History Storage**
+
+* _Cons_
+  * This can be problematic in ephemeral containers used for CICD purposes.
+  * This might require non-trivial authnz to an external file storage solution.
+  * Garbage collection on histories might be needed to keep storage costs down
+    * Detecting which histories are eligible for collection can be complex for Workflow Definitions that are long-running and do not implement Continue As New
+* _Pros_
+  * No need to maintain more than one implementation in VCS for the same Workflow Type in the same source version.
+  * Standard VCS comparison techniques are preserved in diffs to make it easy to see what changes were made.
+
+**In-Memory Workflow History**
+
+* _Cons_ 
+  * Registration of the Workflow Type implementation must be preserved carefully, possibly using the Workflow Options that allow a `string` Workflow Type name.
+    * (see note on Worker registration considerations below)
+  * Duplicate implementations of same representation in same VCS version philosophically contradicts VCS principles to some.
+    * Placing a version in the Workflow Type name "hides" implementation changes in git comparisons by breaking helpful commit diffs during code review.
+    * The git concern can be mitigated with a descending versioning scheme, where the `vNext` overwrites the `latest` while preserving the same filename.
+* _Pros_
+  * No need to maintain external storage solution for the history produced by `latest` build. Validation can be done via in-memory history produced in unit tests.
+
+> The in situ Versioning strategy is handy because `Starters` don't need to update their code with version changes. 
+> 
+> Note that in all SDKs except Java need to specify a `string` WorkflowType name explicitly in the Worker registration,type decorator or attribute options
+to "pin" the Type name to maintain this implementation swap. 
+
+
+
+
 

@@ -18,6 +18,13 @@ spring:
         activity-beans:
           - integrations-handlers
           - notifications-handlers
+      - task-queue: onboardings-v2
+        # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
+        workflow-classes:
+          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingV2Impl
+        activity-beans:
+          - integrations-handlers
+          - notifications-handlers
     namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
     connection:
       target: 127.0.0.1:7233

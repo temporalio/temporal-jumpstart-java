@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.Objects;
 import org.slf4j.Logger;
 
-public class EntityOnboardingImpl implements EntityOnboarding {
+public class EntityOnboardingImpl implements EntityOnboarding, Potato {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
   private EntityOnboardingState state;
   private final IntegrationsHandlers integrationsHandlers =
