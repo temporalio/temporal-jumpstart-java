@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.Objects;
 import org.slf4j.Logger;
 
-public class EntityOnboardingImpl implements EntityOnboarding, Potato {
+public class EntityOnboardingImpl implements EntityOnboarding {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
   private EntityOnboardingState state;
   private final IntegrationsHandlers integrationsHandlers =
@@ -99,7 +99,11 @@ public class EntityOnboardingImpl implements EntityOnboarding, Potato {
     }
 
     try {
-      integrationsHandlers.registerCrmEntity(new RegisterCrmEntityRequest(args.id(), args.value()));
+      if (Workflow.getVersion("REGISTER_CRM_ENTITY", Workflow.DEFAULT_VERSION, 1)
+          != Workflow.DEFAULT_VERSION) {
+        integrationsHandlers.registerCrmEntity(
+            new RegisterCrmEntityRequest(args.id(), args.value()));
+      }
     } catch (ActivityFailure e) {
       ApplicationFailure af = (ApplicationFailure) e.getCause();
       if (af.isNonRetryable()) {

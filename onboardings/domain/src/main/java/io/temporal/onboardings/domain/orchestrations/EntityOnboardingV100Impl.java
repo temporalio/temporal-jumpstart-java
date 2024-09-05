@@ -6,7 +6,6 @@ import io.temporal.failure.ActivityFailure;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
 import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
-import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
 import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
 import io.temporal.onboardings.domain.messages.commands.RequestDeputyOwnerApprovalRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
@@ -19,8 +18,8 @@ import io.temporal.workflow.Workflow;
 import java.time.Duration;
 import org.slf4j.Logger;
 
-public class EntityOnboardingV2Impl implements EntityOnboarding {
-  Logger logger = Workflow.getLogger(EntityOnboardingV2Impl.class);
+public class EntityOnboardingV100Impl implements EntityOnboarding {
+  Logger logger = Workflow.getLogger(EntityOnboardingV100Impl.class);
   private EntityOnboardingState state;
   private final IntegrationsHandlers integrationsHandlers =
       Workflow.newActivityStub(
@@ -95,7 +94,8 @@ public class EntityOnboardingV2Impl implements EntityOnboarding {
     }
 
     try {
-      integrationsHandlers.registerCrmEntity(new RegisterCrmEntityRequest(args.id(), args.value()));
+      //      integrationsHandlers.registerCrmEntity(new RegisterCrmEntityRequest(args.id(),
+      // args.value()));
     } catch (ActivityFailure e) {
       ApplicationFailure af = (ApplicationFailure) e.getCause();
       if (af.isNonRetryable()) {

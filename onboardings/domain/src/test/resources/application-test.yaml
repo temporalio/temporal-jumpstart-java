@@ -7,6 +7,7 @@ spring:
     name: temporal-jumpstart-java
   curriculum:
     task-queue: onboardings
+    task-queue-replay-prefix: replay_
   temporal:
     test-server:
       enabled: true
@@ -18,10 +19,16 @@ spring:
         activity-beans:
           - integrations-handlers
           - notifications-handlers
-      - task-queue: onboardings-v2
+      - task-queue: replay_100
+        capacity:
+          max-concurrent-workflow-task-pollers: 2
+          max-concurrent-activity-task-pollers: 2
+          max-concurrent-workflow-task-executors: 4
+          max-concurrent-activity-executors: 2
+          max-concurrent-local-activity-executors: 4
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
         workflow-classes:
-          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingV2Impl
+          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingV100Impl
         activity-beans:
           - integrations-handlers
           - notifications-handlers

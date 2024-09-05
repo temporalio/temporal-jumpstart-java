@@ -144,10 +144,11 @@ If you elect to use the `GetVersion` or `patch` SDK APIs, you must choose betwee
   * Duplicate implementations of same representation in same VCS version philosophically contradicts VCS principles to some.
     * Placing a version in the Workflow Type name "hides" implementation changes in git comparisons by breaking helpful commit diffs during code review.
     * The git concern can be mitigated with a descending versioning scheme, where the `vNext` overwrites the `latest` while preserving the same filename.
+  * Long-running workflows that do not use ContinueAsNew will keep their history around for a while so quite old implementations will need to survive in VCS to be validated against the proposed `vNext` implementation.
 * _Pros_
   * No need to maintain external storage solution for the history produced by `latest` build. Validation can be done via in-memory history produced in unit tests.
 
-> The in situ Versioning strategy is handy because `Starters` don't need to update their code with version changes. 
+> The in situ Versioning strategy is convenient because `Starters` don't need to update their code with version changes or coordinate deployments with services hosting Temporal Workers. 
 > 
 > Note that in all SDKs except Java need to specify a `string` WorkflowType name explicitly in the Worker registration,type decorator or attribute options
 to "pin" the Type name to maintain this implementation swap. 
