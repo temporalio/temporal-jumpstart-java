@@ -113,7 +113,7 @@ Regardless of your environment or where in the delivery process these appear, th
 
 #### Recommendations
 
-The Replay tests should exercise history that was produced by various code paths through your Executions.
+Replay tests should exercise history that was produced by various code paths through your Executions.
 If your Workflow Definition has conditional branches, loops, or timers, it makes sense to store histories created by the unit test cases that verify these scenarios with the 
 execution histories _caused_ by the scenarios in the `latest` build so that they might be validated in `vNext` implementations.
 
