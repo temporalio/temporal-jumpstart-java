@@ -17,7 +17,7 @@ java {
 
 subprojects {
 	apply plugin: 'java'
-//	apply plugin: 'org.cadixdev.licenser'
+	apply plugin: 'org.cadixdev.licenser'
 	apply plugin: 'com.diffplug.spotless'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
@@ -43,27 +43,27 @@ subprojects {
 
 	}
 
-//	license {
-//		header rootProject.file('LICENSE')
-//		include '**/*.java'
-//		exclude '**/*.json'
-//		exclude '**/*.yaml'
-//		exclude '**/*.yml'
-//		exclude '**/*.html'
-//		exclude '**/*.js'
-//	}
+	license {
+		header rootProject.file('LICENSE')
+		include '**/*.java'
+		exclude '**/*.json'
+		exclude '**/*.yaml'
+		exclude '**/*.yml'
+		exclude '**/*.html'
+		exclude '**/*.js'
+	}
 
-//	apply plugin: 'com.diffplug.spotless'
+	apply plugin: 'com.diffplug.spotless'
 
-//	spotless {
-//		java {
-//			target 'src/*/java/**/*.java'
-//			targetExclude '**/.idea/**'
-//			googleJavaFormat('1.16.0')
-//		}
-//	}
+	spotless {
+		java {
+			target 'src/*/java/**/*.java'
+			targetExclude '**/.idea/**'
+			googleJavaFormat('1.16.0')
+		}
+	}
 
-//	compileJava.dependsOn 'spotlessApply'
+	compileJava.dependsOn 'spotlessApply'
 
 	tasks.named('test') {
 		useJUnitPlatform()
