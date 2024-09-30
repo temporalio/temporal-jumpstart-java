@@ -1,7 +1,15 @@
 # jumpstart
 Some repos Start. This one Jump Starts.
 
+## Requirements
+
+* Java 17+
+* Gradle 8.0.1 (wrapper included)
+* [Temporal CLI](https://github.com/temporalio/cli)
+
 ## Setup
+
+Verify curriculum with `./gradlew :onboardings:api:build :onboardings:workers:build`
 
 // TODO implement script to bootstrap this when `make namespace` in conjunction with `mkcert`.
 
