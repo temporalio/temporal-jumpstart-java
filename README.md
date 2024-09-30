@@ -45,3 +45,7 @@ against Temporal Cloud. Just tune the `application-temporal-cloud.yaml` resource
 
 Run `gradle wrapper` to regen the missing code (we move fast).
 
+### Maintenance
+
+Re-gen licensing with `./gradlew licenseFormat` using the [LICENSE](LICENSE).
+
