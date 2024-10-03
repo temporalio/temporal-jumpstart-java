@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 temporal.io
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package io.temporal.onboardings.api.controllers;
 
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
@@ -43,7 +67,8 @@ public class OnboardingsControllerV2 {
               state.id(),
               state.currentValue(),
               state.approval().approvalStatus().name(),
-              state.approval().comment()),
+              state.approval().comment(),
+              "MISSING_EMAIL"),
           HttpStatus.OK);
     } catch (WorkflowNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -95,7 +120,7 @@ public class OnboardingsControllerV2 {
     try {
       var run = WorkflowClient.start(workflowStub::execute, wfArgs);
       var headers = new HttpHeaders();
-      headers.setLocation(URI.create(String.format("/api/onboardings/%s", id)));
+      headers.setLocation(URI.create(String.format("/api/v2/onboardings/%s", id)));
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       logger.info("Workflow execution already started: {}", id);

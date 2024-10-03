@@ -1,0 +1,61 @@
+server:
+  port: 3030
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: temporal-jumpstart-java
+  curriculum:
+    task-queue: onboardings
+    task-queue-replay-prefix: replay_
+  temporal:
+    test-server:
+      enabled: true
+    workers:
+      - task-queue: onboardings
+        # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
+        workflow-classes:
+          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingImpl
+        activity-beans:
+          - integrations-handlers
+          - notifications-handlers
+      - task-queue: replay_100
+        capacity:
+          max-concurrent-workflow-task-pollers: 2
+          max-concurrent-activity-task-pollers: 2
+          max-concurrent-workflow-task-executors: 4
+          max-concurrent-activity-executors: 2
+          max-concurrent-local-activity-executors: 4
+        # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
+        workflow-classes:
+          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingV100Impl
+        activity-beans:
+          - integrations-handlers
+          - notifications-handlers
+    namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
+    connection:
+      target: 127.0.0.1:7233
+
+# (Note following configuration are not set by default but serve more as reference)
+#    workers:
+#      - task-queue: DemoTaskQueue
+#        capacity:
+#          max-concurrent-workflow-task-pollers: 6
+#          max-concurrent-activity-task-pollers: 6
+#          max-concurrent-workflow-task-executors: 6
+#          max-concurrent-activity-task-executors: 6
+#          max-concurrent-local-activity-task-executors: 6
+#        rate-limits:
+#          max-worker-activities-per-second: 3
+#          max-task-queue-activities-per-second: 3
+#    workflow-cache:
+#      max-instances: 10
+#      max-threads: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

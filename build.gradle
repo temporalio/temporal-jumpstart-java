@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version "${springBootPluginVersion}" apply false
+
+	id "org.springframework.boot" version "${springBootPluginVersion}" apply false
 	id 'org.cadixdev.licenser' version '0.6.1'
 	id 'com.diffplug.spotless' version '6.22.0' apply false
 	id 'io.spring.dependency-management' version '1.1.4' apply false
@@ -26,11 +27,15 @@ subprojects {
 	}
 
 	ext {
-		javaSDKVersion = '1.22.2'
+		javaSDKVersion = '1.25.2'
 		jarVersion = '1.0.0'
 	}
 
 	repositories {
+		maven {
+			url "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+
 		mavenCentral()
 	}
 

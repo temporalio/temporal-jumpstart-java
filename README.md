@@ -1,7 +1,15 @@
 # jumpstart
 Some repos Start. This one Jump Starts.
 
+## Requirements
+
+* Java 17+
+* Gradle 8.0.1 (wrapper included)
+* [Temporal CLI](https://github.com/temporalio/cli)
+
 ## Setup
+
+Verify curriculum with `./gradlew :onboardings:api:build :onboardings:workers:build`
 
 // TODO implement script to bootstrap this when `make namespace` in conjunction with `mkcert`.
 
@@ -36,4 +44,8 @@ against Temporal Cloud. Just tune the `application-temporal-cloud.yaml` resource
 **`Error: Could not find or load main class org.gradle.wrapper.GradleWrapperMain`**
 
 Run `gradle wrapper` to regen the missing code (we move fast).
+
+### Maintenance
+
+Re-gen licensing with `./gradlew licenseFormat` using the [LICENSE](LICENSE).
 

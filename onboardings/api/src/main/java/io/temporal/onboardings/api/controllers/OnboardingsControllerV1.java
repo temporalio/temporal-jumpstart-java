@@ -1,19 +1,41 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2024 temporal.io
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package io.temporal.onboardings.api.controllers;
 
-import io.temporal.api.common.v1.Payload;
-import io.temporal.api.common.v1.Payloads;
-import io.temporal.api.common.v1.WorkflowExecution;
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
-import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionRequest;
-import io.temporal.api.workflowservice.v1.DescribeWorkflowExecutionResponse;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
+import io.temporal.client.WorkflowNotFoundException;
 import io.temporal.client.WorkflowOptions;
-import io.temporal.client.WorkflowStub;
-import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.onboardings.api.messages.OnboardingsGetV1;
 import io.temporal.onboardings.api.messages.OnboardingsPutV1;
+import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
+import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
+import io.temporal.onboardings.domain.orchestrations.EntityOnboarding;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,36 +59,19 @@ public class OnboardingsControllerV1 {
 
   @GetMapping("/{id}")
   public ResponseEntity<OnboardingsGetV1> onboardingGet(@PathVariable("id") String id) {
-    // this is relatively advanced use of the TemporalClient but is shown here to
-    // illustrate how to interact with the lower-level gRPC API for extracting details
-    // about the WorkflowExecution.
-    // We will be replacing this usage with a `Query` invocation to be simpler and more explicit.
-    // This module will not overly explain this interaction but will be valuable later when we
-    // want to reason about our Executions with more detail.
-    var svc = this.temporalClient.getWorkflowServiceStubs();
-
-    WorkflowExecution execution = WorkflowExecution.newBuilder().setWorkflowId(id).build();
-    DescribeWorkflowExecutionResponse desc =
-        svc.blockingStub()
-            .describeWorkflowExecution(
-                DescribeWorkflowExecutionRequest.newBuilder()
-                    .setExecution(execution)
-                    .setNamespace("default")
-                    .build());
-    var status = desc.getWorkflowExecutionInfo().getStatus();
-    var history = this.temporalClient.fetchHistory(id);
-    Payloads payloads =
-        history.getHistory().getEvents(0).getWorkflowExecutionStartedEventAttributes().getInput();
-    OnboardEntityRequest sentRequest = null;
-    for (Payload payload : payloads.getPayloadsList()) {
-      // using default data converter..assumes MigrateableWorkflowParams type
-      // note if you use custom data converter you would need use it instead of default
-      sentRequest =
-          DefaultDataConverter.newDefaultInstance()
-              .fromPayload(payload, OnboardEntityRequest.class, OnboardEntityRequest.class);
+    try {
+      var workflowStub = temporalClient.newWorkflowStub(EntityOnboarding.class, id);
+      var state = workflowStub.getState();
+      return new ResponseEntity<>(
+          new OnboardingsGetV1(
+              state.id(),
+              state.currentValue(),
+              state.approval().approvalStatus().name(),
+              state.approval().comment()),
+          HttpStatus.OK);
+    } catch (WorkflowNotFoundException e) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    var get = new OnboardingsGetV1(sentRequest.id(), status.toString(), sentRequest);
-    return ResponseEntity.ok(get);
   }
 
   @PutMapping(
@@ -75,45 +80,46 @@ public class OnboardingsControllerV1 {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> onboardingPut(
       @PathVariable String id, @RequestBody OnboardingsPutV1 params) {
+    // poor man's inspection to decide whether to update the entity or start a workflow
+    // we could as easily check for WF existence first to decide which is best action to take
+    if (params.approval().approvalStatus().equals(ApprovalStatus.PENDING)) {
+      return startOnboardEntity(id, params);
+    }
 
-    return startOnboardEntity(id, params);
+    // Signal our onboarding with the appropriate ApprovalStatus
+    try {
+      var wfStub = temporalClient.newWorkflowStub(EntityOnboarding.class, id);
+      if (params.approval().approvalStatus().equals(ApprovalStatus.APPROVED)) {
+        wfStub.approve(new ApproveEntityRequest(params.approval().comment()));
+      } else if (params.approval().approvalStatus().equals(ApprovalStatus.REJECTED)) {
+        wfStub.reject(new RejectEntityRequest(params.approval().comment()));
+      } else {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+    } catch (WorkflowNotFoundException e) {
+      // you can receive this if the Workflow has Closed or simply is not there
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   private ResponseEntity<String> startOnboardEntity(String id, OnboardingsPutV1 params) {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)
-            // BestPractice: WorkflowIds should have business meaning.
-            // Details: This identifier can be an AccountID, SessionID, etc.
-            // 1. Prefer _pushing_ an WorkflowID down instead of retrieving after-the-fact.
-            // 2. Acquaint your self with the "Workflow ID Reuse Policy" to fit your use case
-            // Reference: https://docs.temporal.io/workflows#workflow-id-reuse-policy
             .setWorkflowId(id)
-            // BestPractice: Do not fail a workflow on intermittent (eg bug) errors; prefer handling
-            // failures at the Activity level within the Workflow.
-            // Details: A Workflow will very rarely need one to specify a RetryPolicy when starting
-            // a Workflow and we strongly discourage it.
-            // Only Exceptions that inherit from `FailureException` will cause a RetryPolicy to be
-            // enforced. Other Exceptions will cause the WorkflowTask
-            // to be rescheduled so that Workflows can continue to make progress once
-            // repaired/redeployed with corrections.
             .setRetryOptions(null)
-            // Our requirements state that we want to allow the same WorkflowID if prior attempts
-            // were Canceled.
-            // Therefore, we are using this Policy that will reject duplicates unless previous
-            // attempts did not reach terminal state as `Completed'.
             .setWorkflowIdReusePolicy(
-                WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY)
+                WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
             .build();
-    WorkflowStub workflowStub =
-        temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
+    var workflowStub = temporalClient.newWorkflowStub(EntityOnboarding.class, options);
 
     var wfArgs = new OnboardEntityRequest(params.id(), params.value(), 7 * 86400, null, false);
     // Start the workflow execution.
     try {
-      var run = workflowStub.start(wfArgs);
+      var run = WorkflowClient.start(workflowStub::execute, wfArgs);
       var headers = new HttpHeaders();
-      headers.setLocation(URI.create(String.format("/api/onboardings/%s", id)));
+      headers.setLocation(URI.create(String.format("/api/v1/onboardings/%s", id)));
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       logger.info("Workflow execution already started: {}", id);

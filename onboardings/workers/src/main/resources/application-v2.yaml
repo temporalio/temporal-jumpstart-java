@@ -3,20 +3,22 @@ server:
 spring:
   main:
     allow-bean-definition-overriding: true
+    web-application-type: none;
   application:
     name: temporal-jumpstart-java
   curriculum:
     task-queue: onboardings
   temporal:
     test-server:
-      enabled: true
+      enabled: false
     workers:
       - task-queue: onboardings
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
         workflow-classes:
-          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingImpl
-#        activity-beans:
-#          - integrations-handlers-test
+          - io.temporal.onboardings.domain.orchestrations.EntityOnboardingV2Impl
+        activity-beans:
+          - notifications-handlers
+          - integrations-handlers
     namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
     connection:
       target: 127.0.0.1:7233
