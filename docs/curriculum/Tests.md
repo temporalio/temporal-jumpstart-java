@@ -6,11 +6,10 @@ They also happen to be the very best way to learn about how to use Temporal prim
 
 ### About this guidance
 
-_State and/or Behavior Verification_
+_State and Behavior Verification_
 
 This document presumes an acquaintance with the distinction between `state` and `behavior` verification styles.
 It also assumes some familiarity with the use of "Test Doubles" to isolate tests.
-
 
 **Test Doubles**
 
