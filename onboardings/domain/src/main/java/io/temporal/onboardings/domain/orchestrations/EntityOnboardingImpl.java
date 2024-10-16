@@ -69,7 +69,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
               .build());
 
   public EntityOnboardingImpl() {
-    // non null object in the event of signal/update arriving soon
+    // Initialize the state object with
+    // a non null object in the event of signal/update arriving soon
     init(null);
   }
 
@@ -167,6 +168,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
   @Override
   public void approve(ApproveEntityRequest cmd) {
+    // No need for an idempotency key here since we are not concerned about
+    // duplicating messages, though we are _are_ using ContinueAsNew.
     state =
         new EntityOnboardingState(
             state.id(), state.currentValue(), new Approval(ApprovalStatus.APPROVED, cmd.comment()));
@@ -174,6 +177,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
   @Override
   public void reject(RejectEntityRequest cmd) {
+    // No need for an idempotency key here since we are not concerned about
+    // duplicating messages, though we are _are_ using ContinueAsNew.
     state =
         new EntityOnboardingState(
             state.id(), state.currentValue(), new Approval(ApprovalStatus.REJECTED, cmd.comment()));

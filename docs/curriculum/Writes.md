@@ -2,6 +2,44 @@
 
 There are two Temporal primitives used to externally mutate Workflow state once an Execution has started, **Signal** and **Update**.
 
+## Foundations
+
+It is important to understand how messages are processed by Signal and Update handlers to avoid subtle races and bugs. 
+[This document](https://docs.temporal.io/encyclopedia/workflow-message-passing#handling-messages) explains why these
+races might occur. 
+These issues are only relevant when some form of blocking is required to apply a side effect 
+caused by the input; for example, retrieving a result from an Activity inside a Signal handler.
+
+> _Pay careful attention to its caution about interleaving message handlers if you intend to block to apply a side effect._
+
+The question to ask is, "What is the safest, yet performant, way to apply side effects caused by an input?"
+
+### Recommendations
+
+Consider splitting side effects which demand asynchronous application into two stages:
+
+1. **Propose**: Signal/Update Handler
+1. **Apply**: Workflow Execution
+
+This approach overlays rules on the diagram from the event loop in the above document as such:
+![Side Effect Proposer](messages-workflow-loop-proposer.jpg)
+
+#### The steps then become:
+
+_Signal Handler_
+
+1. Inside the Signal handler: Set (propose) the received input message onto common (shared) Workflow Execution state
+2. Inside the Workflow main method: Apply the side effect(s) caused by the proposal (input).
+
+_Update Handler_
+
+In practice this means:
+1. Inside the Update handler
+   1. Set (propose) the received input message onto common (shared) Workflow Execution state
+   2. Block until the expected side effect(s) have been completed if necessary for the response
+   3. Respond with new state
+2. Inside the Workflow main method: Apply the side effect(s) caused by the proposal (input).
+
 ## Signal
 Signal employs "fire and forget" messaging semantics. This is used to send a message (even without data)
 to impact the progress of an existing Workflow execution.
@@ -36,8 +74,9 @@ The **Update** primitive allows Request-Reply messaging semantics.
 Update has [phases](https://docs.temporal.io/encyclopedia/application-message-passing#updates) that are interesting to consider.
 
 The "validation" phase of an Update can inspect current workflow state  to determine if the
-Update should be "accepted" or not.
-// TODO
+Update should be "accepted" or not. Do _not_ put external calls (eg an `Activity` execution) 
+into this phase to meet validation requirements.
+
 
 ## Refactor Our Use Case
 
