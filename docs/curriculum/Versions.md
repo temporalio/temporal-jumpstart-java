@@ -3,8 +3,8 @@
 ## Goals
 
 * Address message versioning strategies 
-* Compare the implications of choosing _In Situ_ Workflow Versioning to _Routed_ Workflow Versioning
-* Introduce `Replay Testing` to safely introduce new features under load for _in situ_ code branch versioning
+* Compare the implications of choosing _Patched_ Workflow Versioning to _Routed_ Workflow Versioning
+* Introduce `Replay Testing` to safely introduce new features under load for _patched_ code branch versioning
 
 ## Message Versioning
 
@@ -32,42 +32,14 @@ _always_ be enforced is **deterministic Workflow Definitions**.
 
 How can we deploy new features or alter behavior in our Workflow Definitions in a safe, backwards-compatible way without introducing too much complexity?
 
+### Replay and Versioning
+
 Workflow Version strategies fall into two broad categories:
 
-* **In Situ** Versioning: Wraps existing Workflow Definition with the `GetVersion` patch api usage. 
+* **Patched** Versioning: Wraps existing Workflow Definition with the `GetVersion` patch api usage. 
   * This strategy only requires changes to your Workflow Definitions and is covered in depth [here](https://docs.temporal.io/develop/java/versioning#patching).
 * **Routed** Versioning: Deploys versions of the same Workflow Definition in parallel, segregated by either _Workflow Type_ or _Task Queue_.
   * This strategy requires updates to the "Starters" code that starts new Workflow Executions, using either the new Workflow Type or Task Queue target to run on the latest. 
-
-### In Situ Versioning Gotchas
-
-There are a few things you must be careful about to leverage the _In Situ_ strategy.
-
-#### _Do-it-yourself Version Search Attribute_
-The Java SDK [does not provide a Search Attribute](https://github.com/temporalio/sdk-java/issues/587) "out-of-the-box"
-to search for Versions which are not used. Until this is patched, you can reference [this sample](https://github.com/temporalio/samples-java/tree/main/core/src/main/java/io/temporal/samples/customchangeversion)
-to learn how to publish a similar attribute for this discovery.
-
-#### _Global Workflow Versioning_
-Some maintain a "Global Versioning" can be done with Workflow definitions wherein only new Executions receive the new behavior
-you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
-This works if you do not have long-running Workflows that want to pick up changes after a `Timer` usage. 
-For example, you might have a "Subscription" Workflow that sleeps for three months and performs an Activity upon `TimerFired`.
-If you want to add an Activity post-timer, you likely want to pick up this new Activity - even in Workflows that have been
-`Open` for some time. This likely means falling back to the using `GetVersion` directly or using **ContinueAsNew** to force a new
-execution with input parameters that reflect what work has already been completed.
-
-#### _Loops_
-
-If you introduce new code inside a loop construct, each iteration of that loop must wrap the new code inside a `GetVersion` call.
-
-
-#### _`changeId`_ Workflow Execution Uniqueness
-
-A `changeId` MUST be unique across the entire Workflow Execution and should be considered immutable. 
-Therefore, each deployment of a Workflow implementation should all use the same `changeId`. 
-
-Note that altering a `changeId` will throw a non-deterministic Exception (NDE). 
 
 Which strategy is best for you?
 
@@ -75,22 +47,109 @@ _Here are some criteria you can use to decide:_
 
 #### I only need to make a simple or few changes to my Workflow Definition
 
-For example, you are just introducing a new Activity or want to change the duration of a Timer and your code is not in a loop. 
-Use the `GetVersion` API _In Situ_ to make changes inside corresponding conditional logic. 
+For example, you are just introducing a new Activity or want to change the duration of a Timer and your code is not in a loop.
+Use the `GetVersion` API to make changes inside corresponding conditional logic.
 
 #### It is simple to coordinate changes and deployment of both the Starter and Worker services
 
 For example, you have a complex change to roll out and your team is a full-stack crew that manages both the Starters and Workers along with their
 deployments.
-Use the _Routed_ strategy. You can update your Starter code to target the new Workflow Definition after you have deployed the new 
-version on a separate TaskQueue or with a distinct WorkflowType name. When older versions are drained off, you can shut those Workers down 
+Use the _Routed_ strategy. You can update your Starter code to target the new Workflow Definition after you have deployed the new
+version on a separate TaskQueue or with a distinct WorkflowType name. When older versions are drained off, you can shut those Workers down
 or deregister the old Workflow Types.
 
 #### It is not simple to make changes or coordinate deployment of Starter and Worker services
 
-For example, your frontend team might not be able to ship as frequently but you need to make changes as soon as possible. 
-Use the _In Situ_ strategy. If the changeset is complex or your Workflow definition is cognitively cumbersome, 
+For example, your frontend team might not be able to ship as frequently but you need to make changes as soon as possible.
+Use the _Patched_ strategy. If the changeset is complex or your Workflow definition is cognitively cumbersome,
 consider pairing that with **Continue As New** to remove some of the older code branches.
+
+
+### Patched Versioning Deeper Look
+
+See the [JavaDocs](https://www.javadoc.io/doc/io.temporal/temporal-sdk/latest/io/temporal/workflow/Workflow.html#getVersion(java.lang.String,int,int)).
+
+The `patch` or `GetVersion` APIs are all about safely deploying _future_ code paths during Replay by inserting a Version marker into event history. 
+These `Version` markers are identified by a unique `changeId` with an Integer for comparison.
+
+#### `GetVersion` arguments
+
+##### ;tldr
+
+* **Can I rename a `changeId`?**
+  * No. This will cause NDE for Replaying executions.
+* **Should I update the `maxVersion` for an existing `changeId`, or mint a new `changeId` Version starting at `1`?**
+  * Update the `maxVersion` if you have named the `changeId` for the feature block the change impacts.
+    * This approach creates fewer `Version` markers in history.
+  * If the patch is very specific, like a `bugfix` change, you should just create a new Version with its own `changeId`
+* **When do I provide a `minVersion` other than `DEFAULT_VERSION`** ? 
+  * Only when you need to protect old executions from accidentally running code that is no longer valid.
+
+
+**changeId** 
+
+A `changeId` MUST be unique across the entire Workflow Execution and should be considered immutable.
+In general, never re-use a `changeId` though you could do so with a `ContinueAsNew` that clears previous history.
+`changeId` might be named for the feature block it represents; for example, `payment-authorization`.
+Or, it might carry more specific context, like `hotfix-JIRA-123`.
+
+How you name the `changeId` in longer running Workflows will impact how `maxVersion` is utilized
+later on.
+
+
+**maxVersion**
+
+The `maxVersion` argument can be confusing and might appear a misnomer since the same `GetVersion` invocation
+either writes OR reads Execution history depending on whether the Execution is Replaying or not.
+
+1. A `GetVersion` call encountered _the first time_ by an Execution (by Workflow ID) for a given `changeId` _writes_ the `maxVersion` value to history **as that Version**.
+2. Subsequent **Replays** of that Workflow Execution line of code will _read_ that `maxVersion` value from history going forward.
+
+This argument will usually only be incremented if the `changeId` represents a feature block of code since the 
+feature might evolve over time (e.g., hotfixes do not evolve).
+
+**minVersion**
+
+The `minVersion` argument, when higher than `Workflow.DEFAULT_VERSION`, acts as a guard clause against old Executions that might Replay
+against code that has since had earlier Versions of that change removed. 
+It does this by specifying the lowest version the current code impacted by the `changeId` can support. 
+An explicit `UnsupportedVersion` Exception will be raised to exit the Replay.
+
+The `minVersion` argument is _irrelevant_ for new Executions, so `Workflow.DEFAULT_VERSION` is most often used as a Null argument.
+
+Therefore, `minVersion` applies to Executions under Replay, while `maxVersion` applies to *future* Executions.
+
+#### Patched Versioning Gotchas
+
+Here are a few things you should consider if you decide to leverage the _Patched_ strategy.
+
+#### _Do-It-Yourself (DIY) Version Search Attribute_
+The Java SDK [does not provide a Search Attribute](https://github.com/temporalio/sdk-java/issues/587) "out-of-the-box"
+to search for Versions which are not used. Until this is patched, you can reference [this sample](https://github.com/temporalio/samples-java/tree/main/core/src/main/java/io/temporal/samples/customchangeversion)
+to learn how to publish a similar attribute for this discovery.
+
+#### _Global Workflow Versioning_
+Some do "Global Versioning" with Workflow definitions wherein only new Executions receive the new behavior
+you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
+This works if you do not have long-running Workflows that want to pick up changes after a `Timer` usage. 
+For example, you might have a "Subscription" Workflow that sleeps for three months and performs an Activity upon `TimerFired`.
+If you want to add an Activity post-timer, you likely want to pick up this new Activity - even in Workflows that have been
+`Open` for some time. This likely means falling back to using `GetVersion` directly or using **ContinueAsNew** to force a new
+execution with input parameters that reflect what work has already been completed.
+
+#### _Loops_
+
+If you introduce new code inside a loop construct, you must decide whether you need to Version:
+* the whole loop: wherein the entire loop uses the result from the same `changeId`
+* per iteration: wherein each iteration has a unique `changeId` 
+
+This is based on _how_ currently `Open` Workflow Executions should behave when they encounter your code change.
+
+If the logic that applies when an Execution was started should not ever change, just Version the whole loop with the same `changeId`.
+Otherwise, mint a unique `changeId` per iteration; for example, suffix the `changeId` with an index.
+
+> **CAUTION**: If the loop will iterate more than a thousand times, the Execution history will explode with `Version` markers. 
+> You can mitigate this risk by performing `ContinueAsNew` periodically.
 
 
 
