@@ -152,14 +152,14 @@ Otherwise, mint a unique `changeId` per iteration; for example, suffix the `chan
 > You can mitigate this risk by performing `ContinueAsNew` periodically.
 
 
-
 ## Replay Tests
 
 Recall that Workflow Executions are "replayed" at various times during your Application lifetime.
 
 > This means we must verify that the state and behaviors meet expectations regardless of **how** it is executed.
 
-Your Workflow can build, pass all unit and functional tests, and ship to production just fine, but still bring your business to a halt because of Non-Determinism Errors.
+Your Workflow could build, pass all unit and functional tests, and ship to production just fine, 
+but still bring your business to a halt because of Non-Determinism Errors.
 This incident will be now exacerbated by the _new_ Workflow Executions that have started in production while the previous versions were "stuck".
 
 The Temporal [WorkflowReplayer](https://docs.temporal.io/develop/java/testing-suite#replay) test facility is what you want to use to either verify or validate any production Workflow
@@ -181,7 +181,7 @@ Factors which determine how these tests are executed are based on your Workflow 
 Continuous Integration / Continuous Deployment (CICD) pipeline.
 
 
-#### Implementing Replay Tests : In Situ Version Strategy
+#### Implementing Replay Tests : Patched Version Strategy
 
 If you elect to use the `GetVersion` or `patch` SDK APIs, you must choose between loading Workflow History representing the
 `latest` build from memory or from file storage.
@@ -210,12 +210,10 @@ If you elect to use the `GetVersion` or `patch` SDK APIs, you must choose betwee
 * _Pros_
     * No need to maintain external storage solution for the history produced by `latest` build. Validation can be done via in-memory history produced in unit tests.
 
-> The in situ Versioning strategy is convenient because `Starters` don't need to update their code with version changes or coordinate deployments with services hosting Temporal Workers.
+> The Patched Versioning strategy is convenient because `Starters` don't need to update their code with version changes or coordinate deployments with services hosting Temporal Workers.
 >
 > Note that in all SDKs except Java need to specify a `string` WorkflowType name explicitly in the Worker registration,type decorator or attribute options
 to "pin" the Type name to maintain this implementation swap.
-
-
 
 ## Onboardings
 
