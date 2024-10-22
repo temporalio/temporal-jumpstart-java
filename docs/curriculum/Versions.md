@@ -32,6 +32,13 @@ _always_ be enforced is **deterministic Workflow Definitions**.
 
 How can we deploy new features or alter behavior in our Workflow Definitions in a safe, backwards-compatible way without introducing too much complexity?
 
+### Execution Lifetime Recommendation
+
+We recommend that you frequently use `ContinueAsNew` in Workflow Executions that exceed your deployment
+frequency. For example, if you typically ship new code every day but have Executions that stay `open` for a year,
+work out a logical rule in your Execution that calls `ContinueAsNew` for those executions every day.
+This allows long-running Executions to pick up changes you ship.
+
 ### Replay and Versioning
 
 Workflow Version strategies fall into two broad categories:
@@ -119,7 +126,7 @@ The `minVersion` argument is _irrelevant_ for new Executions, so `Workflow.DEFAU
 
 Therefore, `minVersion` applies to Executions under Replay, while `maxVersion` applies to *future* Executions.
 
-#### Patched Versioning Gotchas
+#### Patched Versioning: Closer Look
 
 Here are a few things you should consider if you decide to leverage the _Patched_ strategy.
 
@@ -128,28 +135,29 @@ The Java SDK [does not provide a Search Attribute](https://github.com/temporalio
 to search for Versions which are not used. Until this is patched, you can reference [this sample](https://github.com/temporalio/samples-java/tree/main/core/src/main/java/io/temporal/samples/customchangeversion)
 to learn how to publish a similar attribute for this discovery.
 
-#### _Global Workflow Versioning_
-Some do "Global Versioning" with Workflow definitions wherein only new Executions receive the new behavior
-you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
-This works if you do not have long-running Workflows that want to pick up changes after a `Timer` usage. 
-For example, you might have a "Subscription" Workflow that sleeps for three months and performs an Activity upon `TimerFired`.
-If you want to add an Activity post-timer, you likely want to pick up this new Activity - even in Workflows that have been
-`Open` for some time. This likely means falling back to using `GetVersion` directly or using **ContinueAsNew** to force a new
-execution with input parameters that reflect what work has already been completed.
-
 #### _Loops_
 
 If you introduce new code inside a loop construct, you must decide whether you need to Version:
 * the whole loop: wherein the entire loop uses the result from the same `changeId`
-* per iteration: wherein each iteration has a unique `changeId` 
+* per iteration: wherein each iteration has a unique `changeId`
 
 This is based on _how_ currently `Open` Workflow Executions should behave when they encounter your code change.
 
 If the logic that applies when an Execution was started should not ever change, just Version the whole loop with the same `changeId`.
 Otherwise, mint a unique `changeId` per iteration; for example, suffix the `changeId` with an index.
 
-> **CAUTION**: If the loop will iterate more than a thousand times, the Execution history will explode with `Version` markers. 
+> **CAUTION**: If the loop will iterate more than a thousand times, the Execution history will explode with `Version` markers.
 > You can mitigate this risk by performing `ContinueAsNew` periodically.
+
+#### _Global Workflow Versioning_
+Some do "Global Versioning" with Workflow definitions wherein only new Executions receive the new behavior
+you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
+This works if you do not have long-running Workflows that need to pick up changes after a blocking Awaitable(eg, `Timer` usage). 
+For example, you might have a "Subscription" Workflow that sleeps for three months and performs an Activity upon `TimerFired`.
+If you want to add an Activity post-timer, you likely want to pick up this new Activity - even in Workflows that have been
+`Open` for some time. This likely means falling back to using `GetVersion` directly or using **ContinueAsNew** to force a new
+execution with input parameters that reflect what work has already been completed.
+
 
 
 ## Replay Tests
