@@ -32,12 +32,12 @@ _always_ be enforced is **deterministic Workflow Definitions**.
 
 How can we deploy new features or alter behavior in our Workflow Definitions in a safe, backwards-compatible way without introducing too much complexity?
 
-### Recommendation: Limit Your Execution Lifetime
+#### High Level Recommendation: Restrict Workflow Execution Lifetimes
 
-We recommend that you frequently use `ContinueAsNew` in Workflow Executions that exceed your deployment
-frequency. For example, if you typically ship new code every day but have Executions that stay `open` for a year,
-work out a logical rule in your Execution that calls `ContinueAsNew` for those executions every day.
-This allows long-running Executions to pick up changes you ship.
+We recommend that you frequently use `ContinueAsNew` in Workflow Executions that  are "long-running".
+This frequency can largely be determined by how often you ship new features.
+For example, if you typically ship new code every day and have Executions that stay `open` for a year
+_and_ you need to see changes reflected in those Executions when they are shipped, devise a logical rule in your Execution that calls `ContinueAsNew` for those executions every day.
 
 ### Strategy Types
 
