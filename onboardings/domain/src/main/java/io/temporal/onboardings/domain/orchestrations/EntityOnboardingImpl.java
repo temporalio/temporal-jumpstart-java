@@ -44,6 +44,8 @@ import java.time.Duration;
 import java.util.Objects;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
+
 public class EntityOnboardingImpl implements EntityOnboarding {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
   private EntityOnboardingState state;
@@ -66,19 +68,41 @@ public class EntityOnboardingImpl implements EntityOnboarding {
               .setStartToCloseTimeout(Duration.ofSeconds(2))
               .build());
 
+  public EntityOnboardingImpl() {
+    // Initialize the state object with
+    // a non null object in the event of signal/update arriving soon
+    init(null);
+  }
+
+  private void init(@Nullable OnboardEntityRequest args) {
+    if(Objects.isNull(args)) {
+      state = new EntityOnboardingState();
+      return;
+    }
+    var status = args.skipApproval()
+            ? new Approval(ApprovalStatus.APPROVED, null)
+            : new Approval(ApprovalStatus.PENDING, null);
+    if(Objects.isNull(state.id())) {
+      state = new EntityOnboardingState(
+                      args.id(),
+                      args.value(),
+                      status);
+    } else {
+      state = new EntityOnboardingState(
+              args.id(),
+              Objects.requireNonNullElseGet(state.currentValue(), args::id),
+              Objects.nonNull(state.approval()) ? state.approval() : status);
+    }
+  }
   @Override
   public void execute(OnboardEntityRequest args) {
-    state =
-        new EntityOnboardingState(
-            args.id(),
-            args.value(),
-            args.skipApproval()
-                ? new Approval(ApprovalStatus.APPROVED, null)
-                : new Approval(ApprovalStatus.PENDING, null));
+    init(args);
+
     var notifyDeputyOwner =
         Objects.nonNull(args.deputyOwnerEmail()) && !args.deputyOwnerEmail().isEmpty();
 
     assertValidArgs(args);
+
     if (!args.skipApproval()) {
       var waitApprovalSecs = args.completionTimeoutSeconds();
       if (notifyDeputyOwner) {
@@ -110,7 +134,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
                 state.currentValue(),
                 args.completionTimeoutSeconds() - waitApprovalSecs,
                 null,
-                args.skipApproval());
+                    false);
         can.execute(canArgs);
         return;
       }
@@ -144,6 +168,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
   @Override
   public void approve(ApproveEntityRequest cmd) {
+    // No need for an idempotency key here since we are not concerned about
+    // duplicating messages, though we are _are_ using ContinueAsNew.
     state =
         new EntityOnboardingState(
             state.id(), state.currentValue(), new Approval(ApprovalStatus.APPROVED, cmd.comment()));
@@ -151,6 +177,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
   @Override
   public void reject(RejectEntityRequest cmd) {
+    // No need for an idempotency key here since we are not concerned about
+    // duplicating messages, though we are _are_ using ContinueAsNew.
     state =
         new EntityOnboardingState(
             state.id(), state.currentValue(), new Approval(ApprovalStatus.REJECTED, cmd.comment()));
