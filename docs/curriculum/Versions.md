@@ -39,7 +39,7 @@ frequency. For example, if you typically ship new code every day but have Execut
 work out a logical rule in your Execution that calls `ContinueAsNew` for those executions every day.
 This allows long-running Executions to pick up changes you ship.
 
-### Versioning Strategy Types
+### Strategy Types
 
 Workflow Version strategies fall into two broad categories:
 
@@ -72,15 +72,14 @@ For example, your frontend team might not be able to ship as frequently but you 
 **Recommendation**: _Use the Patched strategy_. If the changeset is complex or your Workflow definition is cognitively cumbersome,
 consider pairing that with **Continue As New** to remove some of the older code branches.
 
-
-### Patched Strategy Deeper Look
+## Workflow Versioning: Patched Strategy
 
 See the [JavaDocs for API details](https://www.javadoc.io/doc/io.temporal/temporal-sdk/latest/io/temporal/workflow/Workflow.html#getVersion(java.lang.String,int,int)).
 
 The `patch` or `GetVersion` APIs are all about safely deploying _future_ code paths during Replay by inserting a Version marker into event history. 
 These `Version` markers are identified by a unique `changeId` with an Integer for comparison.
 
-#### A closer look at `GetVersion` arguments
+### `GetVersion` Usage
 
 ##### ;TLDR
 * **Can I rename a `changeId`?**
@@ -92,7 +91,9 @@ These `Version` markers are identified by a unique `changeId` with an Integer fo
 * **When would I provide a `minVersion` other than `DEFAULT_VERSION`** ? 
   * Only when you need to protect old executions from accidentally running code that is no longer valid.
 
-**changeId** 
+#### Arguments
+
+##### changeId
 
 A `changeId` MUST be unique across the entire Workflow Execution and should be considered immutable.
 In general, never re-use a `changeId` though you could do so with a `ContinueAsNew` that clears previous history.
@@ -103,7 +104,7 @@ How you name the `changeId` in longer running Workflows will impact how `maxVers
 later on.
 
 
-**maxVersion**
+#### maxVersion
 
 The `maxVersion` argument can be confusing and might appear a misnomer since the same `GetVersion` invocation
 either writes OR reads Execution history depending on whether the Execution is Replaying or not.
@@ -114,7 +115,7 @@ either writes OR reads Execution history depending on whether the Execution is R
 This argument will usually only be incremented if the `changeId` represents a feature block of code since the 
 feature might evolve over time (e.g., hotfixes do not evolve).
 
-**minVersion**
+#### minVersion
 
 The `minVersion` argument, when higher than `Workflow.DEFAULT_VERSION`, acts as a guard clause against old Executions that might Replay
 against code that has since had earlier Versions of that change removed. 
@@ -125,7 +126,7 @@ The `minVersion` argument is _irrelevant_ for new Executions, so `Workflow.DEFAU
 
 Therefore, `minVersion` applies to Executions under Replay, while `maxVersion` applies to *future* Executions.
 
-#### Patched Versioning In Practice
+### Patched Versioning In Practice
 
 Here are a few things you should consider if you decide to leverage the _Patched_ strategy.
 
@@ -138,7 +139,6 @@ Until this is provided, you can reference [this sample](https://github.com/tempo
 to learn how to publish a similar attribute for this discovery.
 
 #### _Loops_
-
 If you introduce new code inside a loop construct, you must decide whether you need to Version:
 * the whole loop: wherein the entire loop uses the result from the same `changeId`
 * per iteration: wherein each iteration has a unique `changeId`
@@ -148,7 +148,9 @@ This is based on _how_ currently `Open` Workflow Executions should behave when t
 If the logic that applies when an Execution was started should not ever change, just Version the whole loop with the same `changeId`.
 Otherwise, mint a unique `changeId` per iteration; for example, suffix the `changeId` with an index.
 
-> **CAUTION**: If the loop will iterate more than a thousand times, the Execution history will explode with `Version` markers.
+> **CAUTION**: If the loop will iterate many times (eg more than a thousand times), 
+> the Execution history will explode with `Version` markers.
+> 
 > You can mitigate this risk by performing `ContinueAsNew` periodically.
 
 #### _Global Workflow Versioning_
@@ -159,6 +161,43 @@ For example, you might have a "Subscription" Workflow that sleeps for three mont
 If you want to add an Activity post-timer, you likely want to pick up this new Activity - even in Workflows that have been
 `Open` for some time. This likely means falling back to using `GetVersion` directly or using **ContinueAsNew** to force a new
 execution with input parameters that reflect what work has already been completed.
+
+## Workflow Versioning: Routed Strategy
+
+You can target specific Versions of your Workflow Definition from the `Starter` by either:
+1. Specifying the WorkflowType explicitly; eg `MyWorkflowV2`
+2. Designating a TaskQueue for where the new Workflow Version is hosted; eg `TaskQueue: "PaymentsV2"`
+
+Both strategies will avoid the risk of **NonDeterminismExceptions** in currently Open Workflows.
+There are a few subtle differences to consider to decide which is suitable.
+
+#### Workflow Type Routed Versioning
+
+This type of Versioning appends a Version into the Implementation name; eg `MyWorkflowV2`.
+This is by convention only and is not enforced.
+
+_Pros_
+
+* Does not demand changes to your Worker deployment.
+* Allows for discrete changes to each Workflow Type within the Application.
+
+_Cons_
+* Starters must update `Start/Execute` Workflow code to route to the new Implementation, possibly forcing cross-team deployments.
+* Requires custom **SearchAttribute** or metrics to determine when the old Implementations can be deregistered.
+* Changing definition behavior results in a whole new source file, making Git diffs exposing the changes more difficult to spot in PRs.
+
+#### TaskQueue Routed Versioning
+
+_Pros_
+
+* Might be easier to determine which Version of your application to decommission by observing Worker compute resources.
+* Explicit Version support at a higher Application level since multiple Workflow Types can be registered at once.
+
+_Cons_
+
+* Starters must update `Start/Execute` Workflow code to route to the new Implementation, possibly forcing cross-team deployments.
+* Worker count will increase exponentially, increasing complexity in infrastructure deployments and observability.
+  * This is further exacerbated if using `TaskQueue` for multi-tenancy purposes.
 
 ## Replay Tests
 
@@ -211,7 +250,7 @@ If you elect to use the `GetVersion` or `patch` SDK APIs, you must choose betwee
 * _Cons_
     * Registration of the Workflow Type implementation must be preserved carefully, possibly using the Workflow Options that allow a `string` Workflow Type name.
         * (see note on Worker registration considerations below)
-    * Duplicate implementations of same representation in same VCS version philosophically contradicts VCS principles to some.
+    * Duplicate implementations of same representation in same VCS version might philosophically contradict your organization VCS principles.
         * Placing a version in the Workflow Type name "hides" implementation changes in git comparisons by breaking helpful commit diffs during code review.
         * The git concern can be mitigated with a descending versioning scheme, where the `vNext` overwrites the `latest` while preserving the same filename.
     * Long-running workflows that do not use ContinueAsNew will keep their history around for a while so quite old implementations will need to survive in VCS to be validated against the proposed `vNext` implementation.
