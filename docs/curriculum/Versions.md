@@ -153,6 +153,22 @@ Otherwise, mint a unique `changeId` per iteration; for example, suffix the `chan
 > 
 > You can mitigate this risk by performing `ContinueAsNew` periodically.
 
+#### _Rolling Deployments With Patched Workflow Definitions_
+
+If you perform rolling deployments of Worker services that register Patched Worflow Definitions, 
+it is _possible_ that a race can occur when:
+
+1. The **latest** Patched Workflow Definition 
+   1. Starts an Execution 
+   2. Writes the `Version` marker to history
+   3. Crashes
+2. The **previous** Version
+   1. Picks up the Workflow Task to resume the Execution
+   2. The Task fails with a `NonDeterminismException` (NDE)
+
+Your Workflow will not be corrupted, but you could see an impact on performance and Task
+failures appear in the history for this Execution.
+
 #### _Global Workflow Versioning_
 Some users do "Global Versioning" with Workflow definitions wherein only new Executions receive the new behavior
 you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
