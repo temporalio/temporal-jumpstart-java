@@ -138,6 +138,15 @@ The Java SDK [does not provide this Search Attribute](https://github.com/tempora
 Until this is provided, you can reference [this sample](https://github.com/temporalio/samples-java/tree/main/core/src/main/java/io/temporal/samples/customchangeversion)
 to learn how to publish a similar attribute for this discovery.
 
+#### _Removing Old Versions_
+
+* Note the gap [here](#user-content-temporalchangeversion-search-attribute)
+* If there is a `Query` handler in the Workflow Definition, care should be taken in removing unused Version
+blocks before the Namespace retention policy since the revealed state should be reflective
+of the Version that produced it. If there is any exposed state in a Query that is computed
+variously based on Version, consider waiting to remove impacted Version blocks until
+the Namespace retention policy has passed.
+
 #### _Loops_
 If you introduce new code inside a loop construct, you must decide whether you need to Version:
 * the whole loop: wherein the entire loop uses the result from the same `changeId`
@@ -169,6 +178,9 @@ it is _possible_ that a race can occur when:
 Your Workflow will not be corrupted, but you could see an impact on performance and Task
 failures appear in the history for this Execution.
 
+One mitigation of this would be to always enforce Versioning for the entire Workflow Definition before any deployment, as 
+proposed [here](#user-content-global-workflow-versioning).
+
 #### _Global Workflow Versioning_
 Some users do "Global Versioning" with Workflow definitions wherein only new Executions receive the new behavior
 you must Version ([source](https://medium.com/@qlong/how-to-overcome-some-maintenance-challenges-of-temporal-cadence-workflow-versioning-f893815dd18d)).
@@ -187,7 +199,7 @@ You can target specific Versions of your Workflow Definition from the `Starter` 
 Both strategies will avoid the risk of **NonDeterminismExceptions** in currently Open Workflows.
 There are a few subtle differences to consider to decide which is suitable.
 
-#### Workflow Type Routed Versioning
+#### WorkflowType Routed Versioning
 
 This type of Versioning appends a Version into the Implementation name; eg `MyWorkflowV2`.
 This is by convention only and is not enforced.
@@ -202,6 +214,11 @@ _Cons_
 * Requires custom **SearchAttribute** or metrics to determine when the old Implementations can be deregistered.
 * Changing definition behavior results in a whole new source file, making Git diffs exposing the changes more difficult to spot in PRs.
 
+
+##### Removing Old WorkflowType Versions
+
+Simply remove the registration of the WorkflowType from relevant Workers.
+
 #### TaskQueue Routed Versioning
 
 _Pros_
@@ -214,6 +231,12 @@ _Cons_
 * Starters must update `Start/Execute` Workflow code to route to the new Implementation, possibly forcing cross-team deployments.
 * Worker count will increase exponentially, increasing complexity in infrastructure deployments and observability.
   * This is further exacerbated if using `TaskQueue` for multi-tenancy purposes.
+
+##### Removing Old TaskQueue Versions
+
+If you have multiple WorkerFactories (Java) in a process, remove these factories
+using the deprecated TaskQueue. If a single WorkerFactory is in a process, remove it from
+the deployment.
 
 ## Replay Tests
 
