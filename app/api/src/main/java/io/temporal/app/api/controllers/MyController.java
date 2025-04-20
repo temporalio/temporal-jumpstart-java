@@ -85,7 +85,7 @@ public class MyController {
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_REJECT_DUPLICATE)
             .build();
     var workflowStub = temporalClient.newWorkflowStub(MyWorkflow.class, options);
-
+    workflowStub.execute();
     var wfArgs = new StartMyWorkflowRequest(params.id(), params.value());
     // Start the workflow execution.
     try {

@@ -25,6 +25,11 @@ You can avoid this by:
   * For example, instead of _changing_ a property name prefer _adding_ the new name you want to use and keep the other around until you can deprecate it safely.
 * Always use Replay tests to verify your current message schema is compatible with currently open Workflow Executions.
 
+##### Resources
+
+* Compare [Avro versus Protobufs](https://blog.softwaremill.com/the-best-serialization-strategy-for-event-sourcing-9321c299632b)
+* Compare [Avro versus Protobufs](https://softwaremill.com/data-serialization-tools-comparison-avro-vs-protobuf/)
+
 ## Workflow Versioning
 
 The Temporal programming model does not impose many requirements on how to build your Application features, but the one requirement which must
@@ -77,7 +82,11 @@ consider pairing that with **Continue As New** to remove some of the older code 
 See the [JavaDocs for API details](https://www.javadoc.io/doc/io.temporal/temporal-sdk/latest/io/temporal/workflow/Workflow.html#getVersion(java.lang.String,int,int)).
 
 The `patch` or `GetVersion` APIs are all about safely deploying _future_ code paths during Replay by inserting a Version marker into event history. 
-These `Version` markers are identified by a unique `changeId` with an Integer for comparison.
+These `Version` markers are identified by a unique `changeId` with an Integer for comparison. 
+
+Additionally, for all SDKs [except Java](#user-content-temporalchangeversion-search-attribute),
+a SearchAttribute named `TemporalChangeVersion` is also Upserted for the `changeId` value to ease discovery of Versions that you might
+remove from the codebase.
 
 ### `GetVersion` Usage
 
