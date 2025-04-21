@@ -28,7 +28,7 @@ import io.temporal.onboardings.domain.messages.values.Approval;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 
 public record EntityOnboardingState(String id, String currentValue, Approval approval) {
-    public EntityOnboardingState() {
-        this(null, null, new Approval(ApprovalStatus.PENDING, null));
-    }
+  public EntityOnboardingState() {
+    this(null, null, new Approval(ApprovalStatus.PENDING, null));
+  }
 }

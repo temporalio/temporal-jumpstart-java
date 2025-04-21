@@ -1,7 +1,6 @@
-# jumpstart
-Some repos Start. This one Jump Starts.
+# Temporal Jumpstart: Java SDK
 
-## Requirements
+## System Requirements
 
 * Java 17+
 * Gradle 8.0.1 (wrapper included)

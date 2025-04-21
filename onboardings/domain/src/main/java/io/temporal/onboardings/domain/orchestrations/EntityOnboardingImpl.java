@@ -42,9 +42,8 @@ import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.workflow.Workflow;
 import java.time.Duration;
 import java.util.Objects;
-import org.slf4j.Logger;
-
 import javax.annotation.Nullable;
+import org.slf4j.Logger;
 
 public class EntityOnboardingImpl implements EntityOnboarding {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
@@ -75,25 +74,25 @@ public class EntityOnboardingImpl implements EntityOnboarding {
   }
 
   private void init(@Nullable OnboardEntityRequest args) {
-    if(Objects.isNull(args)) {
+    if (Objects.isNull(args)) {
       state = new EntityOnboardingState();
       return;
     }
-    var status = args.skipApproval()
+    var status =
+        args.skipApproval()
             ? new Approval(ApprovalStatus.APPROVED, null)
             : new Approval(ApprovalStatus.PENDING, null);
-    if(Objects.isNull(state.id())) {
-      state = new EntityOnboardingState(
-                      args.id(),
-                      args.value(),
-                      status);
+    if (Objects.isNull(state.id())) {
+      state = new EntityOnboardingState(args.id(), args.value(), status);
     } else {
-      state = new EntityOnboardingState(
+      state =
+          new EntityOnboardingState(
               args.id(),
               Objects.requireNonNullElseGet(state.currentValue(), args::id),
               Objects.nonNull(state.approval()) ? state.approval() : status);
     }
   }
+
   @Override
   public void execute(OnboardEntityRequest args) {
     init(args);
@@ -134,7 +133,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
                 state.currentValue(),
                 args.completionTimeoutSeconds() - waitApprovalSecs,
                 null,
-                    false);
+                false);
         can.execute(canArgs);
         return;
       }
