@@ -27,7 +27,7 @@ subprojects {
 	}
 
 	ext {
-		javaSDKVersion = '1.25.2'
+		javaSDKVersion = '1.29.0'
 		jarVersion = '1.0.0'
 	}
 
