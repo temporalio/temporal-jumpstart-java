@@ -40,6 +40,7 @@ import io.temporal.onboardings.domain.messages.values.Approval;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.workflow.Workflow;
+import io.temporal.workflow.WorkflowInit;
 import java.time.Duration;
 import java.util.Objects;
 import javax.annotation.Nullable;
@@ -67,36 +68,23 @@ public class EntityOnboardingImpl implements EntityOnboarding {
               .setStartToCloseTimeout(Duration.ofSeconds(2))
               .build());
 
-  public EntityOnboardingImpl() {
+  @WorkflowInit
+  public EntityOnboardingImpl(@Nullable OnboardEntityRequest args) {
     // Initialize the state object with
     // a non null object in the event of signal/update arriving soon
-    init(null);
+    init(args);
   }
 
   private void init(@Nullable OnboardEntityRequest args) {
-    if (Objects.isNull(args)) {
-      state = new EntityOnboardingState();
-      return;
-    }
     var status =
         args.skipApproval()
             ? new Approval(ApprovalStatus.APPROVED, null)
             : new Approval(ApprovalStatus.PENDING, null);
-    if (Objects.isNull(state.id())) {
-      state = new EntityOnboardingState(args.id(), args.value(), status);
-    } else {
-      state =
-          new EntityOnboardingState(
-              args.id(),
-              Objects.requireNonNullElseGet(state.currentValue(), args::id),
-              Objects.nonNull(state.approval()) ? state.approval() : status);
-    }
+    this.state = new EntityOnboardingState(args.id(), args.value(), status);
   }
 
   @Override
   public void execute(OnboardEntityRequest args) {
-    init(args);
-
     var notifyDeputyOwner =
         Objects.nonNull(args.deputyOwnerEmail()) && !args.deputyOwnerEmail().isEmpty();
 
