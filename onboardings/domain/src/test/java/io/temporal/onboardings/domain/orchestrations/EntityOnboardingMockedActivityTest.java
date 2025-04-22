@@ -34,9 +34,11 @@ import io.temporal.onboardings.domain.DomainConfig;
 import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
 import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
 import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.SyncToStorageRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.onboardings.domain.messages.queries.EntityOnboardingState;
+import io.temporal.onboardings.domain.messages.values.Approval;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
 import io.temporal.testing.TestWorkflowEnvironment;
@@ -232,6 +234,27 @@ public class EntityOnboardingMockedActivityTest {
     Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
     Assertions.assertEquals(
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
+  }
+
+  // behavior verification
+  @Test
+  public void givenValidArgsWithOwnerApprovalNoDeputyOwner_itShouldSyncToStorage() {
+    String wfId = UUID.randomUUID().toString();
+    var args = new OnboardEntityRequest(wfId, UUID.randomUUID().toString(), 4, null, false);
+    EntityOnboarding sut =
+        workflowClient.newWorkflowStub(
+            EntityOnboarding.class,
+            WorkflowOptions.newBuilder().setWorkflowId(args.id()).setTaskQueue(taskQueue).build());
+    WorkflowClient.start(sut::execute, args);
+    testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
+    sut.forceSync();
+    verify(notificationsHandlers, never()).requestDeputyOwnerApproval(any());
+
+    verify(integrationsHandlers, times(2))
+        .syncToStorage(
+            new SyncToStorageRequest(
+                new EntityOnboardingState(
+                    args.id(), args.value(), new Approval(ApprovalStatus.PENDING, null))));
   }
 
   @ComponentScan

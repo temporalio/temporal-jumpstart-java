@@ -27,8 +27,11 @@ package io.temporal.onboardings.domain.integrations;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.clients.crm.CrmClient;
 import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.SyncToStorageRequest;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
+import io.temporal.workflow.Workflow;
 import java.net.ConnectException;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -36,6 +39,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @Component("integrations-handlers")
 public class IntegrationsHandlersImpl implements IntegrationsHandlers {
   private final CrmClient crmClient;
+  Logger logger = Workflow.getLogger(IntegrationsHandlersImpl.class);
 
   public IntegrationsHandlersImpl(CrmClient crmClient) {
     this.crmClient = crmClient;
@@ -60,5 +64,10 @@ public class IntegrationsHandlersImpl implements IntegrationsHandlers {
       throw ApplicationFailure.newNonRetryableFailureWithCause(
           "Failed to connect with CRM service.", Errors.SERVICE_UNRECOVERABLE.name(), e);
     }
+  }
+
+  @Override
+  public void syncToStorage(SyncToStorageRequest cmd) {
+    logger.info("Received syncToStorageRequest: {}", cmd);
   }
 }
