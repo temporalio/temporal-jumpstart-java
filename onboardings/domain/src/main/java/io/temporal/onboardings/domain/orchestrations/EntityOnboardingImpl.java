@@ -46,6 +46,13 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 import org.slf4j.Logger;
 
+// EntityOnboardingImpl is always the `latest` implementation of `EntityOnboarding`
+// Versions being superceded will be copied to a separate file (or package), incremented by
+// The format {WorkflowInterface}V{previousVersion + 1}Impl
+// example:
+// 1. The version before `latest` is `EntityOnboardingV99Impl` version
+// 2. Copy current `latest` EntityOnboardingImpl as `EntityOnboardingV100Impl`
+// 3. Make changes in the existing `EntityOnboardingImpl` with appropriate GetVersion calls
 public class EntityOnboardingImpl implements EntityOnboarding {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
   private EntityOnboardingState state;
@@ -72,6 +79,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
   public EntityOnboardingImpl(@Nullable OnboardEntityRequest args) {
     // Initialize the state object with
     // a non null object in the event of signal/update arriving soon
+    // See https://docs.temporal.io/handling-messages for details
     init(args);
   }
 
@@ -122,6 +130,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
                 args.completionTimeoutSeconds() - waitApprovalSecs,
                 null,
                 false);
+        // be sure to check that all handlers have been completed before CAN
+        Workflow.await(Workflow::isEveryHandlerFinished);
         can.execute(canArgs);
         return;
       }
@@ -129,6 +139,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
     // make sure we are APPROVED to proceed with the Onboarding
     if (!state.approval().approvalStatus().equals(ApprovalStatus.APPROVED)) {
+      Workflow.await(Workflow::isEveryHandlerFinished);
       logger.info("Entity was rejected for {}", args.id());
       return;
     }
@@ -146,6 +157,9 @@ public class EntityOnboardingImpl implements EntityOnboarding {
       }
       throw e;
     }
+    // be sure to check that all handlers have been completed before exit
+    Workflow.await(Workflow::isEveryHandlerFinished);
+
   }
 
   @Override

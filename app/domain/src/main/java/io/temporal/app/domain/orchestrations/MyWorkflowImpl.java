@@ -25,8 +25,11 @@
 package io.temporal.app.domain.orchestrations;
 
 import io.temporal.app.domain.messages.orchestrations.StartMyWorkflowRequest;
+import io.temporal.workflow.Workflow;
 
 public class MyWorkflowImpl implements MyWorkflow {
   @Override
-  public void execute(StartMyWorkflowRequest args) {}
+  public void execute(StartMyWorkflowRequest args) {
+    Workflow.await(Workflow::isEveryHandlerFinished);
+  }
 }
