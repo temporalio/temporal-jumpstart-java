@@ -130,6 +130,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
                 args.completionTimeoutSeconds() - waitApprovalSecs,
                 null,
                 false);
+        // be sure to check that all handlers have been completed before CAN
+        Workflow.await(Workflow::isEveryHandlerFinished);
         can.execute(canArgs);
         return;
       }
@@ -137,6 +139,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
     // make sure we are APPROVED to proceed with the Onboarding
     if (!state.approval().approvalStatus().equals(ApprovalStatus.APPROVED)) {
+      Workflow.await(Workflow::isEveryHandlerFinished);
       logger.info("Entity was rejected for {}", args.id());
       return;
     }
@@ -154,6 +157,9 @@ public class EntityOnboardingImpl implements EntityOnboarding {
       }
       throw e;
     }
+    // be sure to check that all handlers have been completed before exit
+    Workflow.await(Workflow::isEveryHandlerFinished);
+
   }
 
   @Override
