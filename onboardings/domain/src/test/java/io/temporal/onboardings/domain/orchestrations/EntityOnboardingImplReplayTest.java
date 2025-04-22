@@ -90,6 +90,8 @@ public class EntityOnboardingImplReplayTest {
             .map(Worker::getTaskQueue)
             .filter(s -> s.startsWith("replay_"))
             .toList();
+    // enumerate the replay task queues since these have the various `EntityOnboarding` Workflow definitions
+    // These are our "source" Workflows that produce the history to verify against the `latest` implementation
     for (String tq : taskQueues) {
       String wfId = UUID.randomUUID().toString();
       String wfId2 = UUID.randomUUID().toString();
@@ -103,6 +105,7 @@ public class EntityOnboardingImplReplayTest {
       source.approve(new ApproveEntityRequest("nocomment"));
       testWorkflowEnvironment.sleep(Duration.ofSeconds(1));
       Assertions.assertDoesNotThrow(() -> source.execute(args));
+
       var history = workflowClient.fetchHistory(args.id());
       Assertions.assertDoesNotThrow(
           () -> {
