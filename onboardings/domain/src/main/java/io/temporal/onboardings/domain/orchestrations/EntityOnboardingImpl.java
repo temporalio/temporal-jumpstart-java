@@ -93,6 +93,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
 
   @Override
   public void execute(OnboardEntityRequest args) {
+
     var notifyDeputyOwner =
         Objects.nonNull(args.deputyOwnerEmail()) && !args.deputyOwnerEmail().isEmpty();
 
@@ -159,7 +160,6 @@ public class EntityOnboardingImpl implements EntityOnboarding {
     }
     // be sure to check that all handlers have been completed before exit
     Workflow.await(Workflow::isEveryHandlerFinished);
-
   }
 
   @Override
