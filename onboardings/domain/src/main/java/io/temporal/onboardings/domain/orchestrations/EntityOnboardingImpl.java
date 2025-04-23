@@ -177,6 +177,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
             () -> {
               while (true) {
                 try {
+
                   // calling this BEFORE the condition effectively dumps our state to
                   // storage before waiting to be told to resync
                   integrationsHandlers.syncToStorage(new SyncToStorageRequest(this.state));
