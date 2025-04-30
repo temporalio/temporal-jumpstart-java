@@ -148,6 +148,11 @@ public class EntityOnboardingV100Impl implements EntityOnboarding {
             state.id(), state.currentValue(), new Approval(ApprovalStatus.REJECTED, cmd.comment()));
   }
 
+  @Override
+  public void forceSync() {
+    throw ApplicationFailure.newFailure("not implemented", "NOT_IMPLEMENTED");
+  }
+
   private void assertValidArgs(OnboardEntityRequest args) {
     if (args.id() == null
         || args.id().isEmpty()

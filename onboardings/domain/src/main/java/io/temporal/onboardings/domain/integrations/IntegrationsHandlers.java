@@ -26,8 +26,11 @@ package io.temporal.onboardings.domain.integrations;
 
 import io.temporal.activity.ActivityInterface;
 import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
+import io.temporal.onboardings.domain.messages.commands.SyncToStorageRequest;
 
 @ActivityInterface
 public interface IntegrationsHandlers {
   void registerCrmEntity(RegisterCrmEntityRequest cmd);
+
+  void syncToStorage(SyncToStorageRequest cmd);
 }

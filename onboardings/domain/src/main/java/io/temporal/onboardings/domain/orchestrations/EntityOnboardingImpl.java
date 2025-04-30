@@ -29,16 +29,14 @@ import io.temporal.common.RetryOptions;
 import io.temporal.failure.ActivityFailure;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.onboardings.domain.integrations.IntegrationsHandlers;
-import io.temporal.onboardings.domain.messages.commands.ApproveEntityRequest;
-import io.temporal.onboardings.domain.messages.commands.RegisterCrmEntityRequest;
-import io.temporal.onboardings.domain.messages.commands.RejectEntityRequest;
-import io.temporal.onboardings.domain.messages.commands.RequestDeputyOwnerApprovalRequest;
+import io.temporal.onboardings.domain.messages.commands.*;
 import io.temporal.onboardings.domain.messages.orchestrations.Errors;
 import io.temporal.onboardings.domain.messages.orchestrations.OnboardEntityRequest;
 import io.temporal.onboardings.domain.messages.queries.EntityOnboardingState;
 import io.temporal.onboardings.domain.messages.values.Approval;
 import io.temporal.onboardings.domain.messages.values.ApprovalStatus;
 import io.temporal.onboardings.domain.notifications.NotificationsHandlers;
+import io.temporal.workflow.CancellationScope;
 import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowInit;
 import java.time.Duration;
@@ -56,6 +54,7 @@ import org.slf4j.Logger;
 public class EntityOnboardingImpl implements EntityOnboarding {
   Logger logger = Workflow.getLogger(EntityOnboardingImpl.class);
   private EntityOnboardingState state;
+  private boolean shouldSync;
   private final IntegrationsHandlers integrationsHandlers =
       Workflow.newActivityStub(
           IntegrationsHandlers.class,
@@ -97,6 +96,13 @@ public class EntityOnboardingImpl implements EntityOnboarding {
         Objects.nonNull(args.deputyOwnerEmail()) && !args.deputyOwnerEmail().isEmpty();
 
     assertValidArgs(args);
+
+    // Sync the Things
+    // THIS WILL RAISE A NDE!
+    // Run replay test to see how that looks
+    CancellationScope syncScope = startSyncToStorage();
+
+    syncScope.run();
 
     if (!args.skipApproval()) {
       var waitApprovalSecs = args.completionTimeoutSeconds();
@@ -159,7 +165,32 @@ public class EntityOnboardingImpl implements EntityOnboarding {
     }
     // be sure to check that all handlers have been completed before exit
     Workflow.await(Workflow::isEveryHandlerFinished);
+  }
 
+  // startSyncToStorage
+  // Kick off the application state sync asynchronously.
+  // This is akin to dirty checking inside an OR/M IdentityMap implementation
+  // Just mark the workflow as `shouldSync` and the condition unblocks to perform the work.
+  private CancellationScope startSyncToStorage() {
+    CancellationScope syncScope =
+        Workflow.newCancellationScope(
+            () -> {
+              while (true) {
+                try {
+
+                  // calling this BEFORE the condition effectively dumps our state to
+                  // storage before waiting to be told to resync
+                  integrationsHandlers.syncToStorage(new SyncToStorageRequest(this.state));
+                  shouldSync = false;
+                } catch (ActivityFailure e) {
+                  // maybe we can count the number of times we are willing to fail to report
+                  // that our Workflow state is out of sync now
+                  logger.warn("Sync failed", e);
+                }
+                Workflow.await(() -> shouldSync);
+              }
+            });
+    return syncScope;
   }
 
   @Override
@@ -183,6 +214,11 @@ public class EntityOnboardingImpl implements EntityOnboarding {
     state =
         new EntityOnboardingState(
             state.id(), state.currentValue(), new Approval(ApprovalStatus.REJECTED, cmd.comment()));
+  }
+
+  @Override
+  public void forceSync() {
+    shouldSync = true;
   }
 
   private void assertValidArgs(OnboardEntityRequest args) {
