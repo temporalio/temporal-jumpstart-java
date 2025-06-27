@@ -220,8 +220,8 @@ dist
 .env*.local
 
 # certs
-*.pem
-*.key
+# svelte
+.svelte-kit
 
 generated
 build
