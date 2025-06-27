@@ -1,0 +1,40 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { @apply h-full overflow-hidden; }
+
+.hero-gradient {
+  @apply bg-gradient-to-br from-primary-500 to-primary-700;
+}
+
+.form-container {
+  @apply p-8 max-w-md w-full mx-auto;
+}
+
+.form-step {
+  @apply space-y-6;
+}
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { @apply h-full overflow-hidden; }
+.field-group {
+  @apply space-y-1;
+}
+
+.field-label {
+  @apply text-sm font-medium;
+}
+
+.required-field::after {
+  content: ' *';
+  @apply text-error-500;
+}
+
+.error-text {
+  @apply text-error-500 text-xs mt-1;
+}

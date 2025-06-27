@@ -34,7 +34,6 @@ import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowExecutionAlreadyStarted;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.client.WorkflowStub;
-import io.temporal.common.RetryOptions;
 import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.onboardings.api.messages.OnboardingsGetV0;
 import io.temporal.onboardings.api.messages.OnboardingsPutV0;
@@ -170,7 +169,6 @@ public class OnboardingsControllerV0 {
             // attempts did not reach terminal state as `Completed'.
             .setWorkflowIdReusePolicy(
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY)
-
             .build();
     WorkflowStub workflowStub =
         temporalClient.newUntypedWorkflowStub("WorkflowDefinitionDoesntExistYet", options);
