@@ -6,10 +6,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "io.temporal:temporal-spring-boot-starter:${javaSDKVersion}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+//    implementation "io.github.danielliu1123:springdoc-bridge-protobuf:0.3.5"
+
 
     // Protobuf dependencies
-    implementation("com.google.protobuf:protobuf-java:3.25.1")
-    implementation("com.google.protobuf:protobuf-java-util:3.25.1")
+    // Core protobuf runtime
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
+
+    // JSON conversion utilities (for REST APIs)
+    implementation 'com.google.protobuf:protobuf-java-util:4.31.1'
+
+    // Optional: If you're using protobuf-lite (smaller runtime)
+    // implementation("com.google.protobuf:protobuf-javalite:3.25.1")
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
 
     // Optional: Spring Boot protobuf support (if you want automatic HTTP message converters)
     implementation("org.springframework.boot:spring-boot-starter-webflux") // includes protobuf support
