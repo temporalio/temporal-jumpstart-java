@@ -7,6 +7,12 @@ dependencies {
     implementation "io.temporal:temporal-spring-boot-starter:${javaSDKVersion}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
 
+    // Protobuf dependencies
+    implementation("com.google.protobuf:protobuf-java:3.25.1")
+    implementation("com.google.protobuf:protobuf-java-util:3.25.1")
+
+    // Optional: Spring Boot protobuf support (if you want automatic HTTP message converters)
+    implementation("org.springframework.boot:spring-boot-starter-webflux") // includes protobuf support
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     runtimeOnly "io.micrometer:micrometer-registry-prometheus"

@@ -1,9 +1,10 @@
+# For details on buf.yaml configuration, visit https://buf.build/docs/configuration/v2/buf-yaml
 version: v2
-directories:
-  - proto
+modules:
+  - path: proto
 lint:
   use:
-    - DEFAULT
+    - STANDARD
 breaking:
   use:
     - FILE

@@ -2,11 +2,8 @@ version: v2
 managed:
   enabled: true
 inputs:
-  - directory: .
-    paths:
-      - proto
+  - directory: proto
+
 plugins:
   - remote: buf.build/protocolbuffers/java
     out: api/src/main/java
-    opt:
-      - lite
