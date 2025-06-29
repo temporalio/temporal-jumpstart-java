@@ -25,6 +25,11 @@ public final class CommandsProto {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
 
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_RegisterUserRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_RegisterUserRequest_fieldAccessorTable;
+
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
@@ -34,15 +39,24 @@ public final class CommandsProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\036applications/v1/commands.proto\022\017applic"
-          + "ations.v1B\221\001\n#io.temporal.fsi.api.applic"
-          + "ations.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017Appli"
-          + "cations.V1\312\002\017Applications\\V1\342\002\033Applicati"
-          + "ons\\V1\\GPBMetadata\352\002\020Applications::V1b\006p"
-          + "roto3"
+          + "ations.v1\"+\n\023RegisterUserRequest\022\024\n\005emai"
+          + "l\030\001 \001(\tR\005emailB\221\001\n#io.temporal.fsi.api.a"
+          + "pplications.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017"
+          + "Applications.V1\312\002\017Applications\\V1\342\002\033Appl"
+          + "ications\\V1\\GPBMetadata\352\002\020Applications::"
+          + "V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
             descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {});
+    internal_static_applications_v1_RegisterUserRequest_descriptor =
+        getDescriptor().getMessageTypes().get(0);
+    internal_static_applications_v1_RegisterUserRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_RegisterUserRequest_descriptor,
+            new java.lang.String[] {
+              "Email",
+            });
     descriptor.resolveAllFeaturesImmutable();
   }
 

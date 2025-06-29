@@ -4,3 +4,6 @@ package applications.v1;
 
 option java_multiple_files = true;
 option java_outer_classname = "Commands";
+message RegisterUserRequest {
+  string email = 1;
+}
