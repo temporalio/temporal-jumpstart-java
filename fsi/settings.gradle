@@ -1,0 +1,6 @@
+rootProject.name = 'fsi'
+include 'web'
+include 'workers'
+include 'domain'
+include 'proto'
+include 'api'

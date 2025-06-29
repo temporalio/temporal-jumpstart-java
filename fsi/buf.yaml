@@ -1,0 +1,9 @@
+version: v2
+directories:
+  - proto
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE

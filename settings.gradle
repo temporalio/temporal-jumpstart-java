@@ -6,4 +6,3 @@ include 'onboardings:workers'
 include 'app:api'
 include 'app:domain'
 include 'app:workers'
-

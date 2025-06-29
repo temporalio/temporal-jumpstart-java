@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package applications.v1.workflows;
+
+option java_package = "com.example.proto.applications.v1.workflows";
+option java_multiple_files = true;
+
+message StartUserRegistrationsRequest {
+  string name = 1;
+}

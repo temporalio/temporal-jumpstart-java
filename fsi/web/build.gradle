@@ -1,0 +1,24 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "io.temporal:temporal-spring-boot-starter:${javaSDKVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
+
+    implementation project(':domain')
+}
+
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
