@@ -1,0 +1,24 @@
+server:
+  port: 3030
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: temporal-fsi
+  # temporal specific configs
+  temporal:
+    connection:
+      target: local
+    workers-auto-discovery:
+      packages: # intentionally left blank to avoid spring auto configure problems...i just want a client
+  curriculum:
+    task-queue: fsi
+# actuator (sdk metrics)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

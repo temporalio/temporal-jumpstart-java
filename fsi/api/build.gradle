@@ -11,13 +11,14 @@ repositories {
 
 dependencies {
     // Core protobuf runtime
-    implementation("com.google.protobuf:protobuf-java:3.25.1")
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
 
     // JSON conversion utilities (for REST APIs)
-    implementation("com.google.protobuf:protobuf-java-util:3.25.1")
+    implementation 'com.google.protobuf:protobuf-java-util:4.31.1'
 
     // Optional: If you're using protobuf-lite (smaller runtime)
     // implementation("com.google.protobuf:protobuf-javalite:3.25.1")
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'

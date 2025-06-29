@@ -18,6 +18,7 @@ dependencies {
     runtimeOnly "io.micrometer:micrometer-registry-prometheus"
 
     implementation project(':domain')
+    implementation project(':api')
 }
 
 

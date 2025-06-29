@@ -1,9 +1,13 @@
 version: v2
 managed:
   enabled: true
+  override:
+    - file_option: java_package_prefix
+      value: io.temporal.fsi.api
 inputs:
   - directory: proto
+clean: true
 
 plugins:
-  - remote: buf.build/protocolbuffers/java
+  - remote: buf.build/protocolbuffers/java:v31.1
     out: api/src/main/java
