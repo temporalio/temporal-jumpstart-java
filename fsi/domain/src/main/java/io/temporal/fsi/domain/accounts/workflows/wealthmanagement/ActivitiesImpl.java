@@ -82,4 +82,9 @@ public class ActivitiesImpl implements Activities {
     // forward the application details (collected inside an Update??)
     return ApplyWealthManagementVendorResponse.newBuilder().build();
   }
+
+  @Override
+  public void nagApplicant(NagApplicantRequest cmd) {
+    // send email to remind applicant they are not done yet!
+  }
 }

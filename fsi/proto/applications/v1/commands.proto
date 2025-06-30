@@ -64,3 +64,14 @@ message ApplyWealthManagementVendorRequest {
 message ApplyWealthManagementVendorResponse {
   string client_id = 1;
 }
+
+message CompleteWealthManagementApplicationRequest {
+
+}
+message CompleteWealthManagementApplicationResponse {
+
+}
+
+message NagApplicantRequest {
+  string user_id = 1;
+}

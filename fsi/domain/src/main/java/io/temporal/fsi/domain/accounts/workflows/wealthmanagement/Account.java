@@ -1,9 +1,6 @@
 package io.temporal.fsi.domain.accounts.workflows.wealthmanagement;
 
-import io.temporal.fsi.api.applications.v1.GetWealthManagementAccountResponse;
-import io.temporal.fsi.api.applications.v1.LinkExistingClientRequest;
-import io.temporal.fsi.api.applications.v1.MatchClientRequest;
-import io.temporal.fsi.api.applications.v1.OpenWealthManagementAccountRequest;
+import io.temporal.fsi.api.applications.v1.*;
 import io.temporal.workflow.*;
 
 @WorkflowInterface
@@ -19,6 +16,10 @@ public interface Account {
 
   @SignalMethod
   void linkExistingClient(LinkExistingClientRequest cmd);
+
+  @UpdateMethod
+  GetWealthManagementAccountResponse completeWealthManagementApplication(
+      CompleteWealthManagementApplicationRequest cmd);
 
   @SignalMethod
   void markWealthManagementVendorCompleted();

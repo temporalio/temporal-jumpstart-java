@@ -81,6 +81,18 @@ public final class CommandsProto {
       internal_static_applications_v1_ApplyWealthManagementVendorResponse_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_ApplyWealthManagementVendorResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_CompleteWealthManagementApplicationRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_CompleteWealthManagementApplicationRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_CompleteWealthManagementApplicationResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_CompleteWealthManagementApplicationResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_NagApplicantRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_NagApplicantRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -116,11 +128,15 @@ public final class CommandsProto {
           + "ApplyWealthManagementVendorRequest\022\033\n\tcl"
           + "ient_id\030\001 \001(\tR\010clientId\022\027\n\007user_id\030\002 \001(\t"
           + "R\006userId\"B\n#ApplyWealthManagementVendorR"
-          + "esponse\022\033\n\tclient_id\030\001 \001(\tR\010clientIdB\221\001\n"
-          + "#io.temporal.fsi.api.applications.v1B\rCo"
-          + "mmandsProtoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017"
-          + "Applications\\V1\342\002\033Applications\\V1\\GPBMet"
-          + "adata\352\002\020Applications::V1b\006proto3"
+          + "esponse\022\033\n\tclient_id\030\001 \001(\tR\010clientId\",\n*"
+          + "CompleteWealthManagementApplicationReque"
+          + "st\"-\n+CompleteWealthManagementApplicatio"
+          + "nResponse\".\n\023NagApplicantRequest\022\027\n\007user"
+          + "_id\030\001 \001(\tR\006userIdB\221\001\n#io.temporal.fsi.ap"
+          + "i.applications.v1B\rCommandsProtoP\001\242\002\003AXX"
+          + "\252\002\017Applications.V1\312\002\017Applications\\V1\342\002\033A"
+          + "pplications\\V1\\GPBMetadata\352\002\020Application"
+          + "s::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -232,6 +248,26 @@ public final class CommandsProto {
             internal_static_applications_v1_ApplyWealthManagementVendorResponse_descriptor,
             new java.lang.String[] {
               "ClientId",
+            });
+    internal_static_applications_v1_CompleteWealthManagementApplicationRequest_descriptor =
+        getDescriptor().getMessageTypes().get(14);
+    internal_static_applications_v1_CompleteWealthManagementApplicationRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_CompleteWealthManagementApplicationRequest_descriptor,
+            new java.lang.String[] {});
+    internal_static_applications_v1_CompleteWealthManagementApplicationResponse_descriptor =
+        getDescriptor().getMessageTypes().get(15);
+    internal_static_applications_v1_CompleteWealthManagementApplicationResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_CompleteWealthManagementApplicationResponse_descriptor,
+            new java.lang.String[] {});
+    internal_static_applications_v1_NagApplicantRequest_descriptor =
+        getDescriptor().getMessageTypes().get(16);
+    internal_static_applications_v1_NagApplicantRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_NagApplicantRequest_descriptor,
+            new java.lang.String[] {
+              "UserId",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

@@ -21,4 +21,7 @@ public interface Activities {
   @ActivityMethod
   ApplyWealthManagementVendorResponse applyWealthManagementVendor(
       ApplyWealthManagementVendorRequest cmd);
+
+  @ActivityMethod
+  void nagApplicant(NagApplicantRequest cmd);
 }

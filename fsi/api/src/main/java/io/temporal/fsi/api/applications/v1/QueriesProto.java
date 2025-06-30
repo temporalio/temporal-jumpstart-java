@@ -49,7 +49,7 @@ public final class QueriesProto {
           + "trationsResponse\022T\n\022user_registrations\030\001"
           + " \003(\0132%.applications.v1.RegisterUserRespo"
           + "nseR\021userRegistrations\022+\n\005users\030\002 \003(\0132\025."
-          + "applications.v1.UserR\005users\"\323\002\n\"GetWealt"
+          + "applications.v1.UserR\005users\"\263\003\n\"GetWealt"
           + "hManagementAccountResponse\022G\n\004args\030\001 \001(\013"
           + "23.applications.v1.OpenWealthManagementA"
           + "ccountRequestR\004args\022\027\n\007user_id\030\002 \001(\tR\006us"
@@ -58,11 +58,13 @@ public final class QueriesProto {
           + "ompleted\022\020\n\003ssn\030\006 \001(\tR\003ssn\022\034\n\tbirthdate\030"
           + "\007 \001(\tR\tbirthdate\022G\n\014match_client\030\010 \001(\0132$"
           + ".applications.v1.MatchClientResponseR\013ma"
-          + "tchClientB\220\001\n#io.temporal.fsi.api.applic"
-          + "ations.v1B\014QueriesProtoP\001\242\002\003AXX\252\002\017Applic"
-          + "ations.V1\312\002\017Applications\\V1\342\002\033Applicatio"
-          + "ns\\V1\\GPBMetadata\352\002\020Applications::V1b\006pr"
-          + "oto3"
+          + "tchClient\022^\n\013application\030\t \001(\0132<.applica"
+          + "tions.v1.CompleteWealthManagementApplica"
+          + "tionResponseR\013applicationB\220\001\n#io.tempora"
+          + "l.fsi.api.applications.v1B\014QueriesProtoP"
+          + "\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Applications"
+          + "\\V1\342\002\033Applications\\V1\\GPBMetadata\352\002\020Appl"
+          + "ications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -94,6 +96,7 @@ public final class QueriesProto {
               "Ssn",
               "Birthdate",
               "MatchClient",
+              "Application",
             });
     descriptor.resolveAllFeaturesImmutable();
     io.temporal.fsi.api.applications.v1.ValuesProto.getDescriptor();

@@ -22,4 +22,5 @@ message GetWealthManagementAccountResponse {
   string ssn = 6;
   string birthdate = 7;
   MatchClientResponse match_client = 8;
+  CompleteWealthManagementApplicationResponse application = 9;
 }

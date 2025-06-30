@@ -327,6 +327,49 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
         : matchClient_;
   }
 
+  public static final int APPLICATION_FIELD_NUMBER = 9;
+  private io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+      application_;
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   *
+   * @return Whether the application field is set.
+   */
+  @java.lang.Override
+  public boolean hasApplication() {
+    return ((bitField0_ & 0x00000004) != 0);
+  }
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   *
+   * @return The application.
+   */
+  @java.lang.Override
+  public io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+      getApplication() {
+    return application_ == null
+        ? io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+            .getDefaultInstance()
+        : application_;
+  }
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   */
+  @java.lang.Override
+  public io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponseOrBuilder
+      getApplicationOrBuilder() {
+    return application_ == null
+        ? io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+            .getDefaultInstance()
+        : application_;
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -365,6 +408,9 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
     if (((bitField0_ & 0x00000002) != 0)) {
       output.writeMessage(8, getMatchClient());
     }
+    if (((bitField0_ & 0x00000004) != 0)) {
+      output.writeMessage(9, getApplication());
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -398,6 +444,9 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
     if (((bitField0_ & 0x00000002) != 0)) {
       size += com.google.protobuf.CodedOutputStream.computeMessageSize(8, getMatchClient());
     }
+    if (((bitField0_ & 0x00000004) != 0)) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(9, getApplication());
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -427,6 +476,10 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
     if (hasMatchClient() != other.hasMatchClient()) return false;
     if (hasMatchClient()) {
       if (!getMatchClient().equals(other.getMatchClient())) return false;
+    }
+    if (hasApplication() != other.hasApplication()) return false;
+    if (hasApplication()) {
+      if (!getApplication().equals(other.getApplication())) return false;
     }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
@@ -458,6 +511,10 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
     if (hasMatchClient()) {
       hash = (37 * hash) + MATCH_CLIENT_FIELD_NUMBER;
       hash = (53 * hash) + getMatchClient().hashCode();
+    }
+    if (hasApplication()) {
+      hash = (37 * hash) + APPLICATION_FIELD_NUMBER;
+      hash = (53 * hash) + getApplication().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -596,6 +653,7 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
       if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
         internalGetArgsFieldBuilder();
         internalGetMatchClientFieldBuilder();
+        internalGetApplicationFieldBuilder();
       }
     }
 
@@ -618,6 +676,11 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
       if (matchClientBuilder_ != null) {
         matchClientBuilder_.dispose();
         matchClientBuilder_ = null;
+      }
+      application_ = null;
+      if (applicationBuilder_ != null) {
+        applicationBuilder_.dispose();
+        applicationBuilder_ = null;
       }
       return this;
     }
@@ -687,6 +750,11 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
             matchClientBuilder_ == null ? matchClient_ : matchClientBuilder_.build();
         to_bitField0_ |= 0x00000002;
       }
+      if (((from_bitField0_ & 0x00000100) != 0)) {
+        result.application_ =
+            applicationBuilder_ == null ? application_ : applicationBuilder_.build();
+        to_bitField0_ |= 0x00000004;
+      }
       result.bitField0_ |= to_bitField0_;
     }
 
@@ -739,6 +807,9 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
       }
       if (other.hasMatchClient()) {
         mergeMatchClient(other.getMatchClient());
+      }
+      if (other.hasApplication()) {
+        mergeApplication(other.getApplication());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -815,6 +886,13 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
                 bitField0_ |= 0x00000080;
                 break;
               } // case 66
+            case 74:
+              {
+                input.readMessage(
+                    internalGetApplicationFieldBuilder().getBuilder(), extensionRegistry);
+                bitField0_ |= 0x00000100;
+                break;
+              } // case 74
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -1540,6 +1618,171 @@ public final class GetWealthManagementAccountResponse extends com.google.protobu
         matchClient_ = null;
       }
       return matchClientBuilder_;
+    }
+
+    private io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+        application_;
+    private com.google.protobuf.SingleFieldBuilder<
+            io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse,
+            io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse.Builder,
+            io.temporal.fsi.api.applications.v1
+                .CompleteWealthManagementApplicationResponseOrBuilder>
+        applicationBuilder_;
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     *
+     * @return Whether the application field is set.
+     */
+    public boolean hasApplication() {
+      return ((bitField0_ & 0x00000100) != 0);
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     *
+     * @return The application.
+     */
+    public io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+        getApplication() {
+      if (applicationBuilder_ == null) {
+        return application_ == null
+            ? io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+                .getDefaultInstance()
+            : application_;
+      } else {
+        return applicationBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public Builder setApplication(
+        io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse value) {
+      if (applicationBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        application_ = value;
+      } else {
+        applicationBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public Builder setApplication(
+        io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse.Builder
+            builderForValue) {
+      if (applicationBuilder_ == null) {
+        application_ = builderForValue.build();
+      } else {
+        applicationBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public Builder mergeApplication(
+        io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse value) {
+      if (applicationBuilder_ == null) {
+        if (((bitField0_ & 0x00000100) != 0)
+            && application_ != null
+            && application_
+                != io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+                    .getDefaultInstance()) {
+          getApplicationBuilder().mergeFrom(value);
+        } else {
+          application_ = value;
+        }
+      } else {
+        applicationBuilder_.mergeFrom(value);
+      }
+      if (application_ != null) {
+        bitField0_ |= 0x00000100;
+        onChanged();
+      }
+      return this;
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public Builder clearApplication() {
+      bitField0_ = (bitField0_ & ~0x00000100);
+      application_ = null;
+      if (applicationBuilder_ != null) {
+        applicationBuilder_.dispose();
+        applicationBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse.Builder
+        getApplicationBuilder() {
+      bitField0_ |= 0x00000100;
+      onChanged();
+      return internalGetApplicationFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    public io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponseOrBuilder
+        getApplicationOrBuilder() {
+      if (applicationBuilder_ != null) {
+        return applicationBuilder_.getMessageOrBuilder();
+      } else {
+        return application_ == null
+            ? io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+                .getDefaultInstance()
+            : application_;
+      }
+    }
+    /**
+     * <code>
+     * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+     * </code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+            io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse,
+            io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse.Builder,
+            io.temporal.fsi.api.applications.v1
+                .CompleteWealthManagementApplicationResponseOrBuilder>
+        internalGetApplicationFieldBuilder() {
+      if (applicationBuilder_ == null) {
+        applicationBuilder_ =
+            new com.google.protobuf.SingleFieldBuilder<
+                io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse,
+                io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse
+                    .Builder,
+                io.temporal.fsi.api.applications.v1
+                    .CompleteWealthManagementApplicationResponseOrBuilder>(
+                getApplication(), getParentForChildren(), isClean());
+        application_ = null;
+      }
+      return applicationBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:applications.v1.GetWealthManagementAccountResponse)

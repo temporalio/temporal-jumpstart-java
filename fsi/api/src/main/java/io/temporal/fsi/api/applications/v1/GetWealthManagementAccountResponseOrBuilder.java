@@ -117,4 +117,28 @@ public interface GetWealthManagementAccountResponseOrBuilder
    * <code>.applications.v1.MatchClientResponse match_client = 8 [json_name = "matchClient"];</code>
    */
   io.temporal.fsi.api.applications.v1.MatchClientResponseOrBuilder getMatchClientOrBuilder();
+
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   *
+   * @return Whether the application field is set.
+   */
+  boolean hasApplication();
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   *
+   * @return The application.
+   */
+  io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponse getApplication();
+  /**
+   * <code>
+   * .applications.v1.CompleteWealthManagementApplicationResponse application = 9 [json_name = "application"];
+   * </code>
+   */
+  io.temporal.fsi.api.applications.v1.CompleteWealthManagementApplicationResponseOrBuilder
+      getApplicationOrBuilder();
 }

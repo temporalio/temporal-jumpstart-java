@@ -1,6 +1,7 @@
 package io.temporal.fsi.domain.accounts.workflows.wealthmanagement;
 
 import io.temporal.activity.ActivityOptions;
+import io.temporal.common.RetryOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.fsi.api.applications.v1.*;
 import io.temporal.workflow.*;
@@ -9,16 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountImpl implements Account {
+  private final Activities notificationActs;
   private GetWealthManagementAccountResponse state;
   private final Activities acts;
 
   @WorkflowInit
   public AccountImpl(OpenWealthManagementAccountRequest cmd) {
     state = GetWealthManagementAccountResponse.getDefaultInstance();
+    // activities calling out to remote resources
     acts =
         Workflow.newActivityStub(
             Activities.class,
             ActivityOptions.newBuilder().setStartToCloseTimeout(Duration.ofSeconds(15)).build());
+    // activities that must be guaraded against infinite retries
+    notificationActs =
+        Workflow.newActivityStub(
+            Activities.class,
+            ActivityOptions.newBuilder()
+                .setStartToCloseTimeout(Duration.ofSeconds(10))
+                .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(2).build())
+                .build());
   }
 
   @Override
@@ -36,7 +47,7 @@ public class AccountImpl implements Account {
     // our match service reported the client was matched
     // so request the `link` from some service
     if (state.hasMatchClient() && !state.getMatchClient().getNotFound()) {
-      acts.requestExistingClient(
+      notificationActs.requestExistingClient(
           RequestExistingClientRequest.newBuilder()
               .setBirthdate(state.getBirthdate())
               .setSsn(state.getSsn())
@@ -46,7 +57,25 @@ public class AccountImpl implements Account {
       // we can time this out if we want to...
       Workflow.await(() -> !state.getClientId().isEmpty());
     }
+    var applicantShouldBeNagged = !state.hasApplication();
+
+    while (applicantShouldBeNagged) {
+      // we are collecting more application info from customer
+      Workflow.await(Duration.ofSeconds(60), () -> state.hasApplication());
+      if (state.getApplication().isInitialized()) {
+        notificationActs.nagApplicant(NagApplicantRequest.newBuilder().build());
+        applicantShouldBeNagged = false;
+      }
+    }
+    // we are collecting more application info from customer
+    Workflow.await(Duration.ofSeconds(60), () -> state.hasApplication());
+    if (!state.hasApplication()) {
+      // we could throw an failure here b/c applicant never finished
+      // but in practice we could do something else and return
+      return;
+    }
     // Done in parallel (forward client record + process with wealth mgmt account setup)
+    // However , we are collecting more info so
     List<Promise<Void>> promiseList = new ArrayList<>();
     promiseList.add(
         Async.procedure(
@@ -98,6 +127,16 @@ public class AccountImpl implements Account {
   @Override
   public void linkExistingClient(LinkExistingClientRequest cmd) {
     state = state.toBuilder().setClientId(cmd.getClientId()).build();
+  }
+
+  @Override
+  public GetWealthManagementAccountResponse completeWealthManagementApplication(
+      CompleteWealthManagementApplicationRequest cmd) {
+    state =
+        state.toBuilder()
+            .setApplication(CompleteWealthManagementApplicationResponse.newBuilder().build())
+            .build();
+    return state;
   }
 
   @Override
