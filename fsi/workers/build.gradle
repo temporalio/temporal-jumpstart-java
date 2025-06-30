@@ -3,6 +3,16 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     implementation "io.temporal:temporal-spring-boot-starter:${javaSDKVersion}"
+    // Protobuf dependencies
+    // Core protobuf runtime
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
+
+    // JSON conversion utilities (for REST APIs)
+    implementation 'com.google.protobuf:protobuf-java-util:4.31.1'
+
+    // Optional: If you're using protobuf-lite (smaller runtime)
+    // implementation("com.google.protobuf:protobuf-javalite:3.25.1")
+    implementation('com.google.protobuf:protobuf-java:4.31.1')
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 
@@ -17,6 +27,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
     implementation project(':domain')
+    implementation project(':api')
 
 }
 

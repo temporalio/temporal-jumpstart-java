@@ -29,6 +29,10 @@ public final class CommandsProto {
       internal_static_applications_v1_RegisterUserRequest_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_RegisterUserRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_RegisterUserResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_RegisterUserResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -40,11 +44,12 @@ public final class CommandsProto {
     java.lang.String[] descriptorData = {
       "\n\036applications/v1/commands.proto\022\017applic"
           + "ations.v1\"+\n\023RegisterUserRequest\022\024\n\005emai"
-          + "l\030\001 \001(\tR\005emailB\221\001\n#io.temporal.fsi.api.a"
-          + "pplications.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017"
-          + "Applications.V1\312\002\017Applications\\V1\342\002\033Appl"
-          + "ications\\V1\\GPBMetadata\352\002\020Applications::"
-          + "V1b\006proto3"
+          + "l\030\001 \001(\tR\005email\"B\n\024RegisterUserResponse\022\024"
+          + "\n\005email\030\001 \001(\tR\005email\022\024\n\005token\030\002 \001(\tR\005tok"
+          + "enB\221\001\n#io.temporal.fsi.api.applications."
+          + "v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017Applications"
+          + ".V1\312\002\017Applications\\V1\342\002\033Applications\\V1\\"
+          + "GPBMetadata\352\002\020Applications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -56,6 +61,14 @@ public final class CommandsProto {
             internal_static_applications_v1_RegisterUserRequest_descriptor,
             new java.lang.String[] {
               "Email",
+            });
+    internal_static_applications_v1_RegisterUserResponse_descriptor =
+        getDescriptor().getMessageTypes().get(1);
+    internal_static_applications_v1_RegisterUserResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_RegisterUserResponse_descriptor,
+            new java.lang.String[] {
+              "Email", "Token",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

@@ -1,6 +1,12 @@
 syntax = "proto3";
+import "applications/v1/values.proto";
+import "applications/v1/commands.proto";
 
 package applications.v1;
 
 option java_multiple_files = true;
 option java_outer_classname = "Queries";
+
+message GetUserRegistrationsResponse {
+  repeated RegisterUserResponse user_registrations = 1;
+}

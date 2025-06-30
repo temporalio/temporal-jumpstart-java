@@ -7,3 +7,7 @@ option java_outer_classname = "Commands";
 message RegisterUserRequest {
   string email = 1;
 }
+message RegisterUserResponse {
+  string email = 1;
+  string token = 2;
+}

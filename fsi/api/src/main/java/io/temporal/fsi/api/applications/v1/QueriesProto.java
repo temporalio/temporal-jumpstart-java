@@ -25,6 +25,11 @@ public final class QueriesProto {
     registerAllExtensions((com.google.protobuf.ExtensionRegistryLite) registry);
   }
 
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_GetUserRegistrationsResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_GetUserRegistrationsResponse_fieldAccessorTable;
+
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
@@ -34,16 +39,34 @@ public final class QueriesProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\035applications/v1/queries.proto\022\017applica"
-          + "tions.v1B\220\001\n#io.temporal.fsi.api.applica"
-          + "tions.v1B\014QueriesProtoP\001\242\002\003AXX\252\002\017Applica"
-          + "tions.V1\312\002\017Applications\\V1\342\002\033Application"
-          + "s\\V1\\GPBMetadata\352\002\020Applications::V1b\006pro"
-          + "to3"
+          + "tions.v1\032\034applications/v1/values.proto\032\036"
+          + "applications/v1/commands.proto\"t\n\034GetUse"
+          + "rRegistrationsResponse\022T\n\022user_registrat"
+          + "ions\030\001 \003(\0132%.applications.v1.RegisterUse"
+          + "rResponseR\021userRegistrationsB\220\001\n#io.temp"
+          + "oral.fsi.api.applications.v1B\014QueriesPro"
+          + "toP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Applicati"
+          + "ons\\V1\342\002\033Applications\\V1\\GPBMetadata\352\002\020A"
+          + "pplications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
-            descriptorData, new com.google.protobuf.Descriptors.FileDescriptor[] {});
+            descriptorData,
+            new com.google.protobuf.Descriptors.FileDescriptor[] {
+              io.temporal.fsi.api.applications.v1.ValuesProto.getDescriptor(),
+              io.temporal.fsi.api.applications.v1.CommandsProto.getDescriptor(),
+            });
+    internal_static_applications_v1_GetUserRegistrationsResponse_descriptor =
+        getDescriptor().getMessageTypes().get(0);
+    internal_static_applications_v1_GetUserRegistrationsResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_GetUserRegistrationsResponse_descriptor,
+            new java.lang.String[] {
+              "UserRegistrations",
+            });
     descriptor.resolveAllFeaturesImmutable();
+    io.temporal.fsi.api.applications.v1.ValuesProto.getDescriptor();
+    io.temporal.fsi.api.applications.v1.CommandsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)
