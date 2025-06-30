@@ -10,9 +10,9 @@
 	import OnboardingStepIndicator from '$lib/components/OnboardingStepIndicator.svelte';
 	import OnboardingHero from '$lib/components/OnboardingHero.svelte';
 
-	// Define the application steps
+	// Define the account steps
 	const steps = [
-		{ id: 1, title: 'Welcome', description: 'Get started with our application' },
+		{ id: 1, title: 'Welcome', description: 'Get started with our account' },
 		{ id: 2, title: 'Personal Information', description: 'Tell us about yourself' },
 		{ id: 3, title: 'Preferences', description: 'Customize your experience' },
 		{ id: 4, title: 'Completion', description: 'All set and ready to go' }
@@ -24,13 +24,13 @@
 	let initializing = true;
 	let error = null;
 
-	// Subscribe to application store changes
+	// Subscribe to account store changes
 	onMount(async () => {
 		try {
-			// Check if we already have an ongoing application process
+			// Check if we already have an ongoing account process
 			const unsubscribe = onboarding.subscribe(state => {
 				if (!state.id) {
-					// Redirect to landing page if no application process is found
+					// Redirect to landing page if no account process is found
 					window.location.href = '/';
 					return;
 				}
@@ -45,7 +45,7 @@
 			initializing = false;
 			return unsubscribe;
 		} catch (err) {
-			error = err.message || 'Failed to load application process';
+			error = err.message || 'Failed to load account process';
 			console.error('Onboarding error:', err);
 			initializing = false;
 		}
@@ -72,7 +72,7 @@
 		<div class="flex justify-center items-center h-full">
 			<div class="card p-8 text-center">
 				<div class="spinner-border spinner-border-lg" role="status"></div>
-				<p class="mt-4">Loading your application...</p>
+				<p class="mt-4">Loading your account...</p>
 			</div>
 		</div>
 	{:else if error}

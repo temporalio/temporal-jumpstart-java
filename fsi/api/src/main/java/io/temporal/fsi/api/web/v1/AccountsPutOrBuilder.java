@@ -6,9 +6,9 @@
 package io.temporal.fsi.api.web.v1;
 
 @com.google.protobuf.Generated
-public interface ApplicationsPutOrBuilder
+public interface AccountsPutOrBuilder
     extends
-    // @@protoc_insertion_point(interface_extends:web.v1.ApplicationsPut)
+    // @@protoc_insertion_point(interface_extends:web.v1.AccountsPut)
     com.google.protobuf.MessageOrBuilder {
 
   /**

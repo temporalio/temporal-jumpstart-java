@@ -8,7 +8,7 @@ The techniques described support both explicit and autoconfigure Temporal Spring
 
 ## Mocked Activities
 
-Given the following spring configuration in `application-test.yaml`
+Given the following spring configuration in `account-test.yaml`
 ```yaml
   temporal:
     test-server:
@@ -39,7 +39,7 @@ Overriding registered Activity implementations can be as simple as providing a `
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @EnableAutoConfiguration()
 @DirtiesContext
-// use config from application-test.yaml
+// use config from account-test.yaml
 @ActiveProfiles("test")
 // register services from domain
 @Import(DomainConfig.class)
@@ -94,7 +94,7 @@ import org.springframework.context.annotation.Primary;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @EnableAutoConfiguration()
 @DirtiesContext
-// use config from application-test.yaml
+// use config from account-test.yaml
 @ActiveProfiles("test")
 // register services from domain
 @Import(DomainConfig.class)

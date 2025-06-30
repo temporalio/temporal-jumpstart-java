@@ -5,9 +5,9 @@ import io.temporal.api.enums.v1.WorkflowIdConflictPolicy;
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
 import io.temporal.client.*;
 import io.temporal.fsi.api.applications.v1.*;
-import io.temporal.fsi.api.web.v1.ApplicationGet;
-import io.temporal.fsi.api.web.v1.ApplicationsPut;
-import io.temporal.fsi.domain.applications.workflows.applications.Application;
+import io.temporal.fsi.api.web.v1.AccountGet;
+import io.temporal.fsi.api.web.v1.AccountsPut;
+import io.temporal.fsi.domain.accounts.workflows.wealthmanagement.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/v1/applications")
-public class ApplicationsControllerV1 {
-  Logger logger = LoggerFactory.getLogger(ApplicationsControllerV1.class);
+@CrossOrigin(
+    origins = "*",
+    allowedHeaders = "*",
+    methods = {RequestMethod.PUT, RequestMethod.GET})
+@RequestMapping("/api/v1/accounts")
+public class AccountsControllerV1 {
+  Logger logger = LoggerFactory.getLogger(AccountsControllerV1.class);
   @Autowired WorkflowClient temporalClient;
 
   @Value("${spring.curriculum.task-queue}")
@@ -31,12 +34,11 @@ public class ApplicationsControllerV1 {
       value = "/{id}",
       consumes = {MediaType.APPLICATION_JSON_VALUE})
   //      produces = {MediaType.APPLICATION_JSON_VALUE})
-  ResponseEntity<String> applicationsPut(
-      @PathVariable String id, @RequestBody ApplicationsPut params) {
+  ResponseEntity<String> applicationsPut(@PathVariable String id, @RequestBody AccountsPut params) {
 
     if (params.hasBirthdate() && params.hasSsn() && params.hasName()) {
       try {
-        var handle = temporalClient.newWorkflowStub(Application.class, id);
+        var handle = temporalClient.newWorkflowStub(Account.class, id);
         var state =
             handle.matchClient(
                 MatchClientRequest.newBuilder()
@@ -45,7 +47,7 @@ public class ApplicationsControllerV1 {
                     .setName(params.getName())
                     .build());
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-            .header("location", "/api/v1/applications/" + id)
+            .header("location", "/api/v1/accounts/" + id)
             .build();
       } catch (Exception e) {
         logger.error("Error updating workflow", e);
@@ -61,15 +63,15 @@ public class ApplicationsControllerV1 {
                 WorkflowIdReusePolicy.WORKFLOW_ID_REUSE_POLICY_ALLOW_DUPLICATE_FAILED_ONLY)
             .setWorkflowIdConflictPolicy(WorkflowIdConflictPolicy.WORKFLOW_ID_CONFLICT_POLICY_FAIL)
             .build();
-    var args = StartApplicationRequest.newBuilder().setUserId(id).build();
+    var args = OpenWealthManagementAccountRequest.newBuilder().setUserId(id).build();
 
-    var workflowStub = temporalClient.newWorkflowStub(Application.class, options);
+    var workflowStub = temporalClient.newWorkflowStub(Account.class, options);
 
     try {
       var handle = WorkflowClient.start(workflowStub::start, args);
 
       return ResponseEntity.status(HttpStatus.ACCEPTED)
-          .header("location", "/api/v1/applications/" + id)
+          .header("location", "/api/v1/accounts/" + id)
           .build();
     } catch (Exception e) {
       logger.error("Error starting workflow", e);
@@ -82,13 +84,14 @@ public class ApplicationsControllerV1 {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> applicationGet(@PathVariable String id) {
     try {
-      var stub = temporalClient.newWorkflowStub(Application.class, id);
+      var stub = temporalClient.newWorkflowStub(Account.class, id);
       var state = stub.getState();
 
       var resp =
-          ApplicationGet.newBuilder()
+          AccountGet.newBuilder()
               .setUserId(state.getUserId())
               .setClientId(state.getClientId())
+              .setName(state.getName())
               .build();
 
       return ResponseEntity.ok(JsonFormat.printer().print(resp));

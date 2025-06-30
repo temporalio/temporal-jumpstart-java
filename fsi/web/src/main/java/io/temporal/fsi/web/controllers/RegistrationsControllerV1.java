@@ -6,7 +6,7 @@ import io.temporal.client.*;
 import io.temporal.fsi.api.applications.v1.*;
 import io.temporal.fsi.api.web.v1.RegistrationGet;
 import io.temporal.fsi.api.web.v1.RegistrationsPut;
-import io.temporal.fsi.domain.applications.workflows.userRegistrations.UserRegistrations;
+import io.temporal.fsi.domain.accounts.workflows.registrations.UserRegistrations;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
@@ -19,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(
+    origins = "*",
+    allowedHeaders = "*",
+    methods = {RequestMethod.PUT, RequestMethod.GET})
 @RequestMapping("/api/v1/registrations")
 public class RegistrationsControllerV1 {
   Logger logger = LoggerFactory.getLogger(RegistrationsControllerV1.class);
@@ -70,6 +73,7 @@ public class RegistrationsControllerV1 {
     }
   }
 
+  @CrossOrigin
   @PutMapping(
       value = "/{id}/authorizations/{code}",
       consumes = {MediaType.APPLICATION_JSON_VALUE})

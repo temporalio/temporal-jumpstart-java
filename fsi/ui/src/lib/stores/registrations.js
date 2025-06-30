@@ -47,7 +47,7 @@ const createRegistrationsStore = () => {
 	return {
 		subscribe,
 
-		// Initialize a new application process
+		// Initialize a new account process
 		register: async ({ email }) => {
 			update(state => ({ ...state, loading: true, error: null }));
 			const id = nanoid();
@@ -66,7 +66,6 @@ const createRegistrationsStore = () => {
 					throw new Error(`API error: ${response.status}`);
 				}
 				var newData = await d.json();
-				console.log('NEW DATA', newData)
 				set({
 					...initialState,
 					data: { id, email: newData.email, userId: newData.userId, token: newData.token},
@@ -95,7 +94,6 @@ const createRegistrationsStore = () => {
 					throw new Error(`API error: ${response.status}`);
 				}
 				var newData = await d.json();
-				console.log('NEW DATA', newData)
 				set({
 					...initialState,
 					data: { id, email: newData.email, userId: newData.userId, token: newData.token},
@@ -113,7 +111,7 @@ const createRegistrationsStore = () => {
 			}
 		},
 
-		// Load an existing application process
+		// Load an existing account process
 		load: async (id) => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -135,7 +133,7 @@ const createRegistrationsStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to load application data'
+					error: err.message || 'Failed to load account data'
 				}));
 				throw err;
 			}
@@ -179,7 +177,7 @@ const createRegistrationsStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to update the application process
+				// Make the PATCH request to update the account process
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -207,7 +205,7 @@ const createRegistrationsStore = () => {
 			}
 		},
 
-		// Complete the application process
+		// Complete the account process
 		complete: async () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -226,7 +224,7 @@ const createRegistrationsStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to complete the application
+				// Make the PATCH request to complete the account
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -246,7 +244,7 @@ const createRegistrationsStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to complete application'
+					error: err.message || 'Failed to complete account'
 				}));
 				throw err;
 			}

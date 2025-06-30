@@ -1,4 +1,4 @@
-package io.temporal.fsi.domain.applications.workflows.userRegistrations;
+package io.temporal.fsi.domain.accounts.workflows.registrations;
 
 import io.temporal.activity.ActivityInterface;
 import io.temporal.activity.ActivityMethod;

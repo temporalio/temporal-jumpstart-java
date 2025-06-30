@@ -15,13 +15,14 @@ message RegistrationGet {
   optional string user_id = 4;
 }
 
-message ApplicationsPut {
+message AccountsPut {
   optional string ssn = 1;
   optional string birthdate = 2;
   optional string name = 3;
 }
 
-message ApplicationGet {
+message AccountGet {
   string user_id = 1;
   string client_id = 2;
+  string name = 3;
 }

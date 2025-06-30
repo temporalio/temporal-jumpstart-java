@@ -14,11 +14,11 @@ spring:
       - task-queue: fsi
         # name: your-worker-name # unique name of the Worker. If not specified, Task Queue is used as the Worker name.
         workflow-classes:
-          - io.temporal.fsi.domain.applications.workflows.userRegistrations.UserRegistrationsImpl
-          - io.temporal.fsi.domain.applications.workflows.applications.ApplicationImpl
+          - io.temporal.fsi.domain.accounts.workflows.registrations.UserRegistrationsImpl
+          - io.temporal.fsi.domain.accounts.workflows.wealthmanagement.AccountImpl
         activity-beans:
           - user-registrations-activities
-          - application-activities
+          - account-activities
     namespace: default # https://docs.temporal.io/cloud/#temporal-cloud-namespace-id
     connection:
       target: 127.0.0.1:7233

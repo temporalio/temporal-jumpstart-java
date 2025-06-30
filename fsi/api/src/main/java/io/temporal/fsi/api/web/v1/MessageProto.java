@@ -34,13 +34,13 @@ public final class MessageProto {
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_web_v1_RegistrationGet_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_web_v1_ApplicationsPut_descriptor;
+      internal_static_web_v1_AccountsPut_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_web_v1_ApplicationsPut_fieldAccessorTable;
+      internal_static_web_v1_AccountsPut_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_web_v1_ApplicationGet_descriptor;
+      internal_static_web_v1_AccountGet_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_web_v1_ApplicationGet_fieldAccessorTable;
+      internal_static_web_v1_AccountGet_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -54,15 +54,15 @@ public final class MessageProto {
           + "rationsPut\022\024\n\005email\030\001 \001(\tR\005email\"w\n\017Regi"
           + "strationGet\022\016\n\002id\030\001 \001(\tR\002id\022\024\n\005email\030\002 \001"
           + "(\tR\005email\022\024\n\005token\030\003 \001(\tR\005token\022\034\n\007user_"
-          + "id\030\004 \001(\tH\000R\006userId\210\001\001B\n\n\010_user_id\"\203\001\n\017Ap"
-          + "plicationsPut\022\025\n\003ssn\030\001 \001(\tH\000R\003ssn\210\001\001\022!\n\t"
-          + "birthdate\030\002 \001(\tH\001R\tbirthdate\210\001\001\022\027\n\004name\030"
-          + "\003 \001(\tH\002R\004name\210\001\001B\006\n\004_ssnB\014\n\n_birthdateB\007"
-          + "\n\005_name\"F\n\016ApplicationGet\022\027\n\007user_id\030\001 \001"
-          + "(\tR\006userId\022\033\n\tclient_id\030\002 \001(\tR\010clientIdB"
-          + "c\n\032io.temporal.fsi.api.web.v1B\014MessagePr"
-          + "otoP\001\242\002\003WXX\252\002\006Web.V1\312\002\006Web\\V1\342\002\022Web\\V1\\G"
-          + "PBMetadata\352\002\007Web::V1b\006proto3"
+          + "id\030\004 \001(\tH\000R\006userId\210\001\001B\n\n\010_user_id\"\177\n\013Acc"
+          + "ountsPut\022\025\n\003ssn\030\001 \001(\tH\000R\003ssn\210\001\001\022!\n\tbirth"
+          + "date\030\002 \001(\tH\001R\tbirthdate\210\001\001\022\027\n\004name\030\003 \001(\t"
+          + "H\002R\004name\210\001\001B\006\n\004_ssnB\014\n\n_birthdateB\007\n\005_na"
+          + "me\"V\n\nAccountGet\022\027\n\007user_id\030\001 \001(\tR\006userI"
+          + "d\022\033\n\tclient_id\030\002 \001(\tR\010clientId\022\022\n\004name\030\003"
+          + " \001(\tR\004nameBc\n\032io.temporal.fsi.api.web.v1"
+          + "B\014MessageProtoP\001\242\002\003WXX\252\002\006Web.V1\312\002\006Web\\V1"
+          + "\342\002\022Web\\V1\\GPBMetadata\352\002\007Web::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -81,19 +81,19 @@ public final class MessageProto {
             new java.lang.String[] {
               "Id", "Email", "Token", "UserId",
             });
-    internal_static_web_v1_ApplicationsPut_descriptor = getDescriptor().getMessageTypes().get(2);
-    internal_static_web_v1_ApplicationsPut_fieldAccessorTable =
+    internal_static_web_v1_AccountsPut_descriptor = getDescriptor().getMessageTypes().get(2);
+    internal_static_web_v1_AccountsPut_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_web_v1_ApplicationsPut_descriptor,
+            internal_static_web_v1_AccountsPut_descriptor,
             new java.lang.String[] {
               "Ssn", "Birthdate", "Name",
             });
-    internal_static_web_v1_ApplicationGet_descriptor = getDescriptor().getMessageTypes().get(3);
-    internal_static_web_v1_ApplicationGet_fieldAccessorTable =
+    internal_static_web_v1_AccountGet_descriptor = getDescriptor().getMessageTypes().get(3);
+    internal_static_web_v1_AccountGet_fieldAccessorTable =
         new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_web_v1_ApplicationGet_descriptor,
+            internal_static_web_v1_AccountGet_descriptor,
             new java.lang.String[] {
-              "UserId", "ClientId",
+              "UserId", "ClientId", "Name",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

@@ -15,7 +15,7 @@ Verify curriculum with `./gradlew :onboardings:api:build :onboardings:workers:bu
 ## Onboardings
 
 You can run the `api` and `workers` Applications against your local Temporal dev server or
-against Temporal Cloud. Just tune the `application-temporal-cloud.yaml` resources configuration as appropriate.
+against Temporal Cloud. Just tune the `account-temporal-cloud.yaml` resources configuration as appropriate.
 
 
 ### Local

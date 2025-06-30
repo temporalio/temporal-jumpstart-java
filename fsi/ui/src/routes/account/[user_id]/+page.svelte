@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 
-	import { application } from '$lib/stores/application.js';
+	import { account } from '$lib/stores/account.js';
 
 	// Import step components
 	import Welcome from '$lib/components/steps/Welcome.svelte';
@@ -12,13 +12,13 @@
 	import OnboardingStepIndicator from '$lib/components/OnboardingStepIndicator.svelte';
 	import OnboardingHero from '$lib/components/OnboardingHero.svelte';
 
-	// Define the application steps
+	// Define the account steps
 	const steps = [
-		{ id: 1, title: 'Welcome', description: 'Get started with our application' },
+		{ id: 1, title: 'Welcome', description: 'Get started with our account' },
 		{ id: 2, title: 'Personal Information', description: 'Tell us about yourself' },
-		{ id: 3, title: 'Preferences', description: 'Customize your experience' },
-		{ id: 4, title: 'Completion', description: 'All set and ready to go' }
+		{ id: 3, title: 'Completion', description: 'Wealth is headed your way!' }
 	];
+	// { id: 3, title: 'Preferences', description: 'Customize your experience' },
 
 	// Current step tracker
 	let currentStepIndex = 0;
@@ -26,13 +26,13 @@
 	let initializing = true;
 	let error = null;
 
-	// Subscribe to application store changes
+	// Subscribe to account store changes
 	onMount(async () => {
 		try {
-			// Check if we already have an ongoing application process
-			const unsubscribe = application.subscribe(state => {
+			// Check if we already have an ongoing account process
+			const unsubscribe = account.subscribe(state => {
 				// if (!state.id) {
-				// 	// Redirect to landing page if no application process is found
+				// 	// Redirect to landing page if no account process is found
 				// 	window.location.href = '/';
 				// 	return;
 				// }
@@ -47,7 +47,7 @@
 			initializing = false;
 			return unsubscribe;
 		} catch (err) {
-			error = err.message || 'Failed to load application process';
+			error = err.message || 'Failed to load account process';
 			console.error('Onboarding error:', err);
 			initializing = false;
 		}
@@ -74,7 +74,7 @@
 		<div class="flex justify-center items-center h-full">
 			<div class="card p-8 text-center">
 				<div class="spinner-border spinner-border-lg" role="status"></div>
-				<p class="mt-4">Loading your application...</p>
+				<p class="mt-4">Loading your account...</p>
 			</div>
 		</div>
 	{:else if error}
@@ -114,9 +114,9 @@
 						<Welcome {nextStep} currentStep={currentStepIndex}/>
 					{:else if currentStepIndex === 1}
 						<PersonalInfo {nextStep} {prevStep}  currentStep={currentStepIndex} />
+					<!--{:else if currentStepIndex === 2}-->
+					<!--	<Preferences {nextStep} {prevStep} currentStep={currentStepIndex}/>-->
 					{:else if currentStepIndex === 2}
-						<Preferences {nextStep} {prevStep} currentStep={currentStepIndex}/>
-					{:else if currentStepIndex === 3}
 						<Completion {prevStep} currentStep={currentStepIndex} />
 					{/if}
 				</div>

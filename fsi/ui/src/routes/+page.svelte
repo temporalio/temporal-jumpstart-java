@@ -15,13 +15,13 @@
 			loading = true;
 			error = null;
 
-			// Initialize a new application process
+			// Initialize a new account process
 			let {id: registrationId} = await registrations.register({ email });
 
 			// Set the email in the store
-			// await application.saveStep(0, { email });
+			// await account.saveStep(0, { email });
 
-			// Redirect to the application process
+			// Redirect to the account process
 			window.location.href = '/registrations/' + registrationId;
 		} catch (err) {
 			error = err.message || 'Failed to  register';

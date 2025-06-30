@@ -1,20 +1,19 @@
 import { writable } from 'svelte/store';
 
 // Initialize the store with default values
-const createApplicationStore = () => {
+const createAccountStore = () => {
 	const initialState = {
 		id: null,
 		currentStep: 0,
 		completedSteps: [],
 		data: {
-			email: '', // Initial email from landing page
 			name: '',
-			ssn: '',
-			birthdate: '',
+			clientId: '',
+			userId: '',
 			preferences: {
 				theme: 'light',
 				enableNotifications: false
-			}
+			},
 		},
 		isComplete: false,
 		error: null,
@@ -44,7 +43,7 @@ const createApplicationStore = () => {
 				throw new Error(`API error: ${response.status}`);
 			}
 
-			return await response.json();
+			return response;
 		} catch (err) {
 			console.error('API request failed:', err);
 			throw err;
@@ -54,36 +53,83 @@ const createApplicationStore = () => {
 	return {
 		subscribe,
 
-		// Initialize a new application process
+		// Initialize a new account process
 		start: async ({id}) => {
 			update(state => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await apiRequest(`/api/v1/applications/${id}`, 'PUT', {});
+				const response = await apiRequest(`/api/v1/accounts/${id}`, 'PUT', {});
 
+				if(!response.ok) {
+					throw new Error(`API error: ${response.status}`);
+				}
+				const response2 = await apiRequest(`/api/v1/accounts/${id}`, 'GET');
+				if(!response2.ok) {
+					throw new Error(`API error: ${response.status}`);
+				}
+				var data = await response2.json();
 				set({
 					...initialState,
-					id: response.id,
+					currentStep: 0,
+					id: data.userId,
+					data: { clientId: data.clientId, userId: data.userId},
 					loading: false
 				});
+
 
 				return response.id;
 			} catch (err) {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to initialize application'
+					error: err.message || 'Failed to initialize account'
+				}));
+				throw err;
+			}
+		},
+		matchClient: async ({id, ssn, birthdate, name}) => {
+			update(state => ({ ...state, loading: true, error: null }));
+
+			try {
+				const response = await apiRequest(`/api/v1/accounts/${id}`, 'PUT', {
+					ssn, birthdate, name,
+				});
+				console.log('called matchClient', {ssn, birthdate, name});
+				if(!response.ok) {
+					throw new Error(`API error: ${response.status}`);
+				}
+				const response2 = await apiRequest(`/api/v1/accounts/${id}`, 'GET');
+				if(!response2.ok) {
+					throw new Error(`API error: ${response.status}`);
+				}
+
+				var data = await response2.json();
+				set({
+					...initialState,
+					currentStep: 1,
+					id: data.userId,
+					data: { clientId: data.clientId, userId: data.userId, name: data.name},
+					loading: false
+				});
+
+
+				return data;
+			} catch (err) {
+				update(state => ({
+					...state,
+					loading: false,
+					error: err.message || 'Failed to initialize account'
 				}));
 				throw err;
 			}
 		},
 
-		// Load an existing application process
+		// Load an existing account process
 		load: async (id) => {
 			update(state => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await apiRequest(`/api/v1/applications/${id}`, 'GET');
+				const response = await apiRequest(`/api/v1/accounts/${id}`, 'GET');
 
 				set({
 					id: response.id,
@@ -100,7 +146,7 @@ const createApplicationStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to load application data'
+					error: err.message || 'Failed to load account data'
 				}));
 				throw err;
 			}
@@ -114,7 +160,7 @@ const createApplicationStore = () => {
 				// Map step index to data sections
 				switch (stepIndex) {
 					case 1:
-						newData.personalInfo = { ...newData.personalInfo, ...stepData };
+						newData = { ...newData, ...stepData };
 						break;
 					case 2:
 						newData.preferences = { ...newData.preferences, ...stepData };
@@ -144,7 +190,7 @@ const createApplicationStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to update the application process
+				// Make the PATCH request to update the account process
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -172,7 +218,7 @@ const createApplicationStore = () => {
 			}
 		},
 
-		// Complete the application process
+		// Complete the account process
 		complete: async () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -191,7 +237,7 @@ const createApplicationStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to complete the application
+				// Make the PATCH request to complete the account
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -211,7 +257,7 @@ const createApplicationStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to complete application'
+					error: err.message || 'Failed to complete account'
 				}));
 				throw err;
 			}
@@ -223,4 +269,4 @@ const createApplicationStore = () => {
 };
 
 // Create and export the store
-export const application = createApplicationStore();
+export const account = createAccountStore();

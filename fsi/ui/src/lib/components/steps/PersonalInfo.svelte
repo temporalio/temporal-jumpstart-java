@@ -1,6 +1,9 @@
 <script>
-	import { application } from '$lib/stores/application.js';
+	import { account } from '$lib/stores/account.js';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	let userId = $page.params.user_id;
+
 	export let currentStep;
 	export let nextStep;
 	export let prevStep;
@@ -13,7 +16,7 @@
 
 	// Load existing data if available
 	onMount(() => {
-		const unsubscribe = application.subscribe(state => {
+		const unsubscribe = account.subscribe(state => {
 			// First try to get from personalInfo if already saved
 			if (state.data) {
 				name = state.data.name || '';
@@ -30,9 +33,9 @@
 		try {
 			loading = true;
 			error = null;
-
+			console.log('Saving personal info...', { name, ssn, birthdate });
 			// Save the personal info data
-			await application.saveStep(currentStep, { name, email });
+			await account.matchClient({ id: userId, ssn, birthdate, name });
 			nextStep();
 		} catch (err) {
 			error = err.message || 'Failed to save personal information';
@@ -67,12 +70,12 @@
 		</label>
 
 		<div class="flex justify-between mt-6">
-			<button 
-				type="button" 
-				class="btn variant-ghost-surface" 
-				on:click={prevStep}
-				disabled={loading}
-			>Back</button>
+<!--			<button -->
+<!--				type="button" -->
+<!--				class="btn variant-ghost-surface" -->
+<!--				on:click={prevStep}-->
+<!--				disabled={loading}-->
+<!--			>Back</button>-->
 			<button 
 				type="submit" 
 				class="btn variant-filled-primary"

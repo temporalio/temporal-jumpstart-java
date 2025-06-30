@@ -57,6 +57,14 @@ public final class CommandsProto {
       internal_static_applications_v1_MatchClientResponse_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_MatchClientResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_RequestExistingClientRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_RequestExistingClientRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_LinkExistingClientRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_LinkExistingClientRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -81,11 +89,16 @@ public final class CommandsProto {
           + "rthdate\030\002 \001(\tR\tbirthdate\022\022\n\004name\030\003 \001(\tR\004"
           + "name\"O\n\023MatchClientResponse\022\033\n\tclient_id"
           + "\030\001 \001(\tR\010clientId\022\033\n\tnot_found\030\002 \001(\010R\010not"
-          + "FoundB\221\001\n#io.temporal.fsi.api.applicatio"
-          + "ns.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017Applicati"
-          + "ons.V1\312\002\017Applications\\V1\342\002\033Applications\\"
-          + "V1\\GPBMetadata\352\002\020Applications::V1b\006proto"
-          + "3"
+          + "Found\"{\n\034RequestExistingClientRequest\022\020\n"
+          + "\003ssn\030\001 \001(\tR\003ssn\022\034\n\tbirthdate\030\002 \001(\tR\tbirt"
+          + "hdate\022\022\n\004name\030\003 \001(\tR\004name\022\027\n\007user_id\030\004 \001"
+          + "(\tR\006userId\"Q\n\031LinkExistingClientRequest\022"
+          + "\027\n\007user_id\030\001 \001(\tR\006userId\022\033\n\tclient_id\030\002 "
+          + "\001(\tR\010clientIdB\221\001\n#io.temporal.fsi.api.ap"
+          + "plications.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017A"
+          + "pplications.V1\312\002\017Applications\\V1\342\002\033Appli"
+          + "cations\\V1\\GPBMetadata\352\002\020Applications::V"
+          + "1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -151,6 +164,22 @@ public final class CommandsProto {
             internal_static_applications_v1_MatchClientResponse_descriptor,
             new java.lang.String[] {
               "ClientId", "NotFound",
+            });
+    internal_static_applications_v1_RequestExistingClientRequest_descriptor =
+        getDescriptor().getMessageTypes().get(8);
+    internal_static_applications_v1_RequestExistingClientRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_RequestExistingClientRequest_descriptor,
+            new java.lang.String[] {
+              "Ssn", "Birthdate", "Name", "UserId",
+            });
+    internal_static_applications_v1_LinkExistingClientRequest_descriptor =
+        getDescriptor().getMessageTypes().get(9);
+    internal_static_applications_v1_LinkExistingClientRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_LinkExistingClientRequest_descriptor,
+            new java.lang.String[] {
+              "UserId", "ClientId",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

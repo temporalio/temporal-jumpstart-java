@@ -16,14 +16,14 @@
             loading = true;
             error = null;
 
-            // Initialize a new application process
+            // Initialize a new account process
             const registration = await registrations.authorize({ id: $page.params.id, code });
 
             // Set the email in the store
-            // await application.saveStep(0, { email });
+            // await account.saveStep(0, { email });
 
-            // Redirect to the application process
-            window.location.href = `/application/${registration.userId}`;
+            // Redirect to the account process
+            window.location.href = `/account/${registration.userId}`;
         } catch (err) {
             error = err.message || 'Failed to submit code';
             console.error('Application error:', err);

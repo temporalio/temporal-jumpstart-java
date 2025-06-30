@@ -1,5 +1,5 @@
 <script>
-	import { application } from '$lib/stores/application.js';
+	import { account } from '$lib/stores/account.js';
 	import { onMount } from 'svelte';
 	export let nextStep;
 	export let prevStep;
@@ -11,7 +11,7 @@
 
 	// Load existing data if available
 	onMount(() => {
-		const unsubscribe = application.subscribe(state => {
+		const unsubscribe = account.subscribe(state => {
 			if (state.data && state.data.preferences) {
 				theme = state.data.preferences.theme || 'light';
 				enableNotifications = state.data.preferences.enableNotifications || false;
@@ -27,7 +27,7 @@
 			error = null;
 
 			// Save the preferences data
-			await application.saveStep(currentStep, { theme, enableNotifications });
+			await account.saveStep(currentStep, { theme, enableNotifications });
 			nextStep();
 		} catch (err) {
 			error = err.message || 'Failed to save preferences';

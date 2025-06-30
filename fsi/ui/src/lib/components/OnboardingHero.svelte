@@ -5,7 +5,7 @@
 	const heroContent = {
 		1: {
 			title: 'Begin Your Journey',
-			description: 'Start your application process with a few simple steps.',
+			description: 'Start your account process with a few simple steps.',
 			icon: '👋'
 		},
 		2: {
@@ -13,12 +13,12 @@
 			description: 'Help us personalize your experience.',
 			icon: '👤'
 		},
+		// 3: {
+		// 	title: 'Make It Yours',
+		// 	description: 'Customize your experience to fit your needs.',
+		// 	icon: '⚙️'
+		// },
 		3: {
-			title: 'Make It Yours',
-			description: 'Customize your experience to fit your needs.',
-			icon: '⚙️'
-		},
-		4: {
 			title: 'Ready to Go!',
 			description: 'Your account is now fully configured.',
 			icon: '🚀'
@@ -31,7 +31,7 @@
 	<h1 class="h1">{heroContent[currentStep.id].title}</h1>
 	<p class="text-lg">{heroContent[currentStep.id].description}</p>
 
-	<div class="mt-auto pt-8">
-		<img src="https://placehold.co/400x200/1e293b/ffffff?text=Onboarding" alt="Onboarding illustration" class="w-full max-w-md mx-auto opacity-80" />
-	</div>
+<!--	<div class="mt-auto pt-8">-->
+<!--		<img src="https://placehold.co/400x200/1e293b/ffffff?text=Onboarding" alt="Onboarding illustration" class="w-full max-w-md mx-auto opacity-80" />-->
+<!--	</div>-->
 </div>

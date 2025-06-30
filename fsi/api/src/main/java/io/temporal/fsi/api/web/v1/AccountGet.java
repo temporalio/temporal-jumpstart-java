@@ -5,12 +5,12 @@
 
 package io.temporal.fsi.api.web.v1;
 
-/** Protobuf type {@code web.v1.ApplicationGet} */
+/** Protobuf type {@code web.v1.AccountGet} */
 @com.google.protobuf.Generated
-public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
+public final class AccountGet extends com.google.protobuf.GeneratedMessage
     implements
-    // @@protoc_insertion_point(message_implements:web.v1.ApplicationGet)
-    ApplicationGetOrBuilder {
+    // @@protoc_insertion_point(message_implements:web.v1.AccountGet)
+    AccountGetOrBuilder {
   private static final long serialVersionUID = 0L;
 
   static {
@@ -20,30 +20,31 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
         /* minor= */ 31,
         /* patch= */ 1,
         /* suffix= */ "",
-        ApplicationGet.class.getName());
+        AccountGet.class.getName());
   }
-  // Use ApplicationGet.newBuilder() to construct.
-  private ApplicationGet(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+  // Use AccountGet.newBuilder() to construct.
+  private AccountGet(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
     super(builder);
   }
 
-  private ApplicationGet() {
+  private AccountGet() {
     userId_ = "";
     clientId_ = "";
+    name_ = "";
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-    return io.temporal.fsi.api.web.v1.MessageProto.internal_static_web_v1_ApplicationGet_descriptor;
+    return io.temporal.fsi.api.web.v1.MessageProto.internal_static_web_v1_AccountGet_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internalGetFieldAccessorTable() {
     return io.temporal.fsi.api.web.v1.MessageProto
-        .internal_static_web_v1_ApplicationGet_fieldAccessorTable
+        .internal_static_web_v1_AccountGet_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            io.temporal.fsi.api.web.v1.ApplicationGet.class,
-            io.temporal.fsi.api.web.v1.ApplicationGet.Builder.class);
+            io.temporal.fsi.api.web.v1.AccountGet.class,
+            io.temporal.fsi.api.web.v1.AccountGet.Builder.class);
   }
 
   public static final int USER_ID_FIELD_NUMBER = 1;
@@ -124,6 +125,45 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     }
   }
 
+  public static final int NAME_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object name_ = "";
+  /**
+   * <code>string name = 3 [json_name = "name"];</code>
+   *
+   * @return The name.
+   */
+  @java.lang.Override
+  public java.lang.String getName() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      name_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string name = 3 [json_name = "name"];</code>
+   *
+   * @return The bytes for name.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getNameBytes() {
+    java.lang.Object ref = name_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      name_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -144,6 +184,9 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(clientId_)) {
       com.google.protobuf.GeneratedMessage.writeString(output, 2, clientId_);
     }
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(name_)) {
+      com.google.protobuf.GeneratedMessage.writeString(output, 3, name_);
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -159,6 +202,9 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(clientId_)) {
       size += com.google.protobuf.GeneratedMessage.computeStringSize(2, clientId_);
     }
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(name_)) {
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(3, name_);
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -169,14 +215,14 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof io.temporal.fsi.api.web.v1.ApplicationGet)) {
+    if (!(obj instanceof io.temporal.fsi.api.web.v1.AccountGet)) {
       return super.equals(obj);
     }
-    io.temporal.fsi.api.web.v1.ApplicationGet other =
-        (io.temporal.fsi.api.web.v1.ApplicationGet) obj;
+    io.temporal.fsi.api.web.v1.AccountGet other = (io.temporal.fsi.api.web.v1.AccountGet) obj;
 
     if (!getUserId().equals(other.getUserId())) return false;
     if (!getClientId().equals(other.getClientId())) return false;
+    if (!getName().equals(other.getName())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -192,76 +238,77 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     hash = (53 * hash) + getUserId().hashCode();
     hash = (37 * hash) + CLIENT_ID_FIELD_NUMBER;
     hash = (53 * hash) + getClientId().hashCode();
+    hash = (37 * hash) + NAME_FIELD_NUMBER;
+    hash = (53 * hash) + getName().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(java.nio.ByteBuffer data)
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
-      com.google.protobuf.ByteString data)
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(byte[] data)
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(java.io.InputStream input)
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseDelimitedFrom(
-      java.io.InputStream input) throws java.io.IOException {
+  public static io.temporal.fsi.api.web.v1.AccountGet parseDelimitedFrom(java.io.InputStream input)
+      throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseDelimitedFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseDelimitedFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       com.google.protobuf.CodedInputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet parseFrom(
+  public static io.temporal.fsi.api.web.v1.AccountGet parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -278,7 +325,7 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     return DEFAULT_INSTANCE.toBuilder();
   }
 
-  public static Builder newBuilder(io.temporal.fsi.api.web.v1.ApplicationGet prototype) {
+  public static Builder newBuilder(io.temporal.fsi.api.web.v1.AccountGet prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
 
@@ -292,27 +339,26 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     Builder builder = new Builder(parent);
     return builder;
   }
-  /** Protobuf type {@code web.v1.ApplicationGet} */
+  /** Protobuf type {@code web.v1.AccountGet} */
   public static final class Builder extends com.google.protobuf.GeneratedMessage.Builder<Builder>
       implements
-      // @@protoc_insertion_point(builder_implements:web.v1.ApplicationGet)
-      io.temporal.fsi.api.web.v1.ApplicationGetOrBuilder {
+      // @@protoc_insertion_point(builder_implements:web.v1.AccountGet)
+      io.temporal.fsi.api.web.v1.AccountGetOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
-      return io.temporal.fsi.api.web.v1.MessageProto
-          .internal_static_web_v1_ApplicationGet_descriptor;
+      return io.temporal.fsi.api.web.v1.MessageProto.internal_static_web_v1_AccountGet_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.temporal.fsi.api.web.v1.MessageProto
-          .internal_static_web_v1_ApplicationGet_fieldAccessorTable
+          .internal_static_web_v1_AccountGet_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              io.temporal.fsi.api.web.v1.ApplicationGet.class,
-              io.temporal.fsi.api.web.v1.ApplicationGet.Builder.class);
+              io.temporal.fsi.api.web.v1.AccountGet.class,
+              io.temporal.fsi.api.web.v1.AccountGet.Builder.class);
     }
 
-    // Construct using io.temporal.fsi.api.web.v1.ApplicationGet.newBuilder()
+    // Construct using io.temporal.fsi.api.web.v1.AccountGet.newBuilder()
     private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessage.BuilderParent parent) {
@@ -325,23 +371,23 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
       bitField0_ = 0;
       userId_ = "";
       clientId_ = "";
+      name_ = "";
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-      return io.temporal.fsi.api.web.v1.MessageProto
-          .internal_static_web_v1_ApplicationGet_descriptor;
+      return io.temporal.fsi.api.web.v1.MessageProto.internal_static_web_v1_AccountGet_descriptor;
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.web.v1.ApplicationGet getDefaultInstanceForType() {
-      return io.temporal.fsi.api.web.v1.ApplicationGet.getDefaultInstance();
+    public io.temporal.fsi.api.web.v1.AccountGet getDefaultInstanceForType() {
+      return io.temporal.fsi.api.web.v1.AccountGet.getDefaultInstance();
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.web.v1.ApplicationGet build() {
-      io.temporal.fsi.api.web.v1.ApplicationGet result = buildPartial();
+    public io.temporal.fsi.api.web.v1.AccountGet build() {
+      io.temporal.fsi.api.web.v1.AccountGet result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -349,9 +395,9 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.web.v1.ApplicationGet buildPartial() {
-      io.temporal.fsi.api.web.v1.ApplicationGet result =
-          new io.temporal.fsi.api.web.v1.ApplicationGet(this);
+    public io.temporal.fsi.api.web.v1.AccountGet buildPartial() {
+      io.temporal.fsi.api.web.v1.AccountGet result =
+          new io.temporal.fsi.api.web.v1.AccountGet(this);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -359,7 +405,7 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
       return result;
     }
 
-    private void buildPartial0(io.temporal.fsi.api.web.v1.ApplicationGet result) {
+    private void buildPartial0(io.temporal.fsi.api.web.v1.AccountGet result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.userId_ = userId_;
@@ -367,20 +413,23 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.clientId_ = clientId_;
       }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.name_ = name_;
+      }
     }
 
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof io.temporal.fsi.api.web.v1.ApplicationGet) {
-        return mergeFrom((io.temporal.fsi.api.web.v1.ApplicationGet) other);
+      if (other instanceof io.temporal.fsi.api.web.v1.AccountGet) {
+        return mergeFrom((io.temporal.fsi.api.web.v1.AccountGet) other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(io.temporal.fsi.api.web.v1.ApplicationGet other) {
-      if (other == io.temporal.fsi.api.web.v1.ApplicationGet.getDefaultInstance()) return this;
+    public Builder mergeFrom(io.temporal.fsi.api.web.v1.AccountGet other) {
+      if (other == io.temporal.fsi.api.web.v1.AccountGet.getDefaultInstance()) return this;
       if (!other.getUserId().isEmpty()) {
         userId_ = other.userId_;
         bitField0_ |= 0x00000001;
@@ -389,6 +438,11 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
       if (!other.getClientId().isEmpty()) {
         clientId_ = other.clientId_;
         bitField0_ |= 0x00000002;
+        onChanged();
+      }
+      if (!other.getName().isEmpty()) {
+        name_ = other.name_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -429,6 +483,12 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
+            case 26:
+              {
+                name_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -600,24 +660,100 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
       return this;
     }
 
-    // @@protoc_insertion_point(builder_scope:web.v1.ApplicationGet)
+    private java.lang.Object name_ = "";
+    /**
+     * <code>string name = 3 [json_name = "name"];</code>
+     *
+     * @return The name.
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        name_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string name = 3 [json_name = "name"];</code>
+     *
+     * @return The bytes for name.
+     */
+    public com.google.protobuf.ByteString getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string name = 3 [json_name = "name"];</code>
+     *
+     * @param value The name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setName(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      name_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 3 [json_name = "name"];</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearName() {
+      name_ = getDefaultInstance().getName();
+      bitField0_ = (bitField0_ & ~0x00000004);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string name = 3 [json_name = "name"];</code>
+     *
+     * @param value The bytes for name to set.
+     * @return This builder for chaining.
+     */
+    public Builder setNameBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      name_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+
+    // @@protoc_insertion_point(builder_scope:web.v1.AccountGet)
   }
 
-  // @@protoc_insertion_point(class_scope:web.v1.ApplicationGet)
-  private static final io.temporal.fsi.api.web.v1.ApplicationGet DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:web.v1.AccountGet)
+  private static final io.temporal.fsi.api.web.v1.AccountGet DEFAULT_INSTANCE;
 
   static {
-    DEFAULT_INSTANCE = new io.temporal.fsi.api.web.v1.ApplicationGet();
+    DEFAULT_INSTANCE = new io.temporal.fsi.api.web.v1.AccountGet();
   }
 
-  public static io.temporal.fsi.api.web.v1.ApplicationGet getDefaultInstance() {
+  public static io.temporal.fsi.api.web.v1.AccountGet getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ApplicationGet> PARSER =
-      new com.google.protobuf.AbstractParser<ApplicationGet>() {
+  private static final com.google.protobuf.Parser<AccountGet> PARSER =
+      new com.google.protobuf.AbstractParser<AccountGet>() {
         @java.lang.Override
-        public ApplicationGet parsePartialFrom(
+        public AccountGet parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
@@ -636,17 +772,17 @@ public final class ApplicationGet extends com.google.protobuf.GeneratedMessage
         }
       };
 
-  public static com.google.protobuf.Parser<ApplicationGet> parser() {
+  public static com.google.protobuf.Parser<AccountGet> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ApplicationGet> getParserForType() {
+  public com.google.protobuf.Parser<AccountGet> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public io.temporal.fsi.api.web.v1.ApplicationGet getDefaultInstanceForType() {
+  public io.temporal.fsi.api.web.v1.AccountGet getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 }

@@ -6,9 +6,9 @@
 package io.temporal.fsi.api.web.v1;
 
 @com.google.protobuf.Generated
-public interface ApplicationGetOrBuilder
+public interface AccountGetOrBuilder
     extends
-    // @@protoc_insertion_point(interface_extends:web.v1.ApplicationGet)
+    // @@protoc_insertion_point(interface_extends:web.v1.AccountGet)
     com.google.protobuf.MessageOrBuilder {
 
   /**
@@ -36,4 +36,17 @@ public interface ApplicationGetOrBuilder
    * @return The bytes for clientId.
    */
   com.google.protobuf.ByteString getClientIdBytes();
+
+  /**
+   * <code>string name = 3 [json_name = "name"];</code>
+   *
+   * @return The name.
+   */
+  java.lang.String getName();
+  /**
+   * <code>string name = 3 [json_name = "name"];</code>
+   *
+   * @return The bytes for name.
+   */
+  com.google.protobuf.ByteString getNameBytes();
 }

@@ -9,8 +9,6 @@ message StartUserRegistrationsRequest {
   string name = 1;
 }
 
-message StartApplicationRequest {
+message OpenWealthManagementAccountRequest {
   string user_id = 1;
-  string ssn = 2;
-  string birthdate = 3;
 }
