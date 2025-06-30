@@ -14,4 +14,11 @@ public interface Activities {
 
   @ActivityMethod
   void requestExistingClient(RequestExistingClientRequest cmd);
+
+  @ActivityMethod
+  ForwardClientResponse forwardClient(ForwardClientRequest cmd);
+
+  @ActivityMethod
+  ApplyWealthManagementVendorResponse applyWealthManagementVendor(
+      ApplyWealthManagementVendorRequest cmd);
 }

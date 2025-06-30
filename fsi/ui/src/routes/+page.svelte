@@ -97,14 +97,16 @@
 		<div class="hidden md:block bg-gradient-to-br from-primary-900 to-tertiary-900">
 			<div class="h-full flex flex-col justify-center items-center p-8 text-white">
 				<img 
-					src="https://placehold.co/600x400/1e293b/ffffff?text=Temporal+Workflows" 
-					alt="Temporal Workflows" 
+					src="https://placehold.co/600x400/1e293b/ffffff?text=Temporal+Durable+Wealth"
+					alt="Temporal Wealth"
 					class="w-3/4 max-w-lg rounded-lg shadow-xl mb-8" 
 				/>
-				<h2 class="h2 text-center mb-4">Build Durable Applications</h2>
+				<h2 class="h2 text-center mb-4">Manage Your Durability</h2>
 				<p class="text-lg text-center max-w-md">
 					Temporal provides a developer-first platform for writing reliable applications without worrying about timeouts, retries, or infrastructure failures.
+
 				</p>
+				<p>THAT will make you wealthy :)</p>
 			</div>
 		</div>
 	</div>

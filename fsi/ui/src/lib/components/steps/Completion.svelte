@@ -12,8 +12,9 @@
 			error = null;
 
 			// Mark the account as complete
-			await account.complete();
-			window.location.href = 'localhost:8233';
+			// await account.complete();
+
+			window.location.href = '/';
 			onboardingComplete = true;
 		} catch (err) {
 			error = err.message || 'Failed to complete account';

@@ -39,7 +39,7 @@ public class ActivitiesImpl implements Activities {
     if (!exists) {
       clientId = UUID.randomUUID().toString();
     }
-    return MatchClientResponse.newBuilder().setClientId(clientId).setNotFound(exists).build();
+    return MatchClientResponse.newBuilder().setClientId(clientId).setNotFound(!exists).build();
   }
 
   @Override
@@ -62,5 +62,18 @@ public class ActivitiesImpl implements Activities {
             .setClientId(UUID.randomUUID().toString())
             .setUserId(cmd.getUserId())
             .build());
+  }
+
+  @Override
+  public ForwardClientResponse forwardClient(ForwardClientRequest cmd) {
+    // call salesforce API here
+    return ForwardClientResponse.getDefaultInstance();
+  }
+
+  @Override
+  public ApplyWealthManagementVendorResponse applyWealthManagementVendor(
+      ApplyWealthManagementVendorRequest cmd) {
+    // forward the application details (collected inside an Update??)
+    return ApplyWealthManagementVendorResponse.newBuilder().build();
   }
 }

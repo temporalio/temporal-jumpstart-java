@@ -3,10 +3,10 @@ package io.temporal.fsi.domain.accounts.workflows.wealthmanagement;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.fsi.api.applications.v1.*;
-import io.temporal.workflow.UpdateValidatorMethod;
-import io.temporal.workflow.Workflow;
-import io.temporal.workflow.WorkflowInit;
+import io.temporal.workflow.*;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountImpl implements Account {
   private GetWealthManagementAccountResponse state;
@@ -31,6 +31,8 @@ public class AccountImpl implements Account {
       // early return since we are done
       return;
     }
+    // IF match is found, then a manual process is performed to link the “new client” with their
+    // existing client record. Once linked, application process continues
     // our match service reported the client was matched
     // so request the `link` from some service
     if (state.hasMatchClient() && !state.getMatchClient().getNotFound()) {
@@ -44,6 +46,26 @@ public class AccountImpl implements Account {
       // we can time this out if we want to...
       Workflow.await(() -> !state.getClientId().isEmpty());
     }
+    // Done in parallel (forward client record + process with wealth mgmt account setup)
+    List<Promise<Void>> promiseList = new ArrayList<>();
+    promiseList.add(
+        Async.procedure(
+            acts::forwardClient,
+            ForwardClientRequest.newBuilder().setClientId(state.getClientId()).build()));
+    promiseList.add(
+        Async.procedure(
+            acts::applyWealthManagementVendor,
+            ApplyWealthManagementVendorRequest.newBuilder().build()));
+
+    // Invoke all activities in parallel. Wait for all to complete
+    Promise.allOf(promiseList).get();
+
+    // TODO
+    // Batch process that just calls these Workflow Executions to complete them :)
+    // For now, we will simply send a signal
+    Workflow.await(() -> state.getIsCompleted());
+    // be sure all messages are flushed
+    Workflow.await(Workflow::isEveryHandlerFinished);
   }
 
   @Override
@@ -76,5 +98,10 @@ public class AccountImpl implements Account {
   @Override
   public void linkExistingClient(LinkExistingClientRequest cmd) {
     state = state.toBuilder().setClientId(cmd.getClientId()).build();
+  }
+
+  @Override
+  public void markWealthManagementVendorCompleted() {
+    state = state.toBuilder().setIsCompleted(true).build();
   }
 }

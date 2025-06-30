@@ -19,4 +19,7 @@ public interface Account {
 
   @SignalMethod
   void linkExistingClient(LinkExistingClientRequest cmd);
+
+  @SignalMethod
+  void markWealthManagementVendorCompleted();
 }

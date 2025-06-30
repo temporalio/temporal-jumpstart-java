@@ -48,3 +48,19 @@ message LinkExistingClientRequest {
   string user_id = 1;
   string client_id = 2;
 }
+
+message ForwardClientRequest {
+  string user_id = 1;
+  string client_id = 2;
+}
+message ForwardClientResponse {
+
+}
+
+message ApplyWealthManagementVendorRequest {
+  string client_id = 1;
+  string user_id = 2;
+}
+message ApplyWealthManagementVendorResponse {
+  string client_id = 1;
+}
