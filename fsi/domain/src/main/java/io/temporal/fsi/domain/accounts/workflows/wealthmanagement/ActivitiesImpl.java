@@ -35,10 +35,16 @@ public class ActivitiesImpl implements Activities {
   @Override
   public MatchClientResponse matchClient(MatchClientRequest cmd) {
     var exists = cmd.getName().contains("exists");
+    var apiFailure = cmd.getName().contains("api_failure");
     var clientId = "";
     if (!exists) {
       clientId = UUID.randomUUID().toString();
     }
+    // faking the api outage
+    if (apiFailure && Activity.getExecutionContext().getInfo().getAttempt() <= 5) {
+      throw ApplicationFailure.newFailure("api_failure", "api_failure", "faking the api failure");
+    }
+
     return MatchClientResponse.newBuilder().setClientId(clientId).setNotFound(!exists).build();
   }
 
