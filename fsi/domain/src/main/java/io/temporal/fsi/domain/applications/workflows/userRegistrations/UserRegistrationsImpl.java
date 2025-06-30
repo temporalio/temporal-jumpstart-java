@@ -9,8 +9,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class UserRegistrationsImpl implements UserRegistrations {
-
-  private final GetUserRegistrationsResponse state;
+  private GetUserRegistrationsResponse state;
   private final List<RegisterUserRequest> pending;
   private final Activities acts;
 
@@ -32,7 +31,9 @@ public class UserRegistrationsImpl implements UserRegistrations {
 
   @UpdateMethod(name = "registerUser")
   public void ValidateRegisterUserRequest(RegisterUserRequest cmd) {
-    if (pending.stream().anyMatch(r -> r.getEmail().equals(cmd.getEmail()))) {
+    if (pending.stream().anyMatch(r -> r.getEmail().equals(cmd.getEmail()))
+        || state.getUserRegistrationsList().stream()
+            .anyMatch(r -> r.getEmail().equals(cmd.getEmail()))) {
       throw new IllegalArgumentException("Email request pending");
     }
   }
@@ -40,9 +41,11 @@ public class UserRegistrationsImpl implements UserRegistrations {
   @Override
   public RegisterUserResponse registerUser(RegisterUserRequest cmd) {
     pending.add(cmd);
-    var reg = acts.registerUser(cmd);
+    RegisterUserResponse reg = acts.registerUser(cmd);
 
-    state.getUserRegistrationsList().add(reg);
+    Workflow.getLogger(UserRegistrationsImpl.class).info("Registered user {}", reg.getEmail());
+    state = state.toBuilder().addUserRegistrations(reg).build();
+
     return reg;
   }
 
