@@ -8,3 +8,9 @@ option java_outer_classname = "Workflows";
 message StartUserRegistrationsRequest {
   string name = 1;
 }
+
+message StartApplicationRequest {
+  string user_id = 1;
+  string ssn = 2;
+  string birthdate = 3;
+}

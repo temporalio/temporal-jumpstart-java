@@ -3,10 +3,10 @@
 	import { application } from '$lib/stores/application.js';
 
 	// Import step components
-	import Step1Welcome from '$lib/components/steps/Step1Welcome.svelte';
-	import Step2PersonalInfo from '$lib/components/steps/Step2PersonalInfo.svelte';
-	import Step3Preferences from '$lib/components/steps/Step3Preferences.svelte';
-	import Step4Completion from '$lib/components/steps/Step4Completion.svelte';
+	import Welcome from '$lib/components/steps/Welcome.svelte';
+	import PersonalInfo from '$lib/components/steps/PersonalInfo.svelte';
+	import Preferences from '$lib/components/steps/Preferences.svelte';
+	import Completion from '$lib/components/steps/Completion.svelte';
 	import OnboardingStepIndicator from '$lib/components/OnboardingStepIndicator.svelte';
 	import OnboardingHero from '$lib/components/OnboardingHero.svelte';
 
@@ -29,11 +29,11 @@
 		try {
 			// Check if we already have an ongoing application process
 			const unsubscribe = application.subscribe(state => {
-				if (!state.id) {
-					// Redirect to landing page if no application process is found
-					window.location.href = '/';
-					return;
-				}
+				// if (!state.id) {
+				// 	// Redirect to landing page if no application process is found
+				// 	window.location.href = '/';
+				// 	return;
+				// }
 
 				// Update current step based on store data
 				if (state.currentStep !== undefined) {
@@ -109,13 +109,13 @@
 				<!-- Dynamic step content -->
 				<div class="lg:ml-72">
 					{#if currentStepIndex === 0}
-						<Step1Welcome {nextStep} />
+						<Welcome {nextStep} />
 					{:else if currentStepIndex === 1}
-						<Step2PersonalInfo {nextStep} {prevStep} />
+						<PersonalInfo {nextStep} {prevStep} />
 					{:else if currentStepIndex === 2}
-						<Step3Preferences {nextStep} {prevStep} />
+						<Preferences {nextStep} {prevStep} />
 					{:else if currentStepIndex === 3}
-						<Step4Completion {prevStep} />
+						<Completion {prevStep} />
 					{/if}
 				</div>
 			</div>

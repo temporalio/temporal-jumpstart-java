@@ -83,7 +83,7 @@ const createApplicationStore = () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await apiRequest(`/api/v1/onboardings/${id}`, 'GET');
+				const response = await apiRequest(`/api/v1/applications/${id}`, 'GET');
 
 				set({
 					id: response.id,
