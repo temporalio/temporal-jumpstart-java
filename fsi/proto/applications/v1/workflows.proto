@@ -5,8 +5,6 @@ package applications.v1;
 option java_multiple_files = true;
 option java_outer_classname = "Workflows";
 
-
-
 message StartUserRegistrationsRequest {
   string name = 1;
 }

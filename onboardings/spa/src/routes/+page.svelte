@@ -15,14 +15,14 @@
 			loading = true;
 			error = null;
 
-			// Initialize a new onboarding process
+			// Initialize a new application process
 			const onboardingId = await onboarding.initialize();
 
 			// Set the email in the store
 			await onboarding.saveStep(0, { email });
 
-			// Redirect to the onboarding process
-			window.location.href = '/onboarding';
+			// Redirect to the application process
+			window.location.href = '/application';
 		} catch (err) {
 			error = err.message || 'Failed to start application process';
 			console.error('Application error:', err);

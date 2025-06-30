@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { onboarding } from '$lib/stores/onboarding';
+	import { application } from '$lib/stores/application.js';
 
 	// Import step components
 	import Step1Welcome from '$lib/components/steps/Step1Welcome.svelte';
@@ -10,7 +10,7 @@
 	import OnboardingStepIndicator from '$lib/components/OnboardingStepIndicator.svelte';
 	import OnboardingHero from '$lib/components/OnboardingHero.svelte';
 
-	// Define the onboarding steps
+	// Define the application steps
 	const steps = [
 		{ id: 1, title: 'Welcome', description: 'Get started with our application' },
 		{ id: 2, title: 'Personal Information', description: 'Tell us about yourself' },
@@ -24,13 +24,13 @@
 	let initializing = true;
 	let error = null;
 
-	// Subscribe to onboarding store changes
+	// Subscribe to application store changes
 	onMount(async () => {
 		try {
-			// Check if we already have an ongoing onboarding process
-			const unsubscribe = onboarding.subscribe(state => {
+			// Check if we already have an ongoing application process
+			const unsubscribe = application.subscribe(state => {
 				if (!state.id) {
-					// Redirect to landing page if no onboarding process is found
+					// Redirect to landing page if no application process is found
 					window.location.href = '/';
 					return;
 				}
@@ -45,7 +45,7 @@
 			initializing = false;
 			return unsubscribe;
 		} catch (err) {
-			error = err.message || 'Failed to load onboarding process';
+			error = err.message || 'Failed to load application process';
 			console.error('Onboarding error:', err);
 			initializing = false;
 		}

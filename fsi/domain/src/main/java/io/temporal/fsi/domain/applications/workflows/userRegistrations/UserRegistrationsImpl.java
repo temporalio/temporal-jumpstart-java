@@ -50,6 +50,17 @@ public class UserRegistrationsImpl implements UserRegistrations {
   }
 
   @Override
+  public AuthorizeUserResponse authorizeUser(AuthorizeUserRequest cmd) {
+    AuthorizeUserResponse auth = acts.authorizeUser(cmd);
+    state =
+        state.toBuilder()
+            .addUsers(
+                User.newBuilder().setUserId(auth.getUserId()).setEmail(auth.getUserId()).build())
+            .build();
+    return auth;
+  }
+
+  @Override
   public GetUserRegistrationsResponse getState() {
     return state;
   }

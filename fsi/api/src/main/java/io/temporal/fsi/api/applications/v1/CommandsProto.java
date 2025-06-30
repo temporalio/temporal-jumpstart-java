@@ -33,6 +33,14 @@ public final class CommandsProto {
       internal_static_applications_v1_RegisterUserResponse_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_RegisterUserResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_AuthorizeUserRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_AuthorizeUserRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_AuthorizeUserResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_AuthorizeUserResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -43,13 +51,18 @@ public final class CommandsProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\036applications/v1/commands.proto\022\017applic"
-          + "ations.v1\"+\n\023RegisterUserRequest\022\024\n\005emai"
-          + "l\030\001 \001(\tR\005email\"B\n\024RegisterUserResponse\022\024"
-          + "\n\005email\030\001 \001(\tR\005email\022\024\n\005token\030\002 \001(\tR\005tok"
-          + "enB\221\001\n#io.temporal.fsi.api.applications."
-          + "v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017Applications"
-          + ".V1\312\002\017Applications\\V1\342\002\033Applications\\V1\\"
-          + "GPBMetadata\352\002\020Applications::V1b\006proto3"
+          + "ations.v1\"Q\n\023RegisterUserRequest\022\016\n\002id\030\001"
+          + " \001(\tR\002id\022\024\n\005email\030\002 \001(\tR\005email\022\024\n\005token\030"
+          + "\003 \001(\tR\005token\"R\n\024RegisterUserResponse\022\016\n\002"
+          + "id\030\001 \001(\tR\002id\022\024\n\005email\030\002 \001(\tR\005email\022\024\n\005to"
+          + "ken\030\003 \001(\tR\005token\"V\n\024AuthorizeUserRequest"
+          + "\022\024\n\005email\030\001 \001(\tR\005email\022\024\n\005token\030\002 \001(\tR\005t"
+          + "oken\022\022\n\004code\030\003 \001(\tR\004code\"0\n\025AuthorizeUse"
+          + "rResponse\022\027\n\007user_id\030\001 \001(\tR\006userIdB\221\001\n#i"
+          + "o.temporal.fsi.api.applications.v1B\rComm"
+          + "andsProtoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Ap"
+          + "plications\\V1\342\002\033Applications\\V1\\GPBMetad"
+          + "ata\352\002\020Applications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -60,7 +73,7 @@ public final class CommandsProto {
         new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
             internal_static_applications_v1_RegisterUserRequest_descriptor,
             new java.lang.String[] {
-              "Email",
+              "Id", "Email", "Token",
             });
     internal_static_applications_v1_RegisterUserResponse_descriptor =
         getDescriptor().getMessageTypes().get(1);
@@ -68,7 +81,23 @@ public final class CommandsProto {
         new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
             internal_static_applications_v1_RegisterUserResponse_descriptor,
             new java.lang.String[] {
-              "Email", "Token",
+              "Id", "Email", "Token",
+            });
+    internal_static_applications_v1_AuthorizeUserRequest_descriptor =
+        getDescriptor().getMessageTypes().get(2);
+    internal_static_applications_v1_AuthorizeUserRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_AuthorizeUserRequest_descriptor,
+            new java.lang.String[] {
+              "Email", "Token", "Code",
+            });
+    internal_static_applications_v1_AuthorizeUserResponse_descriptor =
+        getDescriptor().getMessageTypes().get(3);
+    internal_static_applications_v1_AuthorizeUserResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_AuthorizeUserResponse_descriptor,
+            new java.lang.String[] {
+              "UserId",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

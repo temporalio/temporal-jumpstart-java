@@ -29,6 +29,10 @@ public final class MessageProto {
       internal_static_web_v1_RegistrationsPut_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_web_v1_RegistrationsPut_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_web_v1_RegistrationGet_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_web_v1_RegistrationGet_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -39,10 +43,13 @@ public final class MessageProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\024web/v1/message.proto\022\006web.v1\"(\n\020Regist"
-          + "rationsPut\022\024\n\005email\030\001 \001(\tR\005emailBc\n\032io.t"
-          + "emporal.fsi.api.web.v1B\014MessageProtoP\001\242\002"
-          + "\003WXX\252\002\006Web.V1\312\002\006Web\\V1\342\002\022Web\\V1\\GPBMetad"
-          + "ata\352\002\007Web::V1b\006proto3"
+          + "rationsPut\022\024\n\005email\030\001 \001(\tR\005email\"w\n\017Regi"
+          + "strationGet\022\016\n\002id\030\001 \001(\tR\002id\022\024\n\005email\030\002 \001"
+          + "(\tR\005email\022\024\n\005token\030\003 \001(\tR\005token\022\034\n\007user_"
+          + "id\030\004 \001(\tH\000R\006userId\210\001\001B\n\n\010_user_idBc\n\032io."
+          + "temporal.fsi.api.web.v1B\014MessageProtoP\001\242"
+          + "\002\003WXX\252\002\006Web.V1\312\002\006Web\\V1\342\002\022Web\\V1\\GPBMeta"
+          + "data\352\002\007Web::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -53,6 +60,13 @@ public final class MessageProto {
             internal_static_web_v1_RegistrationsPut_descriptor,
             new java.lang.String[] {
               "Email",
+            });
+    internal_static_web_v1_RegistrationGet_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_web_v1_RegistrationGet_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_web_v1_RegistrationGet_descriptor,
+            new java.lang.String[] {
+              "Id", "Email", "Token", "UserId",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

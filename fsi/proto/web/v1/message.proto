@@ -8,3 +8,9 @@ option java_outer_classname = "Web";
 message RegistrationsPut {
   string email = 1;
 }
+message RegistrationGet {
+  string id = 1;
+  string email = 2;
+  string token = 3;
+  optional string user_id = 4;
+}

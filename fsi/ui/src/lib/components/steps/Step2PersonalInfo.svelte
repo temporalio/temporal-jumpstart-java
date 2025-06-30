@@ -1,5 +1,5 @@
 <script>
-	import { onboarding } from '$lib/stores/onboarding';
+	import { application } from '$lib/stores/application.js';
 	import { onMount } from 'svelte';
 	export let nextStep;
 	export let prevStep;
@@ -11,7 +11,7 @@
 
 	// Load existing data if available
 	onMount(() => {
-		const unsubscribe = onboarding.subscribe(state => {
+		const unsubscribe = application.subscribe(state => {
 			// First try to get from personalInfo if already saved
 			if (state.data && state.data.personalInfo) {
 				name = state.data.personalInfo.name || '';
@@ -33,7 +33,7 @@
 			error = null;
 
 			// Save the personal info data
-			await onboarding.saveStep(1, { name, email });
+			await application.saveStep(1, { name, email });
 			nextStep();
 		} catch (err) {
 			error = err.message || 'Failed to save personal information';

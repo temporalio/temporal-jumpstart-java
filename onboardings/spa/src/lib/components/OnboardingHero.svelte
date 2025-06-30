@@ -5,7 +5,7 @@
 	const heroContent = {
 		1: {
 			title: 'Begin Your Journey',
-			description: 'Start your onboarding process with a few simple steps.',
+			description: 'Start your application process with a few simple steps.',
 			icon: '👋'
 		},
 		2: {

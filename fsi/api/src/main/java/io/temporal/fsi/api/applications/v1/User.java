@@ -5,12 +5,12 @@
 
 package io.temporal.fsi.api.applications.v1;
 
-/** Protobuf type {@code applications.v1.UserRegistration} */
+/** Protobuf type {@code applications.v1.User} */
 @com.google.protobuf.Generated
-public final class UserRegistration extends com.google.protobuf.GeneratedMessage
+public final class User extends com.google.protobuf.GeneratedMessage
     implements
-    // @@protoc_insertion_point(message_implements:applications.v1.UserRegistration)
-    UserRegistrationOrBuilder {
+    // @@protoc_insertion_point(message_implements:applications.v1.User)
+    UserOrBuilder {
   private static final long serialVersionUID = 0L;
 
   static {
@@ -20,67 +20,66 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
         /* minor= */ 31,
         /* patch= */ 1,
         /* suffix= */ "",
-        UserRegistration.class.getName());
+        User.class.getName());
   }
-  // Use UserRegistration.newBuilder() to construct.
-  private UserRegistration(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+  // Use User.newBuilder() to construct.
+  private User(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
     super(builder);
   }
 
-  private UserRegistration() {
-    id_ = "";
+  private User() {
+    userId_ = "";
     email_ = "";
-    token_ = "";
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
     return io.temporal.fsi.api.applications.v1.ValuesProto
-        .internal_static_applications_v1_UserRegistration_descriptor;
+        .internal_static_applications_v1_User_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internalGetFieldAccessorTable() {
     return io.temporal.fsi.api.applications.v1.ValuesProto
-        .internal_static_applications_v1_UserRegistration_fieldAccessorTable
+        .internal_static_applications_v1_User_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            io.temporal.fsi.api.applications.v1.UserRegistration.class,
-            io.temporal.fsi.api.applications.v1.UserRegistration.Builder.class);
+            io.temporal.fsi.api.applications.v1.User.class,
+            io.temporal.fsi.api.applications.v1.User.Builder.class);
   }
 
-  public static final int ID_FIELD_NUMBER = 1;
+  public static final int USER_ID_FIELD_NUMBER = 1;
 
   @SuppressWarnings("serial")
-  private volatile java.lang.Object id_ = "";
+  private volatile java.lang.Object userId_ = "";
   /**
-   * <code>string id = 1 [json_name = "id"];</code>
+   * <code>string user_id = 1 [json_name = "userId"];</code>
    *
-   * @return The id.
+   * @return The userId.
    */
   @java.lang.Override
-  public java.lang.String getId() {
-    java.lang.Object ref = id_;
+  public java.lang.String getUserId() {
+    java.lang.Object ref = userId_;
     if (ref instanceof java.lang.String) {
       return (java.lang.String) ref;
     } else {
       com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
       java.lang.String s = bs.toStringUtf8();
-      id_ = s;
+      userId_ = s;
       return s;
     }
   }
   /**
-   * <code>string id = 1 [json_name = "id"];</code>
+   * <code>string user_id = 1 [json_name = "userId"];</code>
    *
-   * @return The bytes for id.
+   * @return The bytes for userId.
    */
   @java.lang.Override
-  public com.google.protobuf.ByteString getIdBytes() {
-    java.lang.Object ref = id_;
+  public com.google.protobuf.ByteString getUserIdBytes() {
+    java.lang.Object ref = userId_;
     if (ref instanceof java.lang.String) {
       com.google.protobuf.ByteString b =
           com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-      id_ = b;
+      userId_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -126,45 +125,6 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     }
   }
 
-  public static final int TOKEN_FIELD_NUMBER = 3;
-
-  @SuppressWarnings("serial")
-  private volatile java.lang.Object token_ = "";
-  /**
-   * <code>string token = 3 [json_name = "token"];</code>
-   *
-   * @return The token.
-   */
-  @java.lang.Override
-  public java.lang.String getToken() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      return (java.lang.String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-      java.lang.String s = bs.toStringUtf8();
-      token_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string token = 3 [json_name = "token"];</code>
-   *
-   * @return The bytes for token.
-   */
-  @java.lang.Override
-  public com.google.protobuf.ByteString getTokenBytes() {
-    java.lang.Object ref = token_;
-    if (ref instanceof java.lang.String) {
-      com.google.protobuf.ByteString b =
-          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-      token_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -179,14 +139,11 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(id_)) {
-      com.google.protobuf.GeneratedMessage.writeString(output, 1, id_);
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
+      com.google.protobuf.GeneratedMessage.writeString(output, 1, userId_);
     }
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
       com.google.protobuf.GeneratedMessage.writeString(output, 2, email_);
-    }
-    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(token_)) {
-      com.google.protobuf.GeneratedMessage.writeString(output, 3, token_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -197,14 +154,11 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     if (size != -1) return size;
 
     size = 0;
-    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(id_)) {
-      size += com.google.protobuf.GeneratedMessage.computeStringSize(1, id_);
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(userId_)) {
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(1, userId_);
     }
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
       size += com.google.protobuf.GeneratedMessage.computeStringSize(2, email_);
-    }
-    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(token_)) {
-      size += com.google.protobuf.GeneratedMessage.computeStringSize(3, token_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -216,15 +170,13 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof io.temporal.fsi.api.applications.v1.UserRegistration)) {
+    if (!(obj instanceof io.temporal.fsi.api.applications.v1.User)) {
       return super.equals(obj);
     }
-    io.temporal.fsi.api.applications.v1.UserRegistration other =
-        (io.temporal.fsi.api.applications.v1.UserRegistration) obj;
+    io.temporal.fsi.api.applications.v1.User other = (io.temporal.fsi.api.applications.v1.User) obj;
 
-    if (!getId().equals(other.getId())) return false;
+    if (!getUserId().equals(other.getUserId())) return false;
     if (!getEmail().equals(other.getEmail())) return false;
-    if (!getToken().equals(other.getToken())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -236,82 +188,80 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + ID_FIELD_NUMBER;
-    hash = (53 * hash) + getId().hashCode();
+    hash = (37 * hash) + USER_ID_FIELD_NUMBER;
+    hash = (53 * hash) + getUserId().hashCode();
     hash = (37 * hash) + EMAIL_FIELD_NUMBER;
     hash = (53 * hash) + getEmail().hashCode();
-    hash = (37 * hash) + TOKEN_FIELD_NUMBER;
-    hash = (53 * hash) + getToken().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
-      java.nio.ByteBuffer data) throws com.google.protobuf.InvalidProtocolBufferException {
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(java.nio.ByteBuffer data)
+      throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       java.nio.ByteBuffer data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(byte[] data)
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
-      java.io.InputStream input) throws java.io.IOException {
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(java.io.InputStream input)
+      throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseDelimitedFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseDelimitedFrom(
       java.io.InputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseDelimitedFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseDelimitedFrom(
       java.io.InputStream input, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseDelimitedWithIOException(
         PARSER, input, extensionRegistry);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       com.google.protobuf.CodedInputStream input) throws java.io.IOException {
     return com.google.protobuf.GeneratedMessage.parseWithIOException(PARSER, input);
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration parseFrom(
+  public static io.temporal.fsi.api.applications.v1.User parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -328,7 +278,7 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     return DEFAULT_INSTANCE.toBuilder();
   }
 
-  public static Builder newBuilder(io.temporal.fsi.api.applications.v1.UserRegistration prototype) {
+  public static Builder newBuilder(io.temporal.fsi.api.applications.v1.User prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
 
@@ -342,27 +292,27 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     Builder builder = new Builder(parent);
     return builder;
   }
-  /** Protobuf type {@code applications.v1.UserRegistration} */
+  /** Protobuf type {@code applications.v1.User} */
   public static final class Builder extends com.google.protobuf.GeneratedMessage.Builder<Builder>
       implements
-      // @@protoc_insertion_point(builder_implements:applications.v1.UserRegistration)
-      io.temporal.fsi.api.applications.v1.UserRegistrationOrBuilder {
+      // @@protoc_insertion_point(builder_implements:applications.v1.User)
+      io.temporal.fsi.api.applications.v1.UserOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return io.temporal.fsi.api.applications.v1.ValuesProto
-          .internal_static_applications_v1_UserRegistration_descriptor;
+          .internal_static_applications_v1_User_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return io.temporal.fsi.api.applications.v1.ValuesProto
-          .internal_static_applications_v1_UserRegistration_fieldAccessorTable
+          .internal_static_applications_v1_User_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              io.temporal.fsi.api.applications.v1.UserRegistration.class,
-              io.temporal.fsi.api.applications.v1.UserRegistration.Builder.class);
+              io.temporal.fsi.api.applications.v1.User.class,
+              io.temporal.fsi.api.applications.v1.User.Builder.class);
     }
 
-    // Construct using io.temporal.fsi.api.applications.v1.UserRegistration.newBuilder()
+    // Construct using io.temporal.fsi.api.applications.v1.User.newBuilder()
     private Builder() {}
 
     private Builder(com.google.protobuf.GeneratedMessage.BuilderParent parent) {
@@ -373,26 +323,25 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      id_ = "";
+      userId_ = "";
       email_ = "";
-      token_ = "";
       return this;
     }
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
       return io.temporal.fsi.api.applications.v1.ValuesProto
-          .internal_static_applications_v1_UserRegistration_descriptor;
+          .internal_static_applications_v1_User_descriptor;
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.applications.v1.UserRegistration getDefaultInstanceForType() {
-      return io.temporal.fsi.api.applications.v1.UserRegistration.getDefaultInstance();
+    public io.temporal.fsi.api.applications.v1.User getDefaultInstanceForType() {
+      return io.temporal.fsi.api.applications.v1.User.getDefaultInstance();
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.applications.v1.UserRegistration build() {
-      io.temporal.fsi.api.applications.v1.UserRegistration result = buildPartial();
+    public io.temporal.fsi.api.applications.v1.User build() {
+      io.temporal.fsi.api.applications.v1.User result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -400,9 +349,9 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
     }
 
     @java.lang.Override
-    public io.temporal.fsi.api.applications.v1.UserRegistration buildPartial() {
-      io.temporal.fsi.api.applications.v1.UserRegistration result =
-          new io.temporal.fsi.api.applications.v1.UserRegistration(this);
+    public io.temporal.fsi.api.applications.v1.User buildPartial() {
+      io.temporal.fsi.api.applications.v1.User result =
+          new io.temporal.fsi.api.applications.v1.User(this);
       if (bitField0_ != 0) {
         buildPartial0(result);
       }
@@ -410,45 +359,36 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
       return result;
     }
 
-    private void buildPartial0(io.temporal.fsi.api.applications.v1.UserRegistration result) {
+    private void buildPartial0(io.temporal.fsi.api.applications.v1.User result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.id_ = id_;
+        result.userId_ = userId_;
       }
       if (((from_bitField0_ & 0x00000002) != 0)) {
         result.email_ = email_;
-      }
-      if (((from_bitField0_ & 0x00000004) != 0)) {
-        result.token_ = token_;
       }
     }
 
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof io.temporal.fsi.api.applications.v1.UserRegistration) {
-        return mergeFrom((io.temporal.fsi.api.applications.v1.UserRegistration) other);
+      if (other instanceof io.temporal.fsi.api.applications.v1.User) {
+        return mergeFrom((io.temporal.fsi.api.applications.v1.User) other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(io.temporal.fsi.api.applications.v1.UserRegistration other) {
-      if (other == io.temporal.fsi.api.applications.v1.UserRegistration.getDefaultInstance())
-        return this;
-      if (!other.getId().isEmpty()) {
-        id_ = other.id_;
+    public Builder mergeFrom(io.temporal.fsi.api.applications.v1.User other) {
+      if (other == io.temporal.fsi.api.applications.v1.User.getDefaultInstance()) return this;
+      if (!other.getUserId().isEmpty()) {
+        userId_ = other.userId_;
         bitField0_ |= 0x00000001;
         onChanged();
       }
       if (!other.getEmail().isEmpty()) {
         email_ = other.email_;
         bitField0_ |= 0x00000002;
-        onChanged();
-      }
-      if (!other.getToken().isEmpty()) {
-        token_ = other.token_;
-        bitField0_ |= 0x00000004;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -479,7 +419,7 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
               break;
             case 10:
               {
-                id_ = input.readStringRequireUtf8();
+                userId_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000001;
                 break;
               } // case 10
@@ -489,12 +429,6 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
                 bitField0_ |= 0x00000002;
                 break;
               } // case 18
-            case 26:
-              {
-                token_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000004;
-                break;
-              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -514,77 +448,77 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
 
     private int bitField0_;
 
-    private java.lang.Object id_ = "";
+    private java.lang.Object userId_ = "";
     /**
-     * <code>string id = 1 [json_name = "id"];</code>
+     * <code>string user_id = 1 [json_name = "userId"];</code>
      *
-     * @return The id.
+     * @return The userId.
      */
-    public java.lang.String getId() {
-      java.lang.Object ref = id_;
+    public java.lang.String getUserId() {
+      java.lang.Object ref = userId_;
       if (!(ref instanceof java.lang.String)) {
         com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        id_ = s;
+        userId_ = s;
         return s;
       } else {
         return (java.lang.String) ref;
       }
     }
     /**
-     * <code>string id = 1 [json_name = "id"];</code>
+     * <code>string user_id = 1 [json_name = "userId"];</code>
      *
-     * @return The bytes for id.
+     * @return The bytes for userId.
      */
-    public com.google.protobuf.ByteString getIdBytes() {
-      java.lang.Object ref = id_;
+    public com.google.protobuf.ByteString getUserIdBytes() {
+      java.lang.Object ref = userId_;
       if (ref instanceof String) {
         com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-        id_ = b;
+        userId_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
     /**
-     * <code>string id = 1 [json_name = "id"];</code>
+     * <code>string user_id = 1 [json_name = "userId"];</code>
      *
-     * @param value The id to set.
+     * @param value The userId to set.
      * @return This builder for chaining.
      */
-    public Builder setId(java.lang.String value) {
+    public Builder setUserId(java.lang.String value) {
       if (value == null) {
         throw new NullPointerException();
       }
-      id_ = value;
+      userId_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
     }
     /**
-     * <code>string id = 1 [json_name = "id"];</code>
+     * <code>string user_id = 1 [json_name = "userId"];</code>
      *
      * @return This builder for chaining.
      */
-    public Builder clearId() {
-      id_ = getDefaultInstance().getId();
+    public Builder clearUserId() {
+      userId_ = getDefaultInstance().getUserId();
       bitField0_ = (bitField0_ & ~0x00000001);
       onChanged();
       return this;
     }
     /**
-     * <code>string id = 1 [json_name = "id"];</code>
+     * <code>string user_id = 1 [json_name = "userId"];</code>
      *
-     * @param value The bytes for id to set.
+     * @param value The bytes for userId to set.
      * @return This builder for chaining.
      */
-    public Builder setIdBytes(com.google.protobuf.ByteString value) {
+    public Builder setUserIdBytes(com.google.protobuf.ByteString value) {
       if (value == null) {
         throw new NullPointerException();
       }
       checkByteStringIsUtf8(value);
-      id_ = value;
+      userId_ = value;
       bitField0_ |= 0x00000001;
       onChanged();
       return this;
@@ -666,100 +600,24 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
       return this;
     }
 
-    private java.lang.Object token_ = "";
-    /**
-     * <code>string token = 3 [json_name = "token"];</code>
-     *
-     * @return The token.
-     */
-    public java.lang.String getToken() {
-      java.lang.Object ref = token_;
-      if (!(ref instanceof java.lang.String)) {
-        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        token_ = s;
-        return s;
-      } else {
-        return (java.lang.String) ref;
-      }
-    }
-    /**
-     * <code>string token = 3 [json_name = "token"];</code>
-     *
-     * @return The bytes for token.
-     */
-    public com.google.protobuf.ByteString getTokenBytes() {
-      java.lang.Object ref = token_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
-        token_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string token = 3 [json_name = "token"];</code>
-     *
-     * @param value The token to set.
-     * @return This builder for chaining.
-     */
-    public Builder setToken(java.lang.String value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      token_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string token = 3 [json_name = "token"];</code>
-     *
-     * @return This builder for chaining.
-     */
-    public Builder clearToken() {
-      token_ = getDefaultInstance().getToken();
-      bitField0_ = (bitField0_ & ~0x00000004);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string token = 3 [json_name = "token"];</code>
-     *
-     * @param value The bytes for token to set.
-     * @return This builder for chaining.
-     */
-    public Builder setTokenBytes(com.google.protobuf.ByteString value) {
-      if (value == null) {
-        throw new NullPointerException();
-      }
-      checkByteStringIsUtf8(value);
-      token_ = value;
-      bitField0_ |= 0x00000004;
-      onChanged();
-      return this;
-    }
-
-    // @@protoc_insertion_point(builder_scope:applications.v1.UserRegistration)
+    // @@protoc_insertion_point(builder_scope:applications.v1.User)
   }
 
-  // @@protoc_insertion_point(class_scope:applications.v1.UserRegistration)
-  private static final io.temporal.fsi.api.applications.v1.UserRegistration DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:applications.v1.User)
+  private static final io.temporal.fsi.api.applications.v1.User DEFAULT_INSTANCE;
 
   static {
-    DEFAULT_INSTANCE = new io.temporal.fsi.api.applications.v1.UserRegistration();
+    DEFAULT_INSTANCE = new io.temporal.fsi.api.applications.v1.User();
   }
 
-  public static io.temporal.fsi.api.applications.v1.UserRegistration getDefaultInstance() {
+  public static io.temporal.fsi.api.applications.v1.User getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<UserRegistration> PARSER =
-      new com.google.protobuf.AbstractParser<UserRegistration>() {
+  private static final com.google.protobuf.Parser<User> PARSER =
+      new com.google.protobuf.AbstractParser<User>() {
         @java.lang.Override
-        public UserRegistration parsePartialFrom(
+        public User parsePartialFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
@@ -778,17 +636,17 @@ public final class UserRegistration extends com.google.protobuf.GeneratedMessage
         }
       };
 
-  public static com.google.protobuf.Parser<UserRegistration> parser() {
+  public static com.google.protobuf.Parser<User> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<UserRegistration> getParserForType() {
+  public com.google.protobuf.Parser<User> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public io.temporal.fsi.api.applications.v1.UserRegistration getDefaultInstanceForType() {
+  public io.temporal.fsi.api.applications.v1.User getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 }

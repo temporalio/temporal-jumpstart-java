@@ -6,47 +6,47 @@
 package io.temporal.fsi.api.applications.v1;
 
 @com.google.protobuf.Generated
-public interface RegisterUserResponseOrBuilder
+public interface AuthorizeUserRequestOrBuilder
     extends
-    // @@protoc_insertion_point(interface_extends:applications.v1.RegisterUserResponse)
+    // @@protoc_insertion_point(interface_extends:applications.v1.AuthorizeUserRequest)
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string id = 1 [json_name = "id"];</code>
-   *
-   * @return The id.
-   */
-  java.lang.String getId();
-  /**
-   * <code>string id = 1 [json_name = "id"];</code>
-   *
-   * @return The bytes for id.
-   */
-  com.google.protobuf.ByteString getIdBytes();
-
-  /**
-   * <code>string email = 2 [json_name = "email"];</code>
+   * <code>string email = 1 [json_name = "email"];</code>
    *
    * @return The email.
    */
   java.lang.String getEmail();
   /**
-   * <code>string email = 2 [json_name = "email"];</code>
+   * <code>string email = 1 [json_name = "email"];</code>
    *
    * @return The bytes for email.
    */
   com.google.protobuf.ByteString getEmailBytes();
 
   /**
-   * <code>string token = 3 [json_name = "token"];</code>
+   * <code>string token = 2 [json_name = "token"];</code>
    *
    * @return The token.
    */
   java.lang.String getToken();
   /**
-   * <code>string token = 3 [json_name = "token"];</code>
+   * <code>string token = 2 [json_name = "token"];</code>
    *
    * @return The bytes for token.
    */
   com.google.protobuf.ByteString getTokenBytes();
+
+  /**
+   * <code>string code = 3 [json_name = "code"];</code>
+   *
+   * @return The code.
+   */
+  java.lang.String getCode();
+  /**
+   * <code>string code = 3 [json_name = "code"];</code>
+   *
+   * @return The bytes for code.
+   */
+  com.google.protobuf.ByteString getCodeBytes();
 }

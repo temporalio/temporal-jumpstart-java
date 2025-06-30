@@ -2,7 +2,7 @@
   "name": "onboarding-app",
   "version": "0.0.1",
   "private": true,
-    "type": "module",
+  "type": "module",
   "engines": {
     "node": "^24.3.0"
   },
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "1.6.3",
-    "inputmask": "5.0.8"
+    "inputmask": "5.0.8",
+    "nanoid": "^5.1.5"
   }
 }

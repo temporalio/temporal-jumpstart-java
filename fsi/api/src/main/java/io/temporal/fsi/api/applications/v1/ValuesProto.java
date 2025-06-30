@@ -29,6 +29,10 @@ public final class ValuesProto {
       internal_static_applications_v1_UserRegistration_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_UserRegistration_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_User_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_User_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -39,12 +43,14 @@ public final class ValuesProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\034applications/v1/values.proto\022\017applicat"
-          + "ions.v1\">\n\020UserRegistration\022\024\n\005email\030\001 \001"
-          + "(\tR\005email\022\024\n\005token\030\002 \001(\tR\005tokenB\217\001\n#io.t"
-          + "emporal.fsi.api.applications.v1B\013ValuesP"
-          + "rotoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Applica"
-          + "tions\\V1\342\002\033Applications\\V1\\GPBMetadata\352\002"
-          + "\020Applications::V1b\006proto3"
+          + "ions.v1\"N\n\020UserRegistration\022\016\n\002id\030\001 \001(\tR"
+          + "\002id\022\024\n\005email\030\002 \001(\tR\005email\022\024\n\005token\030\003 \001(\t"
+          + "R\005token\"5\n\004User\022\027\n\007user_id\030\001 \001(\tR\006userId"
+          + "\022\024\n\005email\030\002 \001(\tR\005emailB\217\001\n#io.temporal.f"
+          + "si.api.applications.v1B\013ValuesProtoP\001\242\002\003"
+          + "AXX\252\002\017Applications.V1\312\002\017Applications\\V1\342"
+          + "\002\033Applications\\V1\\GPBMetadata\352\002\020Applicat"
+          + "ions::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -55,7 +61,14 @@ public final class ValuesProto {
         new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
             internal_static_applications_v1_UserRegistration_descriptor,
             new java.lang.String[] {
-              "Email", "Token",
+              "Id", "Email", "Token",
+            });
+    internal_static_applications_v1_User_descriptor = getDescriptor().getMessageTypes().get(1);
+    internal_static_applications_v1_User_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_User_descriptor,
+            new java.lang.String[] {
+              "UserId", "Email",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

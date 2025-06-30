@@ -6,6 +6,11 @@ option java_multiple_files = true;
 option java_outer_classname = "Values";
 
 message UserRegistration {
-  string email = 1;
-  string token = 2;
+  string id = 1;
+  string email = 2;
+  string token = 3;
+}
+message User {
+  string user_id = 1;
+  string email = 2;
 }

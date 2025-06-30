@@ -29,6 +29,7 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
 
   private GetUserRegistrationsResponse() {
     userRegistrations_ = java.util.Collections.emptyList();
+    users_ = java.util.Collections.emptyList();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -100,6 +101,37 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
     return userRegistrations_.get(index);
   }
 
+  public static final int USERS_FIELD_NUMBER = 2;
+
+  @SuppressWarnings("serial")
+  private java.util.List<io.temporal.fsi.api.applications.v1.User> users_;
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  @java.lang.Override
+  public java.util.List<io.temporal.fsi.api.applications.v1.User> getUsersList() {
+    return users_;
+  }
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  @java.lang.Override
+  public java.util.List<? extends io.temporal.fsi.api.applications.v1.UserOrBuilder>
+      getUsersOrBuilderList() {
+    return users_;
+  }
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  @java.lang.Override
+  public int getUsersCount() {
+    return users_.size();
+  }
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  @java.lang.Override
+  public io.temporal.fsi.api.applications.v1.User getUsers(int index) {
+    return users_.get(index);
+  }
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  @java.lang.Override
+  public io.temporal.fsi.api.applications.v1.UserOrBuilder getUsersOrBuilder(int index) {
+    return users_.get(index);
+  }
+
   private byte memoizedIsInitialized = -1;
 
   @java.lang.Override
@@ -117,6 +149,9 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
     for (int i = 0; i < userRegistrations_.size(); i++) {
       output.writeMessage(1, userRegistrations_.get(i));
     }
+    for (int i = 0; i < users_.size(); i++) {
+      output.writeMessage(2, users_.get(i));
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -129,6 +164,9 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
     for (int i = 0; i < userRegistrations_.size(); i++) {
       size +=
           com.google.protobuf.CodedOutputStream.computeMessageSize(1, userRegistrations_.get(i));
+    }
+    for (int i = 0; i < users_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream.computeMessageSize(2, users_.get(i));
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -147,6 +185,7 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
         (io.temporal.fsi.api.applications.v1.GetUserRegistrationsResponse) obj;
 
     if (!getUserRegistrationsList().equals(other.getUserRegistrationsList())) return false;
+    if (!getUsersList().equals(other.getUsersList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -161,6 +200,10 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
     if (getUserRegistrationsCount() > 0) {
       hash = (37 * hash) + USER_REGISTRATIONS_FIELD_NUMBER;
       hash = (53 * hash) + getUserRegistrationsList().hashCode();
+    }
+    if (getUsersCount() > 0) {
+      hash = (37 * hash) + USERS_FIELD_NUMBER;
+      hash = (53 * hash) + getUsersList().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -301,6 +344,13 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
         userRegistrationsBuilder_.clear();
       }
       bitField0_ = (bitField0_ & ~0x00000001);
+      if (usersBuilder_ == null) {
+        users_ = java.util.Collections.emptyList();
+      } else {
+        users_ = null;
+        usersBuilder_.clear();
+      }
+      bitField0_ = (bitField0_ & ~0x00000002);
       return this;
     }
 
@@ -347,6 +397,15 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
         result.userRegistrations_ = userRegistrations_;
       } else {
         result.userRegistrations_ = userRegistrationsBuilder_.build();
+      }
+      if (usersBuilder_ == null) {
+        if (((bitField0_ & 0x00000002) != 0)) {
+          users_ = java.util.Collections.unmodifiableList(users_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.users_ = users_;
+      } else {
+        result.users_ = usersBuilder_.build();
       }
     }
 
@@ -397,6 +456,33 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
           }
         }
       }
+      if (usersBuilder_ == null) {
+        if (!other.users_.isEmpty()) {
+          if (users_.isEmpty()) {
+            users_ = other.users_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureUsersIsMutable();
+            users_.addAll(other.users_);
+          }
+          onChanged();
+        }
+      } else {
+        if (!other.users_.isEmpty()) {
+          if (usersBuilder_.isEmpty()) {
+            usersBuilder_.dispose();
+            usersBuilder_ = null;
+            users_ = other.users_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+            usersBuilder_ =
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders
+                    ? internalGetUsersFieldBuilder()
+                    : null;
+          } else {
+            usersBuilder_.addAllMessages(other.users_);
+          }
+        }
+      }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
       return this;
@@ -437,6 +523,19 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
                 }
                 break;
               } // case 10
+            case 18:
+              {
+                io.temporal.fsi.api.applications.v1.User m =
+                    input.readMessage(
+                        io.temporal.fsi.api.applications.v1.User.parser(), extensionRegistry);
+                if (usersBuilder_ == null) {
+                  ensureUsersIsMutable();
+                  users_.add(m);
+                } else {
+                  usersBuilder_.addMessage(m);
+                }
+                break;
+              } // case 18
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -752,6 +851,210 @@ public final class GetUserRegistrationsResponse extends com.google.protobuf.Gene
         userRegistrations_ = null;
       }
       return userRegistrationsBuilder_;
+    }
+
+    private java.util.List<io.temporal.fsi.api.applications.v1.User> users_ =
+        java.util.Collections.emptyList();
+
+    private void ensureUsersIsMutable() {
+      if (!((bitField0_ & 0x00000002) != 0)) {
+        users_ = new java.util.ArrayList<io.temporal.fsi.api.applications.v1.User>(users_);
+        bitField0_ |= 0x00000002;
+      }
+    }
+
+    private com.google.protobuf.RepeatedFieldBuilder<
+            io.temporal.fsi.api.applications.v1.User,
+            io.temporal.fsi.api.applications.v1.User.Builder,
+            io.temporal.fsi.api.applications.v1.UserOrBuilder>
+        usersBuilder_;
+
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public java.util.List<io.temporal.fsi.api.applications.v1.User> getUsersList() {
+      if (usersBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(users_);
+      } else {
+        return usersBuilder_.getMessageList();
+      }
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public int getUsersCount() {
+      if (usersBuilder_ == null) {
+        return users_.size();
+      } else {
+        return usersBuilder_.getCount();
+      }
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public io.temporal.fsi.api.applications.v1.User getUsers(int index) {
+      if (usersBuilder_ == null) {
+        return users_.get(index);
+      } else {
+        return usersBuilder_.getMessage(index);
+      }
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder setUsers(int index, io.temporal.fsi.api.applications.v1.User value) {
+      if (usersBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureUsersIsMutable();
+        users_.set(index, value);
+        onChanged();
+      } else {
+        usersBuilder_.setMessage(index, value);
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder setUsers(
+        int index, io.temporal.fsi.api.applications.v1.User.Builder builderForValue) {
+      if (usersBuilder_ == null) {
+        ensureUsersIsMutable();
+        users_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        usersBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder addUsers(io.temporal.fsi.api.applications.v1.User value) {
+      if (usersBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureUsersIsMutable();
+        users_.add(value);
+        onChanged();
+      } else {
+        usersBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder addUsers(int index, io.temporal.fsi.api.applications.v1.User value) {
+      if (usersBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureUsersIsMutable();
+        users_.add(index, value);
+        onChanged();
+      } else {
+        usersBuilder_.addMessage(index, value);
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder addUsers(io.temporal.fsi.api.applications.v1.User.Builder builderForValue) {
+      if (usersBuilder_ == null) {
+        ensureUsersIsMutable();
+        users_.add(builderForValue.build());
+        onChanged();
+      } else {
+        usersBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder addUsers(
+        int index, io.temporal.fsi.api.applications.v1.User.Builder builderForValue) {
+      if (usersBuilder_ == null) {
+        ensureUsersIsMutable();
+        users_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        usersBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder addAllUsers(
+        java.lang.Iterable<? extends io.temporal.fsi.api.applications.v1.User> values) {
+      if (usersBuilder_ == null) {
+        ensureUsersIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(values, users_);
+        onChanged();
+      } else {
+        usersBuilder_.addAllMessages(values);
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder clearUsers() {
+      if (usersBuilder_ == null) {
+        users_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+      } else {
+        usersBuilder_.clear();
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public Builder removeUsers(int index) {
+      if (usersBuilder_ == null) {
+        ensureUsersIsMutable();
+        users_.remove(index);
+        onChanged();
+      } else {
+        usersBuilder_.remove(index);
+      }
+      return this;
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public io.temporal.fsi.api.applications.v1.User.Builder getUsersBuilder(int index) {
+      return internalGetUsersFieldBuilder().getBuilder(index);
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public io.temporal.fsi.api.applications.v1.UserOrBuilder getUsersOrBuilder(int index) {
+      if (usersBuilder_ == null) {
+        return users_.get(index);
+      } else {
+        return usersBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public java.util.List<? extends io.temporal.fsi.api.applications.v1.UserOrBuilder>
+        getUsersOrBuilderList() {
+      if (usersBuilder_ != null) {
+        return usersBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(users_);
+      }
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public io.temporal.fsi.api.applications.v1.User.Builder addUsersBuilder() {
+      return internalGetUsersFieldBuilder()
+          .addBuilder(io.temporal.fsi.api.applications.v1.User.getDefaultInstance());
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public io.temporal.fsi.api.applications.v1.User.Builder addUsersBuilder(int index) {
+      return internalGetUsersFieldBuilder()
+          .addBuilder(index, io.temporal.fsi.api.applications.v1.User.getDefaultInstance());
+    }
+    /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+    public java.util.List<io.temporal.fsi.api.applications.v1.User.Builder> getUsersBuilderList() {
+      return internalGetUsersFieldBuilder().getBuilderList();
+    }
+
+    private com.google.protobuf.RepeatedFieldBuilder<
+            io.temporal.fsi.api.applications.v1.User,
+            io.temporal.fsi.api.applications.v1.User.Builder,
+            io.temporal.fsi.api.applications.v1.UserOrBuilder>
+        internalGetUsersFieldBuilder() {
+      if (usersBuilder_ == null) {
+        usersBuilder_ =
+            new com.google.protobuf.RepeatedFieldBuilder<
+                io.temporal.fsi.api.applications.v1.User,
+                io.temporal.fsi.api.applications.v1.User.Builder,
+                io.temporal.fsi.api.applications.v1.UserOrBuilder>(
+                users_, ((bitField0_ & 0x00000002) != 0), getParentForChildren(), isClean());
+        users_ = null;
+      }
+      return usersBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:applications.v1.GetUserRegistrationsResponse)

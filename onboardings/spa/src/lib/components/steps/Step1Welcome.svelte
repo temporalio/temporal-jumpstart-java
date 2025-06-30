@@ -11,7 +11,7 @@
 			await onboarding.saveStep(0, {});
 			nextStep();
 		} catch (error) {
-			console.error('Failed to start onboarding:', error);
+			console.error('Failed to start application:', error);
 		} finally {
 			loading = false;
 		}
@@ -21,7 +21,7 @@
 <div class="space-y-6">
 	<h2 class="h2">Welcome</h2>
 	<p>
-		Welcome to our onboarding process. This will help you get started with our application.
+		Welcome to our application process. This will help you get started with our application.
 		Follow the steps to configure your account and preferences.
 	</p>
 	<div class="flex justify-end mt-4">

@@ -9,4 +9,5 @@ option java_outer_classname = "Queries";
 
 message GetUserRegistrationsResponse {
   repeated RegisterUserResponse user_registrations = 1;
+  repeated User users = 2;
 }

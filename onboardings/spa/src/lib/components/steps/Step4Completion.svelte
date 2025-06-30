@@ -11,12 +11,12 @@
 			loading = true;
 			error = null;
 
-			// Mark the onboarding as complete
+			// Mark the application as complete
 			await onboarding.complete();
 			onboardingComplete = true;
 		} catch (err) {
-			error = err.message || 'Failed to complete onboarding';
-			console.error('Error completing onboarding:', err);
+			error = err.message || 'Failed to complete application';
+			console.error('Error completing application:', err);
 		} finally {
 			loading = false;
 		}
@@ -26,7 +26,7 @@
 <div class="space-y-6 text-center">
 	<div class="text-5xl mb-4">🎉</div>
 	<h2 class="h2">All Done!</h2>
-	<p>Congratulations! You have completed the onboarding process.</p>
+	<p>Congratulations! You have completed the application process.</p>
 	<p>You can now start using all the features of our application.</p>
 
 	{#if error}

@@ -12,15 +12,41 @@ public interface RegisterUserRequestOrBuilder
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>string email = 1 [json_name = "email"];</code>
+   * <code>string id = 1 [json_name = "id"];</code>
+   *
+   * @return The id.
+   */
+  java.lang.String getId();
+  /**
+   * <code>string id = 1 [json_name = "id"];</code>
+   *
+   * @return The bytes for id.
+   */
+  com.google.protobuf.ByteString getIdBytes();
+
+  /**
+   * <code>string email = 2 [json_name = "email"];</code>
    *
    * @return The email.
    */
   java.lang.String getEmail();
   /**
-   * <code>string email = 1 [json_name = "email"];</code>
+   * <code>string email = 2 [json_name = "email"];</code>
    *
    * @return The bytes for email.
    */
   com.google.protobuf.ByteString getEmailBytes();
+
+  /**
+   * <code>string token = 3 [json_name = "token"];</code>
+   *
+   * @return The token.
+   */
+  java.lang.String getToken();
+  /**
+   * <code>string token = 3 [json_name = "token"];</code>
+   *
+   * @return The bytes for token.
+   */
+  com.google.protobuf.ByteString getTokenBytes();
 }

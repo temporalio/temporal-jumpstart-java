@@ -5,9 +5,20 @@ package applications.v1;
 option java_multiple_files = true;
 option java_outer_classname = "Commands";
 message RegisterUserRequest {
-  string email = 1;
+  string id = 1;
+  string email = 2;
+  string token = 3;
 }
 message RegisterUserResponse {
+  string id = 1;
+  string email = 2;
+  string token = 3;
+}
+message AuthorizeUserRequest {
   string email = 1;
   string token = 2;
+  string code = 3;
+}
+message AuthorizeUserResponse {
+  string user_id = 1;
 }

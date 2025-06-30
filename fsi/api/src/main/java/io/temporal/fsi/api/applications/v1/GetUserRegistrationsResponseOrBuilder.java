@@ -44,4 +44,16 @@ public interface GetUserRegistrationsResponseOrBuilder
    */
   io.temporal.fsi.api.applications.v1.RegisterUserResponseOrBuilder getUserRegistrationsOrBuilder(
       int index);
+
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  java.util.List<io.temporal.fsi.api.applications.v1.User> getUsersList();
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  io.temporal.fsi.api.applications.v1.User getUsers(int index);
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  int getUsersCount();
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  java.util.List<? extends io.temporal.fsi.api.applications.v1.UserOrBuilder>
+      getUsersOrBuilderList();
+  /** <code>repeated .applications.v1.User users = 2 [json_name = "users"];</code> */
+  io.temporal.fsi.api.applications.v1.UserOrBuilder getUsersOrBuilder(int index);
 }

@@ -1,5 +1,5 @@
 <script>
-	import { onboarding } from '$lib/stores/onboarding';
+	import { registrations } from '$lib/stores/registrations';
 
 	// Form data
 	let email = '';
@@ -15,16 +15,16 @@
 			loading = true;
 			error = null;
 
-			// Initialize a new onboarding process
-			const onboardingId = await onboarding.initialize();
+			// Initialize a new application process
+			let {id: registrationId} = await registrations.register({ email });
 
 			// Set the email in the store
-			await onboarding.saveStep(0, { email });
+			// await application.saveStep(0, { email });
 
-			// Redirect to the onboarding process
-			window.location.href = '/onboarding';
+			// Redirect to the application process
+			window.location.href = '/registrations/' + registrationId;
 		} catch (err) {
-			error = err.message || 'Failed to start application process';
+			error = err.message || 'Failed to  register';
 			console.error('Application error:', err);
 		} finally {
 			loading = false;
@@ -51,9 +51,9 @@
 						<span>Email</span>
 						<input 
 							class="input" 
-							type="email" 
-							placeholder="Enter your email address" 
-							bind:value={email} 
+							type="email"
+							placeholder="Enter your email address"
+							bind:value={email}
 							required 
 						/>
 					</label>

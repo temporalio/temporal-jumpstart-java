@@ -28,7 +28,9 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
   }
 
   private RegisterUserRequest() {
+    id_ = "";
     email_ = "";
+    token_ = "";
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
@@ -46,12 +48,51 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
             io.temporal.fsi.api.applications.v1.RegisterUserRequest.Builder.class);
   }
 
-  public static final int EMAIL_FIELD_NUMBER = 1;
+  public static final int ID_FIELD_NUMBER = 1;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object id_ = "";
+  /**
+   * <code>string id = 1 [json_name = "id"];</code>
+   *
+   * @return The id.
+   */
+  @java.lang.Override
+  public java.lang.String getId() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      id_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string id = 1 [json_name = "id"];</code>
+   *
+   * @return The bytes for id.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getIdBytes() {
+    java.lang.Object ref = id_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      id_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int EMAIL_FIELD_NUMBER = 2;
 
   @SuppressWarnings("serial")
   private volatile java.lang.Object email_ = "";
   /**
-   * <code>string email = 1 [json_name = "email"];</code>
+   * <code>string email = 2 [json_name = "email"];</code>
    *
    * @return The email.
    */
@@ -68,7 +109,7 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     }
   }
   /**
-   * <code>string email = 1 [json_name = "email"];</code>
+   * <code>string email = 2 [json_name = "email"];</code>
    *
    * @return The bytes for email.
    */
@@ -79,6 +120,45 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
       com.google.protobuf.ByteString b =
           com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
       email_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int TOKEN_FIELD_NUMBER = 3;
+
+  @SuppressWarnings("serial")
+  private volatile java.lang.Object token_ = "";
+  /**
+   * <code>string token = 3 [json_name = "token"];</code>
+   *
+   * @return The token.
+   */
+  @java.lang.Override
+  public java.lang.String getToken() {
+    java.lang.Object ref = token_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      token_ = s;
+      return s;
+    }
+  }
+  /**
+   * <code>string token = 3 [json_name = "token"];</code>
+   *
+   * @return The bytes for token.
+   */
+  @java.lang.Override
+  public com.google.protobuf.ByteString getTokenBytes() {
+    java.lang.Object ref = token_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b =
+          com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+      token_ = b;
       return b;
     } else {
       return (com.google.protobuf.ByteString) ref;
@@ -99,8 +179,14 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
 
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output) throws java.io.IOException {
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(id_)) {
+      com.google.protobuf.GeneratedMessage.writeString(output, 1, id_);
+    }
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
-      com.google.protobuf.GeneratedMessage.writeString(output, 1, email_);
+      com.google.protobuf.GeneratedMessage.writeString(output, 2, email_);
+    }
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(token_)) {
+      com.google.protobuf.GeneratedMessage.writeString(output, 3, token_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -111,8 +197,14 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     if (size != -1) return size;
 
     size = 0;
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(id_)) {
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(1, id_);
+    }
     if (!com.google.protobuf.GeneratedMessage.isStringEmpty(email_)) {
-      size += com.google.protobuf.GeneratedMessage.computeStringSize(1, email_);
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(2, email_);
+    }
+    if (!com.google.protobuf.GeneratedMessage.isStringEmpty(token_)) {
+      size += com.google.protobuf.GeneratedMessage.computeStringSize(3, token_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -130,7 +222,9 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     io.temporal.fsi.api.applications.v1.RegisterUserRequest other =
         (io.temporal.fsi.api.applications.v1.RegisterUserRequest) obj;
 
+    if (!getId().equals(other.getId())) return false;
     if (!getEmail().equals(other.getEmail())) return false;
+    if (!getToken().equals(other.getToken())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -142,8 +236,12 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     }
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
+    hash = (37 * hash) + ID_FIELD_NUMBER;
+    hash = (53 * hash) + getId().hashCode();
     hash = (37 * hash) + EMAIL_FIELD_NUMBER;
     hash = (53 * hash) + getEmail().hashCode();
+    hash = (37 * hash) + TOKEN_FIELD_NUMBER;
+    hash = (53 * hash) + getToken().hashCode();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -276,7 +374,9 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
+      id_ = "";
       email_ = "";
+      token_ = "";
       return this;
     }
 
@@ -314,7 +414,13 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     private void buildPartial0(io.temporal.fsi.api.applications.v1.RegisterUserRequest result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
+        result.id_ = id_;
+      }
+      if (((from_bitField0_ & 0x00000002) != 0)) {
         result.email_ = email_;
+      }
+      if (((from_bitField0_ & 0x00000004) != 0)) {
+        result.token_ = token_;
       }
     }
 
@@ -331,9 +437,19 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
     public Builder mergeFrom(io.temporal.fsi.api.applications.v1.RegisterUserRequest other) {
       if (other == io.temporal.fsi.api.applications.v1.RegisterUserRequest.getDefaultInstance())
         return this;
+      if (!other.getId().isEmpty()) {
+        id_ = other.id_;
+        bitField0_ |= 0x00000001;
+        onChanged();
+      }
       if (!other.getEmail().isEmpty()) {
         email_ = other.email_;
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000002;
+        onChanged();
+      }
+      if (!other.getToken().isEmpty()) {
+        token_ = other.token_;
+        bitField0_ |= 0x00000004;
         onChanged();
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -364,10 +480,22 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
               break;
             case 10:
               {
-                email_ = input.readStringRequireUtf8();
+                id_ = input.readStringRequireUtf8();
                 bitField0_ |= 0x00000001;
                 break;
               } // case 10
+            case 18:
+              {
+                email_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+            case 26:
+              {
+                token_ = input.readStringRequireUtf8();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
             default:
               {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
@@ -387,9 +515,85 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
 
     private int bitField0_;
 
+    private java.lang.Object id_ = "";
+    /**
+     * <code>string id = 1 [json_name = "id"];</code>
+     *
+     * @return The id.
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        id_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string id = 1 [json_name = "id"];</code>
+     *
+     * @return The bytes for id.
+     */
+    public com.google.protobuf.ByteString getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string id = 1 [json_name = "id"];</code>
+     *
+     * @param value The id to set.
+     * @return This builder for chaining.
+     */
+    public Builder setId(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      id_ = value;
+      bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string id = 1 [json_name = "id"];</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearId() {
+      id_ = getDefaultInstance().getId();
+      bitField0_ = (bitField0_ & ~0x00000001);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string id = 1 [json_name = "id"];</code>
+     *
+     * @param value The bytes for id to set.
+     * @return This builder for chaining.
+     */
+    public Builder setIdBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      id_ = value;
+      bitField0_ |= 0x00000001;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object email_ = "";
     /**
-     * <code>string email = 1 [json_name = "email"];</code>
+     * <code>string email = 2 [json_name = "email"];</code>
      *
      * @return The email.
      */
@@ -405,7 +609,7 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
       }
     }
     /**
-     * <code>string email = 1 [json_name = "email"];</code>
+     * <code>string email = 2 [json_name = "email"];</code>
      *
      * @return The bytes for email.
      */
@@ -421,7 +625,7 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
       }
     }
     /**
-     * <code>string email = 1 [json_name = "email"];</code>
+     * <code>string email = 2 [json_name = "email"];</code>
      *
      * @param value The email to set.
      * @return This builder for chaining.
@@ -431,23 +635,23 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
         throw new NullPointerException();
       }
       email_ = value;
-      bitField0_ |= 0x00000001;
+      bitField0_ |= 0x00000002;
       onChanged();
       return this;
     }
     /**
-     * <code>string email = 1 [json_name = "email"];</code>
+     * <code>string email = 2 [json_name = "email"];</code>
      *
      * @return This builder for chaining.
      */
     public Builder clearEmail() {
       email_ = getDefaultInstance().getEmail();
-      bitField0_ = (bitField0_ & ~0x00000001);
+      bitField0_ = (bitField0_ & ~0x00000002);
       onChanged();
       return this;
     }
     /**
-     * <code>string email = 1 [json_name = "email"];</code>
+     * <code>string email = 2 [json_name = "email"];</code>
      *
      * @param value The bytes for email to set.
      * @return This builder for chaining.
@@ -458,7 +662,83 @@ public final class RegisterUserRequest extends com.google.protobuf.GeneratedMess
       }
       checkByteStringIsUtf8(value);
       email_ = value;
-      bitField0_ |= 0x00000001;
+      bitField0_ |= 0x00000002;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object token_ = "";
+    /**
+     * <code>string token = 3 [json_name = "token"];</code>
+     *
+     * @return The token.
+     */
+    public java.lang.String getToken() {
+      java.lang.Object ref = token_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        token_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <code>string token = 3 [json_name = "token"];</code>
+     *
+     * @return The bytes for token.
+     */
+    public com.google.protobuf.ByteString getTokenBytes() {
+      java.lang.Object ref = token_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b =
+            com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+        token_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <code>string token = 3 [json_name = "token"];</code>
+     *
+     * @param value The token to set.
+     * @return This builder for chaining.
+     */
+    public Builder setToken(java.lang.String value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      token_ = value;
+      bitField0_ |= 0x00000004;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string token = 3 [json_name = "token"];</code>
+     *
+     * @return This builder for chaining.
+     */
+    public Builder clearToken() {
+      token_ = getDefaultInstance().getToken();
+      bitField0_ = (bitField0_ & ~0x00000004);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>string token = 3 [json_name = "token"];</code>
+     *
+     * @param value The bytes for token to set.
+     * @return This builder for chaining.
+     */
+    public Builder setTokenBytes(com.google.protobuf.ByteString value) {
+      if (value == null) {
+        throw new NullPointerException();
+      }
+      checkByteStringIsUtf8(value);
+      token_ = value;
+      bitField0_ |= 0x00000004;
       onChanged();
       return this;
     }

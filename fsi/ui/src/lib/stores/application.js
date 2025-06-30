@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 // Initialize the store with default values
-const createOnboardingStore = () => {
+const createApplicationStore = () => {
 	const initialState = {
 		id: null,
 		currentStep: 0,
@@ -54,7 +54,7 @@ const createOnboardingStore = () => {
 	return {
 		subscribe,
 
-		// Initialize a new onboarding process
+		// Initialize a new application process
 		initialize: async () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -72,13 +72,13 @@ const createOnboardingStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to initialize onboarding'
+					error: err.message || 'Failed to initialize application'
 				}));
 				throw err;
 			}
 		},
 
-		// Load an existing onboarding process
+		// Load an existing application process
 		load: async (id) => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -100,7 +100,7 @@ const createOnboardingStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to load onboarding data'
+					error: err.message || 'Failed to load application data'
 				}));
 				throw err;
 			}
@@ -144,7 +144,7 @@ const createOnboardingStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to update the onboarding process
+				// Make the PATCH request to update the application process
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -172,7 +172,7 @@ const createOnboardingStore = () => {
 			}
 		},
 
-		// Complete the onboarding process
+		// Complete the application process
 		complete: async () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
@@ -191,7 +191,7 @@ const createOnboardingStore = () => {
 					data: currentState.data
 				};
 
-				// Make the PATCH request to complete the onboarding
+				// Make the PATCH request to complete the application
 				const response = await apiRequest(
 					`/api/v1/onboardings/${currentState.id}`,
 					'PATCH',
@@ -211,7 +211,7 @@ const createOnboardingStore = () => {
 				update(state => ({
 					...state,
 					loading: false,
-					error: err.message || 'Failed to complete onboarding'
+					error: err.message || 'Failed to complete application'
 				}));
 				throw err;
 			}
@@ -223,4 +223,4 @@ const createOnboardingStore = () => {
 };
 
 // Create and export the store
-export const onboarding = createOnboardingStore();
+export const application = createApplicationStore();
