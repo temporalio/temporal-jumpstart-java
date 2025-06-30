@@ -21,7 +21,8 @@
 		3: {
 			title: 'Ready to Go!',
 			description: 'Your account is now fully configured.',
-			icon: '🚀'
+			icon: '🚀',
+
 		}
 	};
 </script>
@@ -31,7 +32,7 @@
 	<h1 class="h1">{heroContent[currentStep.id].title}</h1>
 	<p class="text-lg">{heroContent[currentStep.id].description}</p>
 
-<!--	<div class="mt-auto pt-8">-->
-<!--		<img src="https://placehold.co/400x200/1e293b/ffffff?text=Onboarding" alt="Onboarding illustration" class="w-full max-w-md mx-auto opacity-80" />-->
-<!--	</div>-->
+	<div class="mt-auto pt-8">
+		<img src="https://placehold.co/400x200/1e293b/ffffff?text=Temporal+Wealth+Management" alt="$$$" class="w-full max-w-md mx-auto opacity-80" />
+	</div>
 </div>
