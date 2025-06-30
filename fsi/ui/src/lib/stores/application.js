@@ -26,6 +26,7 @@ const createApplicationStore = () => {
 	// Helper function to make API requests
 	async function apiRequest(url, method, data = null) {
 		try {
+			url = 'http://localhost:3030' + url;
 			const options = {
 				method,
 				headers: {
@@ -54,11 +55,11 @@ const createApplicationStore = () => {
 		subscribe,
 
 		// Initialize a new application process
-		start: async () => {
+		start: async ({id}) => {
 			update(state => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await apiRequest(`/api/v1/applications/${id}`, 'PUT');
+				const response = await apiRequest(`/api/v1/applications/${id}`, 'PUT', {});
 
 				set({
 					...initialState,

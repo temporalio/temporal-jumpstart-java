@@ -5,13 +5,13 @@
 	export let currentStep;
 	export let nextStep;
 	let loading = false;
-	let { user_id } = $page.props;
+	let userId = $page.params.user_id;
 	async function handleStart() {
 		try {
 			loading = true;
 			// Since this is the welcome step, we just want to move to the next step
 			// without saving specific data
-			await application.start({user_id});
+			await application.start({id:userId});
 			nextStep();
 		} catch (error) {
 			console.error('Failed to start application:', error);

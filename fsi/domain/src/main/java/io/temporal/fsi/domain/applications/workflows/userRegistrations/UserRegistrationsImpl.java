@@ -55,7 +55,7 @@ public class UserRegistrationsImpl implements UserRegistrations {
     state =
         state.toBuilder()
             .addUsers(
-                User.newBuilder().setUserId(auth.getUserId()).setEmail(auth.getUserId()).build())
+                User.newBuilder().setUserId(auth.getUserId()).setEmail(cmd.getEmail()).build())
             .build();
     return auth;
   }

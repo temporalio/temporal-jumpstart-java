@@ -28,6 +28,7 @@ public class ApplicationImpl implements Application {
   public void start(StartApplicationRequest args) {
     acts.validateEligibility(
         ValidateEligibleRequest.newBuilder().setUserId(args.getUserId()).build());
+    Workflow.await(state.);
   }
 
   @Override

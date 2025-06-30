@@ -23,7 +23,7 @@
             // await application.saveStep(0, { email });
 
             // Redirect to the application process
-            window.location.href = `/application/${registration.user_id}`;
+            window.location.href = `/application/${registration.userId}`;
         } catch (err) {
             error = err.message || 'Failed to submit code';
             console.error('Application error:', err);
