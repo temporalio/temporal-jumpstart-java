@@ -8,10 +8,9 @@ const createApplicationStore = () => {
 		completedSteps: [],
 		data: {
 			email: '', // Initial email from landing page
-			personalInfo: {
-				name: '',
-				email: ''
-			},
+			name: '',
+			ssn: '',
+			birthdate: '',
 			preferences: {
 				theme: 'light',
 				enableNotifications: false
@@ -55,11 +54,11 @@ const createApplicationStore = () => {
 		subscribe,
 
 		// Initialize a new application process
-		initialize: async () => {
+		start: async () => {
 			update(state => ({ ...state, loading: true, error: null }));
 
 			try {
-				const response = await apiRequest('/api/v1/onboardings', 'POST');
+				const response = await apiRequest(`/api/v1/applications/${id}`, 'PUT');
 
 				set({
 					...initialState,

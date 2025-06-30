@@ -29,6 +29,10 @@ public final class QueriesProto {
       internal_static_applications_v1_GetUserRegistrationsResponse_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_GetUserRegistrationsResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_GetApplicationResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_GetApplicationResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -40,15 +44,20 @@ public final class QueriesProto {
     java.lang.String[] descriptorData = {
       "\n\035applications/v1/queries.proto\022\017applica"
           + "tions.v1\032\034applications/v1/values.proto\032\036"
-          + "applications/v1/commands.proto\"\241\001\n\034GetUs"
-          + "erRegistrationsResponse\022T\n\022user_registra"
-          + "tions\030\001 \003(\0132%.applications.v1.RegisterUs"
-          + "erResponseR\021userRegistrations\022+\n\005users\030\002"
-          + " \003(\0132\025.applications.v1.UserR\005usersB\220\001\n#i"
-          + "o.temporal.fsi.api.applications.v1B\014Quer"
-          + "iesProtoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017App"
-          + "lications\\V1\342\002\033Applications\\V1\\GPBMetada"
-          + "ta\352\002\020Applications::V1b\006proto3"
+          + "applications/v1/commands.proto\032\037applicat"
+          + "ions/v1/workflows.proto\"\241\001\n\034GetUserRegis"
+          + "trationsResponse\022T\n\022user_registrations\030\001"
+          + " \003(\0132%.applications.v1.RegisterUserRespo"
+          + "nseR\021userRegistrations\022+\n\005users\030\002 \003(\0132\025."
+          + "applications.v1.UserR\005users\"\240\001\n\026GetAppli"
+          + "cationResponse\022<\n\004args\030\001 \001(\0132(.applicati"
+          + "ons.v1.StartApplicationRequestR\004args\022\027\n\007"
+          + "user_id\030\002 \001(\tR\006userId\022\022\n\004name\030\003 \001(\tR\004nam"
+          + "e\022\033\n\tclient_id\030\004 \001(\tR\010clientIdB\220\001\n#io.te"
+          + "mporal.fsi.api.applications.v1B\014QueriesP"
+          + "rotoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Applica"
+          + "tions\\V1\342\002\033Applications\\V1\\GPBMetadata\352\002"
+          + "\020Applications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -56,6 +65,7 @@ public final class QueriesProto {
             new com.google.protobuf.Descriptors.FileDescriptor[] {
               io.temporal.fsi.api.applications.v1.ValuesProto.getDescriptor(),
               io.temporal.fsi.api.applications.v1.CommandsProto.getDescriptor(),
+              io.temporal.fsi.api.applications.v1.WorkflowsProto.getDescriptor(),
             });
     internal_static_applications_v1_GetUserRegistrationsResponse_descriptor =
         getDescriptor().getMessageTypes().get(0);
@@ -65,9 +75,18 @@ public final class QueriesProto {
             new java.lang.String[] {
               "UserRegistrations", "Users",
             });
+    internal_static_applications_v1_GetApplicationResponse_descriptor =
+        getDescriptor().getMessageTypes().get(1);
+    internal_static_applications_v1_GetApplicationResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_GetApplicationResponse_descriptor,
+            new java.lang.String[] {
+              "Args", "UserId", "Name", "ClientId",
+            });
     descriptor.resolveAllFeaturesImmutable();
     io.temporal.fsi.api.applications.v1.ValuesProto.getDescriptor();
     io.temporal.fsi.api.applications.v1.CommandsProto.getDescriptor();
+    io.temporal.fsi.api.applications.v1.WorkflowsProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

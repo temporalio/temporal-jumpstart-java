@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	export let nextStep;
 	export let prevStep;
-
+	export let currentStep;
 	let theme = 'light';
 	let enableNotifications = false;
 	let loading = false;
@@ -27,7 +27,7 @@
 			error = null;
 
 			// Save the preferences data
-			await application.saveStep(2, { theme, enableNotifications });
+			await application.saveStep(currentStep, { theme, enableNotifications });
 			nextStep();
 		} catch (err) {
 			error = err.message || 'Failed to save preferences';

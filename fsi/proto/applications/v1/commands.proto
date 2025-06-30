@@ -22,3 +22,18 @@ message AuthorizeUserRequest {
 message AuthorizeUserResponse {
   string user_id = 1;
 }
+message ValidateEligibleRequest {
+  string user_id = 1;
+}
+message ValidateEligibleResponse {
+
+}
+message MatchClientRequest {
+  string ssn = 1;
+  string birthdate = 2;
+  string name = 3;
+}
+message MatchClientResponse {
+  string client_id = 1;
+  bool not_found = 2;
+}

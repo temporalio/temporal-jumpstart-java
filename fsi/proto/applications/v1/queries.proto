@@ -1,6 +1,7 @@
 syntax = "proto3";
 import "applications/v1/values.proto";
 import "applications/v1/commands.proto";
+import "applications/v1/workflows.proto";
 
 package applications.v1;
 
@@ -10,4 +11,11 @@ option java_outer_classname = "Queries";
 message GetUserRegistrationsResponse {
   repeated RegisterUserResponse user_registrations = 1;
   repeated User users = 2;
+}
+
+message GetApplicationResponse {
+  StartApplicationRequest args = 1;
+  string user_id = 2;
+  string name = 3;
+  string client_id = 4;
 }

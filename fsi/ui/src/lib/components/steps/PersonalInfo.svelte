@@ -1,11 +1,13 @@
 <script>
 	import { application } from '$lib/stores/application.js';
 	import { onMount } from 'svelte';
+	export let currentStep;
 	export let nextStep;
 	export let prevStep;
 
 	let name = '';
-	let email = '';
+	let ssn = '';
+	let birthdate = '';
 	let loading = false;
 	let error = null;
 
@@ -13,15 +15,12 @@
 	onMount(() => {
 		const unsubscribe = application.subscribe(state => {
 			// First try to get from personalInfo if already saved
-			if (state.data && state.data.personalInfo) {
-				name = state.data.personalInfo.name || '';
-				email = state.data.personalInfo.email || '';
+			if (state.data) {
+				name = state.data.name || '';
+				ssn = state.data.ssn || '';
+				birthdate = state.data.birthdate || '';
 			}
 
-			// If email is still empty, try to get from initial capture
-			if (!email && state.data && state.data.email) {
-				email = state.data.email;
-			}
 		});
 
 		return unsubscribe;
@@ -33,7 +32,7 @@
 			error = null;
 
 			// Save the personal info data
-			await application.saveStep(1, { name, email });
+			await application.saveStep(currentStep, { name, email });
 			nextStep();
 		} catch (err) {
 			error = err.message || 'Failed to save personal information';
@@ -59,8 +58,12 @@
 			<input class="input" type="text" placeholder="Enter your full name" bind:value={name} required />
 		</label>
 		<label class="label">
-			<span>Email</span>
-			<input class="input" type="email" placeholder="Enter your email" bind:value={email} required />
+			<span>Social Security Number</span>
+			<input class="input" type="password" placeholder="Enter your SSN" bind:value={ssn} required />
+		</label>
+		<label class="label">
+			<span>Birthdate</span>
+			<input class="input" type="date" placeholder="Enter your birthdate" bind:value={birthdate} required />
 		</label>
 
 		<div class="flex justify-between mt-6">

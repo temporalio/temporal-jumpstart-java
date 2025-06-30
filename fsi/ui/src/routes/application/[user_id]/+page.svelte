@@ -1,5 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+
 	import { application } from '$lib/stores/application.js';
 
 	// Import step components
@@ -109,13 +111,13 @@
 				<!-- Dynamic step content -->
 				<div class="lg:ml-72">
 					{#if currentStepIndex === 0}
-						<Welcome {nextStep} />
+						<Welcome {nextStep} currentStep={currentStepIndex}/>
 					{:else if currentStepIndex === 1}
-						<PersonalInfo {nextStep} {prevStep} />
+						<PersonalInfo {nextStep} {prevStep}  currentStep={currentStepIndex} />
 					{:else if currentStepIndex === 2}
-						<Preferences {nextStep} {prevStep} />
+						<Preferences {nextStep} {prevStep} currentStep={currentStepIndex}/>
 					{:else if currentStepIndex === 3}
-						<Completion {prevStep} />
+						<Completion {prevStep} currentStep={currentStepIndex} />
 					{/if}
 				</div>
 			</div>

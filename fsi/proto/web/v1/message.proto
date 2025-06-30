@@ -14,3 +14,14 @@ message RegistrationGet {
   string token = 3;
   optional string user_id = 4;
 }
+
+message ApplicationsPut {
+  optional string ssn = 1;
+  optional string birthdate = 2;
+  optional string name = 3;
+}
+
+message ApplicationGet {
+  string user_id = 1;
+  string client_id = 2;
+}

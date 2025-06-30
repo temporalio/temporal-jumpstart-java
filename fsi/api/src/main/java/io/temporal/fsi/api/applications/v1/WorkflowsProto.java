@@ -29,6 +29,10 @@ public final class WorkflowsProto {
       internal_static_applications_v1_StartUserRegistrationsRequest_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_StartUserRegistrationsRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_StartApplicationRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_StartApplicationRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -40,11 +44,13 @@ public final class WorkflowsProto {
     java.lang.String[] descriptorData = {
       "\n\037applications/v1/workflows.proto\022\017appli"
           + "cations.v1\"3\n\035StartUserRegistrationsRequ"
-          + "est\022\022\n\004name\030\001 \001(\tR\004nameB\222\001\n#io.temporal."
-          + "fsi.api.applications.v1B\016WorkflowsProtoP"
-          + "\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Applications"
-          + "\\V1\342\002\033Applications\\V1\\GPBMetadata\352\002\020Appl"
-          + "ications::V1b\006proto3"
+          + "est\022\022\n\004name\030\001 \001(\tR\004name\"b\n\027StartApplicat"
+          + "ionRequest\022\027\n\007user_id\030\001 \001(\tR\006userId\022\020\n\003s"
+          + "sn\030\002 \001(\tR\003ssn\022\034\n\tbirthdate\030\003 \001(\tR\tbirthd"
+          + "ateB\222\001\n#io.temporal.fsi.api.applications"
+          + ".v1B\016WorkflowsProtoP\001\242\002\003AXX\252\002\017Applicatio"
+          + "ns.V1\312\002\017Applications\\V1\342\002\033Applications\\V"
+          + "1\\GPBMetadata\352\002\020Applications::V1b\006proto3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -56,6 +62,14 @@ public final class WorkflowsProto {
             internal_static_applications_v1_StartUserRegistrationsRequest_descriptor,
             new java.lang.String[] {
               "Name",
+            });
+    internal_static_applications_v1_StartApplicationRequest_descriptor =
+        getDescriptor().getMessageTypes().get(1);
+    internal_static_applications_v1_StartApplicationRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_StartApplicationRequest_descriptor,
+            new java.lang.String[] {
+              "UserId", "Ssn", "Birthdate",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

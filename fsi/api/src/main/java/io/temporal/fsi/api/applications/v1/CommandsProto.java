@@ -41,6 +41,22 @@ public final class CommandsProto {
       internal_static_applications_v1_AuthorizeUserResponse_descriptor;
   static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_applications_v1_AuthorizeUserResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_ValidateEligibleRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_ValidateEligibleRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_ValidateEligibleResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_ValidateEligibleResponse_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_MatchClientRequest_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_MatchClientRequest_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_applications_v1_MatchClientResponse_descriptor;
+  static final com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_applications_v1_MatchClientResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
@@ -58,11 +74,18 @@ public final class CommandsProto {
           + "ken\030\003 \001(\tR\005token\"V\n\024AuthorizeUserRequest"
           + "\022\024\n\005email\030\001 \001(\tR\005email\022\024\n\005token\030\002 \001(\tR\005t"
           + "oken\022\022\n\004code\030\003 \001(\tR\004code\"0\n\025AuthorizeUse"
-          + "rResponse\022\027\n\007user_id\030\001 \001(\tR\006userIdB\221\001\n#i"
-          + "o.temporal.fsi.api.applications.v1B\rComm"
-          + "andsProtoP\001\242\002\003AXX\252\002\017Applications.V1\312\002\017Ap"
-          + "plications\\V1\342\002\033Applications\\V1\\GPBMetad"
-          + "ata\352\002\020Applications::V1b\006proto3"
+          + "rResponse\022\027\n\007user_id\030\001 \001(\tR\006userId\"2\n\027Va"
+          + "lidateEligibleRequest\022\027\n\007user_id\030\001 \001(\tR\006"
+          + "userId\"\032\n\030ValidateEligibleResponse\"X\n\022Ma"
+          + "tchClientRequest\022\020\n\003ssn\030\001 \001(\tR\003ssn\022\034\n\tbi"
+          + "rthdate\030\002 \001(\tR\tbirthdate\022\022\n\004name\030\003 \001(\tR\004"
+          + "name\"O\n\023MatchClientResponse\022\033\n\tclient_id"
+          + "\030\001 \001(\tR\010clientId\022\033\n\tnot_found\030\002 \001(\010R\010not"
+          + "FoundB\221\001\n#io.temporal.fsi.api.applicatio"
+          + "ns.v1B\rCommandsProtoP\001\242\002\003AXX\252\002\017Applicati"
+          + "ons.V1\312\002\017Applications\\V1\342\002\033Applications\\"
+          + "V1\\GPBMetadata\352\002\020Applications::V1b\006proto"
+          + "3"
     };
     descriptor =
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
@@ -98,6 +121,36 @@ public final class CommandsProto {
             internal_static_applications_v1_AuthorizeUserResponse_descriptor,
             new java.lang.String[] {
               "UserId",
+            });
+    internal_static_applications_v1_ValidateEligibleRequest_descriptor =
+        getDescriptor().getMessageTypes().get(4);
+    internal_static_applications_v1_ValidateEligibleRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_ValidateEligibleRequest_descriptor,
+            new java.lang.String[] {
+              "UserId",
+            });
+    internal_static_applications_v1_ValidateEligibleResponse_descriptor =
+        getDescriptor().getMessageTypes().get(5);
+    internal_static_applications_v1_ValidateEligibleResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_ValidateEligibleResponse_descriptor,
+            new java.lang.String[] {});
+    internal_static_applications_v1_MatchClientRequest_descriptor =
+        getDescriptor().getMessageTypes().get(6);
+    internal_static_applications_v1_MatchClientRequest_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_MatchClientRequest_descriptor,
+            new java.lang.String[] {
+              "Ssn", "Birthdate", "Name",
+            });
+    internal_static_applications_v1_MatchClientResponse_descriptor =
+        getDescriptor().getMessageTypes().get(7);
+    internal_static_applications_v1_MatchClientResponse_fieldAccessorTable =
+        new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_applications_v1_MatchClientResponse_descriptor,
+            new java.lang.String[] {
+              "ClientId", "NotFound",
             });
     descriptor.resolveAllFeaturesImmutable();
   }

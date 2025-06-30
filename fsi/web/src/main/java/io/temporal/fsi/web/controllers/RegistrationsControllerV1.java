@@ -34,8 +34,7 @@ public class RegistrationsControllerV1 {
   //      produces = {MediaType.APPLICATION_JSON_VALUE})
   ResponseEntity<String> registrationsPut(
       @PathVariable String id, @RequestBody RegistrationsPut params) {
-    // poor man's inspection to decide whether to update the entity or start a workflow
-    // we could as easily check for WF existence first to decide which is best action to take
+
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)

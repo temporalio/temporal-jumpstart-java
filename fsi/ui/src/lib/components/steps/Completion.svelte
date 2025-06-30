@@ -1,7 +1,7 @@
 <script>
 	import { application } from '$lib/stores/application.js';
 	export let prevStep;
-
+	export let currentStep;
 	let loading = false;
 	let error = null;
 	let onboardingComplete = false;

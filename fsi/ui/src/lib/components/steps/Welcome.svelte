@@ -1,14 +1,17 @@
 <script>
 	import { application } from '$lib/stores/application.js';
+	import { page } from '$app/stores';
+
+	export let currentStep;
 	export let nextStep;
 	let loading = false;
-
+	let { user_id } = $page.props;
 	async function handleStart() {
 		try {
 			loading = true;
 			// Since this is the welcome step, we just want to move to the next step
 			// without saving specific data
-			await application.saveStep(0, {});
+			await application.start({user_id});
 			nextStep();
 		} catch (error) {
 			console.error('Failed to start application:', error);
