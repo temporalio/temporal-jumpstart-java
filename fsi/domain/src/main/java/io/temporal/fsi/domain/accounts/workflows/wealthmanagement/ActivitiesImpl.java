@@ -79,6 +79,7 @@ public class ActivitiesImpl implements Activities {
   @Override
   public ApplyWealthManagementVendorResponse applyWealthManagementVendor(
       ApplyWealthManagementVendorRequest cmd) {
+    // return the accountId we got from the wealth management vendor API here
     // forward the application details (collected inside an Update??)
     return ApplyWealthManagementVendorResponse.newBuilder().build();
   }

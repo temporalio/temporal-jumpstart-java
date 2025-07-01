@@ -15,6 +15,7 @@ public interface Activities {
   @ActivityMethod
   void requestExistingClient(RequestExistingClientRequest cmd);
 
+  // rename this to `promoteClient`
   @ActivityMethod
   ForwardClientResponse forwardClient(ForwardClientRequest cmd);
 

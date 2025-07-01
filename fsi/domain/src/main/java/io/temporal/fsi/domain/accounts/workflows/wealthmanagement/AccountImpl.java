@@ -57,6 +57,7 @@ public class AccountImpl implements Account {
       // we can time this out if we want to...
       Workflow.await(() -> !state.getClientId().isEmpty());
     }
+    // if we didnt get applicant info yet, let's wait for it and then bug them
     var applicantShouldBeNagged = !state.hasApplication();
 
     while (applicantShouldBeNagged) {
