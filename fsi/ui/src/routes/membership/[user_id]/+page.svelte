@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 
-	import { account } from '$lib/stores/account.js';
+	import { account } from '$lib/stores/account';
 
 	// Import step components
 	import Welcome from '$lib/components/membership/steps/Welcome.svelte';

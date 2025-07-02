@@ -1,5 +1,5 @@
 <script>
-	import { account } from '$lib/stores/account.js';
+	import { account } from '$lib/stores/account';
 	import { page } from '$app/stores';
 
 	export let currentStep;

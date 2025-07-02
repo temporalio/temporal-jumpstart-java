@@ -1,5 +1,5 @@
 <script>
-    import { registrations } from '$lib/stores/registrations.js';
+    import { registrations } from '$lib/stores/registrations';
     import { page } from '$app/stores';
 
     // Form data

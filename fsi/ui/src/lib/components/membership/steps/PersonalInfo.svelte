@@ -1,5 +1,5 @@
 <script>
-	import { account } from '$lib/stores/account.js';
+	import { account } from '$lib/stores/account';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	let userId = $page.params.user_id;

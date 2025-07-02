@@ -1,5 +1,5 @@
 <script>
-	import { account } from '$lib/stores/account.js';
+	import { account } from '$lib/stores/account';
 	import { onMount } from 'svelte';
 	export let nextStep;
 	export let prevStep;
