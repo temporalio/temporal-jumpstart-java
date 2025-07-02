@@ -5,10 +5,10 @@
 	import { account } from '$lib/stores/account.js';
 
 	// Import step components
-	import Welcome from '$lib/components/steps/Welcome.svelte';
-	import PersonalInfo from '$lib/components/steps/PersonalInfo.svelte';
-	import Preferences from '$lib/components/steps/Preferences.svelte';
-	import Completion from '$lib/components/steps/Completion.svelte';
+	import Welcome from '$lib/components/membership/steps/Welcome.svelte';
+	import PersonalInfo from '$lib/components/membership/steps/PersonalInfo.svelte';
+	import Preferences from '$lib/components/membership/steps/Preferences.svelte';
+	import Completion from '$lib/components/membership/steps/Completion.svelte';
 	import OnboardingStepIndicator from '$lib/components/OnboardingStepIndicator.svelte';
 	import OnboardingHero from '$lib/components/OnboardingHero.svelte';
 
