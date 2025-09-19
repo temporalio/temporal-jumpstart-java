@@ -22,13 +22,6 @@
  * SOFTWARE.
  */
 
-package io.temporal.app.domain.products;
+package io.temporal.app.domain.messages.workflows;
 
-import io.temporal.activity.ActivityInterface;
-import io.temporal.activity.ActivityMethod;
-
-@ActivityInterface
-public interface ProductHandlers {
-  @ActivityMethod
-  void fulfillProduct();
-}
+public record StartMyWorkflowRequest(String id, String value) {}

@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package io.temporal.app.domain.orchestrations;
+package io.temporal.app.domain.workflows;
 
-import io.temporal.app.domain.messages.orchestrations.StartMyWorkflowRequest;
-import io.temporal.workflow.Workflow;
+import io.temporal.app.domain.messages.workflows.StartMyWorkflowRequest;
+import io.temporal.workflow.WorkflowInterface;
+import io.temporal.workflow.WorkflowMethod;
 
-public class MyWorkflowImpl implements MyWorkflow {
-  @Override
-  public void execute(StartMyWorkflowRequest args) {
-    Workflow.await(Workflow::isEveryHandlerFinished);
-  }
+@WorkflowInterface
+public interface MyWorkflow {
+  @WorkflowMethod
+  public void execute(StartMyWorkflowRequest args);
 }
