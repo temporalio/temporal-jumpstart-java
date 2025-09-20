@@ -25,8 +25,8 @@
 package io.temporal.app.api.controllers;
 
 import io.temporal.api.enums.v1.WorkflowIdReusePolicy;
-import io.temporal.app.api.messages.MyResourceGet;
-import io.temporal.app.api.messages.MyResourcePut;
+import io.temporal.app.api.messages.UserGet;
+import io.temporal.app.api.messages.UserPost;
 import io.temporal.app.domain.messages.workflows.StartMyWorkflowRequest;
 import io.temporal.app.domain.workflows.MyWorkflow;
 import io.temporal.client.WorkflowClient;
@@ -45,37 +45,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/resources")
-public class MyController {
+@RequestMapping("/api/v1/users")
+public class UsersController {
 
-  Logger logger = LoggerFactory.getLogger(MyController.class);
+  Logger logger = LoggerFactory.getLogger(UsersController.class);
   @Autowired WorkflowClient temporalClient;
 
   @Value("${spring.curriculum.task-queue}")
   String taskQueue;
 
   @GetMapping("/{id}")
-  public ResponseEntity<MyResourceGet> onboardingGet(@PathVariable("id") String id) {
+  public ResponseEntity<UserGet> usersGet(@PathVariable("id") String id) {
     try {
-      var workflowStub = temporalClient.newWorkflowStub(MyWorkflow.class, id);
-      // implement this
-      //            var state = workflowStub.getState();
-      return new ResponseEntity<>(new MyResourceGet("do", "something"), HttpStatus.OK);
+        // If using Temporal..
+        // var workflowStub = temporalClient.newWorkflowStub(MyWorkflow.class, id);
+        // var state = workflowStub.getState();
+      return new ResponseEntity<>(new UserGet("do", "something"), HttpStatus.OK);
     } catch (WorkflowNotFoundException e) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
   }
 
-  @PutMapping(
+  @PostMapping(
       value = "/{id}",
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  ResponseEntity<String> onboardingPut(@PathVariable String id, @RequestBody MyResourcePut params) {
-
+  ResponseEntity<String> usersPost(@PathVariable String id, @RequestBody UserPost params) {
+    // if using Temporal...
     return startWorkflow(id, params);
   }
 
-  private ResponseEntity<String> startWorkflow(String id, MyResourcePut params) {
+  private ResponseEntity<String> startWorkflow(String id, UserPost params) {
     final WorkflowOptions options =
         WorkflowOptions.newBuilder()
             .setTaskQueue(taskQueue)
@@ -90,7 +90,7 @@ public class MyController {
     try {
       var run = WorkflowClient.start(workflowStub::execute, wfArgs);
       var headers = new HttpHeaders();
-      headers.setLocation(URI.create(String.format("/api/resources/%s", id)));
+      headers.setLocation(URI.create(String.format("/api/v1/users/%s", id)));
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
     } catch (WorkflowExecutionAlreadyStarted was) {
       logger.info("Workflow execution already started: {}", id);
