@@ -150,6 +150,8 @@ public class EntityOnboardingImpl implements EntityOnboarding {
           != Workflow.DEFAULT_VERSION) {
         integrationsHandlers.registerCrmEntity(
             new RegisterCrmEntityRequest(args.id(), args.value()));
+      } else {
+          // do the same old stuff they used to do
       }
     } catch (ActivityFailure e) {
       ApplicationFailure af = (ApplicationFailure) e.getCause();
@@ -185,7 +187,7 @@ public class EntityOnboardingImpl implements EntityOnboarding {
             state.id(), state.currentValue(), new Approval(ApprovalStatus.REJECTED, cmd.comment()));
   }
 
-  private void assertValidArgs(OnboardEntityRequest args) {
+    private void assertValidArgs(OnboardEntityRequest args) {
     if (args.id() == null
         || args.id().isEmpty()
         || args.value() == null

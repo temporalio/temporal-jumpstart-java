@@ -1,0 +1,19 @@
+{
+	"/": [
+		"src/routes/+page.ts",
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/membership/[user_id]": [
+		"src/routes/+layout.ts"
+	],
+	"/registrations/[id]": [
+		"src/routes/+layout.ts"
+	],
+	"/wealthmanagement": [
+		"src/routes/+layout.ts"
+	],
+	"/wealthmanagement/application": [
+		"src/routes/+layout.ts"
+	]
+}

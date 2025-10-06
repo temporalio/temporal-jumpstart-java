@@ -1,0 +1,10 @@
+{
+	"/": [
+		"src/routes/+page.js",
+		"src/routes/+layout.js",
+		"src/routes/+layout.js"
+	],
+	"/onboarding": [
+		"src/routes/+layout.js"
+	]
+}

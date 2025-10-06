@@ -1,0 +1,31 @@
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "io.temporal:temporal-spring-boot-starter:${javaSDKVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    runtimeOnly "io.micrometer:micrometer-registry-prometheus"
+
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.mockito:mockito-core:5.11.0"
+
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine"
+
+}
+
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

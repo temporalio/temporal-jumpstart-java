@@ -7,3 +7,7 @@ include 'app:api'
 include 'app:domain'
 include 'app:workers'
 
+
+include 'inframanager'
+include 'inframanager'
+include 'inframanager:domain'
