@@ -6,8 +6,9 @@ import io.temporal.client.WorkflowOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.inframanager.domain.DomainConfig;
-import io.temporal.inframanager.domain.messages.Errors;
-import io.temporal.inframanager.domain.messages.Workflows;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.values.v1.Errors;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.GetInfraSpaceStateResponse;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest;
 import io.temporal.testing.TestWorkflowEnvironment;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -50,7 +51,7 @@ public class InfraSpaceTests {
 
   @Test
   public void givenInvalidArgs_itShouldFail() {
-    var args = new Workflows.StartInfraSpaceRequest(UUID.randomUUID().toString());
+    var args = StartInfraSpaceRequest.newBuilder().setName(UUID.randomUUID().toString()).build();
     InfraSpace sut =
         workflowClient.newWorkflowStub(
             InfraSpace.class,
@@ -78,12 +79,12 @@ public class InfraSpaceTests {
             });
     Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
     Assertions.assertEquals(
-        Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
+        Errors.ERRORS_INVALID_ARGUMENTS.name(), ((ApplicationFailure) e.getCause()).getType());
   }
 
   @Test
   public void givenValidArgs_itShouldExposeState() {
-    var args = new Workflows.StartInfraSpaceRequest(UUID.randomUUID().toString());
+    var args = StartInfraSpaceRequest.newBuilder().setName(UUID.randomUUID().toString()).build();
     InfraSpace sut =
         workflowClient.newWorkflowStub(
             InfraSpace.class,
@@ -100,8 +101,8 @@ public class InfraSpaceTests {
     // async execution
     var exec = WorkflowClient.start(sut::execute, args);
     var actual = sut.getState();
-    var expect = new Workflows.GetInfraSpaceStateResponse(args);
-    expect.setName(args.getName());
+    var expect =
+        GetInfraSpaceStateResponse.newBuilder().setArgs(args).setName(args.getName()).build();
     Assertions.assertEquals(expect, actual);
   }
 

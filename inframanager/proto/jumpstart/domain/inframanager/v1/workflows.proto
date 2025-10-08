@@ -23,9 +23,9 @@ message InfraSpaceExecutionOptions {
 message GetInfraSpaceStateRequest {}
 
 message GetInfraSpaceStateResponse {
-  string id = 1;
-  jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest args = 2;
-  InfraSpaceExecutionOptions options = 3;
+  jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest args = 1;
+  InfraSpaceExecutionOptions options = 2;
+  string name = 3;
 }
 
 // write contracts (updates, signals)

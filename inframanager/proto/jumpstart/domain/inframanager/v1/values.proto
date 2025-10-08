@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package jumpstart.domain.onboardings.values.v1;
+package jumpstart.domain.inframanager.values.v1;
 
 enum ApprovalStatus {
   APPROVAL_STATUS_UNSPECIFIED = 0;

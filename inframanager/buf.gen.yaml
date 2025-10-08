@@ -1,16 +1,15 @@
 version: v2
 managed:
   enabled: true
+  override:
+    - file_option: java_package_prefix
+      value: io.temporal.inframanager.messages
 
 
 plugins:
-  - remote: buf.build/protocolbuffers/csharp:v31.1
-    out: Onboardings.Generated/Jumpstart
-    opt:
-      - base_namespace=Jumpstart
-  - remote: buf.build/grpc/csharp:v1.72.1
-    out: Onboardings.Generated/Jumpstart
-    opt:
-      - base_namespace=Jumpstart
+  - remote: buf.build/protocolbuffers/java:v28.3
+    out: messages/src/main/java
+  - remote: buf.build/grpc/java:v1.70.0
+    out: messages/src/main/java
 inputs:
   - directory: proto

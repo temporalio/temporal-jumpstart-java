@@ -1,6 +1,7 @@
 package io.temporal.inframanager.domain.workflows;
 
-import io.temporal.inframanager.domain.messages.Workflows;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.GetInfraSpaceStateResponse;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest;
 import io.temporal.workflow.QueryMethod;
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;
@@ -8,8 +9,8 @@ import io.temporal.workflow.WorkflowMethod;
 @WorkflowInterface
 public interface InfraSpace {
   @WorkflowMethod
-  void execute(Workflows.StartInfraSpaceRequest startInfraSpaceRequest);
+  void execute(StartInfraSpaceRequest startInfraSpaceRequest);
 
   @QueryMethod
-  Workflows.GetInfraSpaceStateResponse getState();
+  GetInfraSpaceStateResponse getState();
 }
