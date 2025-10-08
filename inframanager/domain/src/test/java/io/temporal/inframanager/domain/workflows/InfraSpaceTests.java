@@ -55,7 +55,7 @@ public class InfraSpaceTests {
         workflowClient.newWorkflowStub(
             InfraSpace.class,
             WorkflowOptions.newBuilder()
-                .setRetryOptions(RetryOptions.newBuilder().setMaximumAttempts(1).build())
+                .setRetryOptions(RetryOptions.newBuilder().setDoNotRetry("INVALID_ARGS").setMaximumAttempts(1).build())
                 .setWorkflowId(args.getName())
                 .setTaskQueue(taskQueue)
                 .build());

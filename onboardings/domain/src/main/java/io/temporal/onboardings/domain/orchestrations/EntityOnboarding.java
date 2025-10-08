@@ -46,7 +46,4 @@ public interface EntityOnboarding {
 
   @SignalMethod
   void reject(RejectEntityRequest cmd);
-
-  @SignalMethod
-    void anotherThing();
 }

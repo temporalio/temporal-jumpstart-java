@@ -5,7 +5,8 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: temporal-inframanager
-  curriculum:
+    enable-interception: true
+  inframanager:
     task-queue: apps
     task-queue-replay-prefix: replay_
   temporal:
