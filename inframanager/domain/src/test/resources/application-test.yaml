@@ -5,7 +5,7 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: temporal-inframanager
-    enable-interception: true
+    enable-interceptors: true
   inframanager:
     task-queue: apps
     task-queue-replay-prefix: replay_

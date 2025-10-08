@@ -1,0 +1,41 @@
+// workflows.proto
+// contains contracts for inputs/outputs to Workflows and related primitives
+syntax = "proto3";
+
+import "jumpstart/domain/inframanager/v1/values.proto";
+import "google/protobuf/timestamp.proto";
+
+package jumpstart.domain.inframanager.workflows.v1;
+
+
+message StartInfraSpaceRequest {
+  optional InfraSpaceExecutionOptions options = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  string name = 4;
+}
+
+
+message InfraSpaceExecutionOptions {
+}
+
+
+// queries
+message GetInfraSpaceStateRequest {}
+
+message GetInfraSpaceStateResponse {
+  string id = 1;
+  jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest args = 2;
+  InfraSpaceExecutionOptions options = 3;
+}
+
+// write contracts (updates, signals)
+
+
+// activity contracts
+
+message GetInfraSpaceExecutionOptionsRequest {
+  optional InfraSpaceExecutionOptions args = 1;
+}
+message GetInfraSpaceExecutionOptionsResponse {
+  InfraSpaceExecutionOptions options = 1;
+}

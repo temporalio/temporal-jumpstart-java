@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package jumpstart.domain.onboardings.values.v1;
+
+enum ApprovalStatus {
+  APPROVAL_STATUS_UNSPECIFIED = 0;
+  APPROVAL_STATUS_PENDING = 1;
+  APPROVAL_STATUS_REJECTED = 2;
+  APPROVAL_STATUS_APPROVED = 3;
+}
+
+message Approval {
+  ApprovalStatus status = 1;
+  string comment = 2;
+}
+
+enum Errors {
+  ERRORS_UNSPECIFIED = 0;
+  ERRORS_INVALID_ARGUMENTS = 1;
+  ERRORS_ONBOARD_ENTITY_TIMED_OUT = 2;
+  ERRORS_SERVICE_UNAVAILABLE = 3;
+  ERRORS_UNAUTHORIZED = 4;
+}
+

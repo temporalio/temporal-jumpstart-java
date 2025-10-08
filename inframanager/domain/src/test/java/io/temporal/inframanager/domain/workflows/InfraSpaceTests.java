@@ -6,8 +6,8 @@ import io.temporal.client.WorkflowOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.failure.ApplicationFailure;
 import io.temporal.inframanager.domain.DomainConfig;
-import io.temporal.inframanager.domain.io.temporal.inframanager.domain.messages.Errors;
-import io.temporal.inframanager.domain.io.temporal.inframanager.domain.messages.Workflows;
+import io.temporal.inframanager.domain.messages.Errors;
+import io.temporal.inframanager.domain.messages.Workflows;
 import io.temporal.testing.TestWorkflowEnvironment;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -55,7 +55,11 @@ public class InfraSpaceTests {
         workflowClient.newWorkflowStub(
             InfraSpace.class,
             WorkflowOptions.newBuilder()
-                .setRetryOptions(RetryOptions.newBuilder().setDoNotRetry("INVALID_ARGS").setMaximumAttempts(1).build())
+                .setRetryOptions(
+                    RetryOptions.newBuilder()
+                        .setDoNotRetry("INVALID_ARGS")
+                        .setMaximumAttempts(1)
+                        .build())
                 .setWorkflowId(args.getName())
                 .setTaskQueue(taskQueue)
                 .build());
@@ -75,6 +79,30 @@ public class InfraSpaceTests {
     Assertions.assertInstanceOf(ApplicationFailure.class, e.getCause());
     Assertions.assertEquals(
         Errors.INVALID_ARGS.name(), ((ApplicationFailure) e.getCause()).getType());
+  }
+
+  @Test
+  public void givenValidArgs_itShouldExposeState() {
+    var args = new Workflows.StartInfraSpaceRequest(UUID.randomUUID().toString());
+    InfraSpace sut =
+        workflowClient.newWorkflowStub(
+            InfraSpace.class,
+            WorkflowOptions.newBuilder()
+                .setRetryOptions(
+                    RetryOptions.newBuilder()
+                        .setDoNotRetry("INVALID_ARGS")
+                        .setMaximumAttempts(1)
+                        .build())
+                .setWorkflowId(args.getName())
+                .setTaskQueue(taskQueue)
+                .build());
+
+    // async execution
+    var exec = WorkflowClient.start(sut::execute, args);
+    var actual = sut.getState();
+    var expect = new Workflows.GetInfraSpaceStateResponse(args);
+    expect.setName(args.getName());
+    Assertions.assertEquals(expect, actual);
   }
 
   @ComponentScan
