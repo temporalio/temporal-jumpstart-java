@@ -1,4 +1,4 @@
-package io.temporal.inframanager.domain.workflows;
+package io.temporal.inframanager.domain.workflows.infraspace;
 
 import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.GetInfraSpaceStateResponse;
 import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest;

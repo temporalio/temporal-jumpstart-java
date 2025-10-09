@@ -1,5 +1,7 @@
-package io.temporal.inframanager.domain.workflows;
+package io.temporal.inframanager.domain.workflows.infraspace;
 
+import io.temporal.failure.ApplicationFailure;
+import io.temporal.inframanager.messages.jumpstart.domain.inframanager.values.v1.Errors;
 import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.GetInfraSpaceStateResponse;
 import io.temporal.inframanager.messages.jumpstart.domain.inframanager.workflows.v1.StartInfraSpaceRequest;
 import io.temporal.workflow.WorkflowInit;
@@ -16,7 +18,10 @@ public class InfraSpaceImpl implements InfraSpace {
 
   @Override
   public void execute(StartInfraSpaceRequest args) {
-    //    throw ApplicationFailure.newFailure("Invalid", Errors.INVALID_ARGS.name());
+    if (args.getName().isEmpty()) {
+      throw ApplicationFailure.newFailure(
+          "`name` is required", Errors.ERRORS_INVALID_ARGUMENTS.name());
+    }
     //        throw new RuntimeException("Not implemented");
   }
 

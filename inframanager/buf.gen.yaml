@@ -9,7 +9,7 @@ managed:
 plugins:
   - remote: buf.build/protocolbuffers/java:v28.3
     out: messages/src/main/java
-  - remote: buf.build/grpc/java:v1.70.0
+  - remote: buf.build/grpc/java:v1.58.0
     out: messages/src/main/java
 inputs:
   - directory: proto

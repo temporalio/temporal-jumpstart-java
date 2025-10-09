@@ -1,4 +1,4 @@
-package io.temporal.inframanager.domain.workflows;
+package io.temporal.inframanager.domain.workflows.infraspace;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowFailedException;
@@ -51,7 +51,8 @@ public class InfraSpaceTests {
 
   @Test
   public void givenInvalidArgs_itShouldFail() {
-    var args = StartInfraSpaceRequest.newBuilder().setName(UUID.randomUUID().toString()).build();
+    var missingName = "";
+    var args = StartInfraSpaceRequest.newBuilder().setName(missingName).build();
     InfraSpace sut =
         workflowClient.newWorkflowStub(
             InfraSpace.class,
@@ -61,7 +62,7 @@ public class InfraSpaceTests {
                         .setDoNotRetry("INVALID_ARGS")
                         .setMaximumAttempts(1)
                         .build())
-                .setWorkflowId(args.getName())
+                .setWorkflowId(UUID.randomUUID().toString())
                 .setTaskQueue(taskQueue)
                 .build());
 
@@ -99,12 +100,35 @@ public class InfraSpaceTests {
                 .build());
 
     // async execution
-    var exec = WorkflowClient.start(sut::execute, args);
+    WorkflowClient.start(sut::execute, args);
     var actual = sut.getState();
     var expect =
         GetInfraSpaceStateResponse.newBuilder().setArgs(args).setName(args.getName()).build();
     Assertions.assertEquals(expect, actual);
   }
+    @Test
+    public void whenDeployingToProgivenValidArgs_itShouldExposeState() {
+        var args = StartInfraSpaceRequest.newBuilder().setName(UUID.randomUUID().toString()).build();
+        InfraSpace sut =
+                workflowClient.newWorkflowStub(
+                        InfraSpace.class,
+                        WorkflowOptions.newBuilder()
+                                .setRetryOptions(
+                                        RetryOptions.newBuilder()
+                                                .setDoNotRetry("INVALID_ARGS")
+                                                .setMaximumAttempts(1)
+                                                .build())
+                                .setWorkflowId(args.getName())
+                                .setTaskQueue(taskQueue)
+                                .build());
+
+        // async execution
+        WorkflowClient.start(sut::execute, args);
+        var actual = sut.getState();
+        var expect =
+                GetInfraSpaceStateResponse.newBuilder().setArgs(args).setName(args.getName()).build();
+        Assertions.assertEquals(expect, actual);
+    }
 
   @ComponentScan
   public static class Configuration {
