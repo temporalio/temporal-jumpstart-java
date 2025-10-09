@@ -30,7 +30,7 @@ subprojects {
 		javaSDKVersion = '1.29.0'
 		jarVersion = '1.0.0'
 		protobufVersion = '4.28.3'
-		grpcVersion = '1.70.0'
+		grpcVersion = '1.58.0'
 	}
 
 	repositories {
@@ -39,19 +39,6 @@ subprojects {
 		}
 
 		mavenCentral()
-	}
-
-	configurations.all {
-		resolutionStrategy {
-			force "com.google.protobuf:protobuf-java:${protobufVersion}"
-			force "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-			force "io.grpc:grpc-protobuf:${grpcVersion}"
-			force "io.grpc:grpc-stub:${grpcVersion}"
-			force "io.grpc:grpc-core:${grpcVersion}"
-			force "io.grpc:grpc-api:${grpcVersion}"
-			force "io.grpc:grpc-netty:${grpcVersion}"
-			force "io.grpc:grpc-netty-shaded:${grpcVersion}"
-		}
 	}
 
 	dependencies {
